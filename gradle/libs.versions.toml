@@ -1,0 +1,34 @@
+[versions]
+agp = "8.8.0"
+adaptiveCmpVersion = "1.0.0"
+android-compileSdk = "35"
+android-minSdk = "24"
+android-targetSdk = "35"
+androidx-activityCompose = "1.10.0"
+composeCmpVersion = "1.7.0"
+composeCmpMaterialNavigationVersion = "1.7.0-beta02"
+compose-multiplatform = "1.7.0"
+kotlin = "2.1.10"
+kotlinx-coroutines = "1.10.1"
+lifecycleCmpVersion = "2.8.4"
+navigationCmpVersion = "2.7.0-alpha07"
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+jetbrains-compose-material-navigation = { group = "org.jetbrains.compose.material", name="material-navigation", version.ref = "composeCmpMaterialNavigationVersion" }
+jetbrains-compose-material3-adaptive-navigation-suite = { group = "org.jetbrains.compose.material3", name="material3-adaptive-navigation-suite", version.ref = "composeCmpVersion" }
+jetbrains-compose-material3-window-size = { group = "org.jetbrains.compose.material3", name="material3-window-size-class", version.ref = "composeCmpVersion" }
+jetbrains-compose-adaptive = { group = "org.jetbrains.compose.material3.adaptive", name="adaptive", version.ref = "adaptiveCmpVersion" }
+jetbrains-compose-adaptive-layout = { group = "org.jetbrains.compose.material3.adaptive", name="adaptive-layout", version.ref = "adaptiveCmpVersion" }
+jetbrains-compose-adaptive-navigation = { group = "org.jetbrains.compose.material3.adaptive", name="adaptive-navigation", version.ref = "adaptiveCmpVersion" }
+jetbrains-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCmpVersion" }
+jetbrains-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "lifecycleCmpVersion" }
+jetbrains-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleCmpVersion" }
+kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
