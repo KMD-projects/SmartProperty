@@ -15,7 +15,7 @@ fun App() {
         Scaffold { innerPadding ->
             Text(
                 modifier = Modifier.padding(innerPadding),
-                text = "ABC"
+                text = "ABCDDDDDDDDDD"
             )
         }
     }
