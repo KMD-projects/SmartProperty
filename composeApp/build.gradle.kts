@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -25,6 +26,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            binaryOption("bundleId", "com.myolwinoo.smartproperty")
         }
     }
     
@@ -75,6 +77,8 @@ kotlin {
             implementation(libs.jetbrains.compose.adaptive)
             implementation(libs.jetbrains.compose.adaptive.layout)
             implementation(libs.jetbrains.compose.adaptive.navigation)
+
+            implementation(libs.kotlinx.serialization.json)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
