@@ -11,8 +11,10 @@ compose-multiplatform = "1.7.0"
 kotlin = "2.1.10"
 kotlinx-coroutines = "1.10.1"
 kotlinx-serialization = "1.8.0"
+koin-bom = "4.1.0-Beta5"
+
 lifecycleCmpVersion = "2.8.4"
-navigationCmpVersion = "2.7.0-alpha07"
+navigationCmpVersion = "2.8.0-alpha10"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
@@ -23,10 +25,16 @@ jetbrains-compose-adaptive = { group = "org.jetbrains.compose.material3.adaptive
 jetbrains-compose-adaptive-layout = { group = "org.jetbrains.compose.material3.adaptive", name="adaptive-layout", version.ref = "adaptiveCmpVersion" }
 jetbrains-compose-adaptive-navigation = { group = "org.jetbrains.compose.material3.adaptive", name="adaptive-navigation", version.ref = "adaptiveCmpVersion" }
 jetbrains-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCmpVersion" }
-jetbrains-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "lifecycleCmpVersion" }
+jetbrains-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleCmpVersion" }
 jetbrains-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleCmpVersion" }
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+
+koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin-bom" }
+koin-core = { group = "io.insert-koin", name = "koin-core" }
+koin-compose = { group = "io.insert-koin", name = "koin-compose" }
+koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel" }
+koin-compose-viewmodel-navigation = { group = "io.insert-koin", name = "koin-compose-viewmodel-navigation" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

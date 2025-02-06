@@ -13,6 +13,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Serializable
@@ -37,7 +38,7 @@ private fun Screen() {
                 item(
                     icon = {
                         Icon(
-                            it.icon,
+                            imageVector = it.icon,
                             contentDescription = stringResource(it.contentDescription)
                         )
                     },

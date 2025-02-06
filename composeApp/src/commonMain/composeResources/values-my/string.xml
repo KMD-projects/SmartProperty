@@ -1,0 +1,11 @@
+<resources>
+    <string name="label_home">ပင်မ</string>
+    <string name="label_search">ရှာရန်</string>
+    <string name="label_profile">ပရိုဖိုင်</string>
+
+    <string name="label_login">ဝင်ရန်</string>
+    <string name="label_register">အကောင့်ဖွင့်</string>
+
+    <string name="label_email">အီးမေးလ်</string>
+    <string name="label_password">စကားဝှက်</string>
+</resources>

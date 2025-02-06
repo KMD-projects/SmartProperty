@@ -13,28 +13,31 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import smartproperty.composeapp.generated.resources.Res
+import smartproperty.composeapp.generated.resources.label_register
 
 @Serializable
-object LoginRoute
+object RegisterRoute
 
-fun NavController.navigateLogin() {
-    navigate(LoginRoute)
+fun NavController.navigateRegister() {
+    navigate(RegisterRoute)
 }
 
-fun NavGraphBuilder.loginScreen(
-    onLoginSuccess: () -> Unit
+fun NavGraphBuilder.registerScreen(
+    onRegisterSuccess: () -> Unit
 ) {
-    composable<LoginRoute> {
+    composable<RegisterRoute> {
         Screen(
-            onLoginSuccess = onLoginSuccess
+            onRegisterSuccess = onRegisterSuccess
         )
     }
 }
 
 @Composable
 private fun Screen(
-    onLoginSuccess: () -> Unit
+    onRegisterSuccess: () -> Unit
 ) {
     Scaffold { innerPadding ->
         Column(
@@ -42,13 +45,14 @@ private fun Screen(
                 .padding(innerPadding),
             verticalArrangement = Arrangement.Center,
         ) {
-            Text("Login Screen")
             Button(
                 onClick = {
-                    onLoginSuccess()
+                    onRegisterSuccess()
                 }
             ) {
-                Text("Login")
+                Text(
+                    text = stringResource(Res.string.label_register)
+                )
             }
         }
     }
@@ -58,6 +62,6 @@ private fun Screen(
 @Composable
 private fun Preview() {
     Screen(
-        onLoginSuccess = {}
+        onRegisterSuccess = {}
     )
 }

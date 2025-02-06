@@ -75,6 +75,8 @@ val surfaceContainerDark = Color(0xFF1D2024)
 val surfaceContainerHighDark = Color(0xFF282A2F)
 val surfaceContainerHighestDark = Color(0xFF33353A)
 
+val loadingOverlay = Color.Black.copy(0.5f)
+
 internal val lightScheme = lightColorScheme(
     primary = primaryLight,
     onPrimary = onPrimaryLight,

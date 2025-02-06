@@ -16,7 +16,7 @@ enum class AppDestinations(
     val icon: ImageVector,
     val contentDescription: StringResource
 ) {
-    HOME(Res.string.label_home, Icons.Default.Home, Res.string.label_home),
-    SEARCH(Res.string.label_search, Icons.Default.Search, Res.string.label_search),
-    PROFILE(Res.string.label_profile, Icons.Default.AccountBox, Res.string.label_profile),
+    HOME(Res.string.label_home, Icons.Filled.Home, Res.string.label_home),
+    SEARCH(Res.string.label_search, Icons.Filled.Search, Res.string.label_search),
+    PROFILE(Res.string.label_profile, Icons.Filled.AccountBox, Res.string.label_profile),
 }
