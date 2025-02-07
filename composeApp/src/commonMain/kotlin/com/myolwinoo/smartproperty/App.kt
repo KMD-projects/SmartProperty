@@ -4,9 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.myolwinoo.smartproperty.design.theme.SPTheme
+import com.myolwinoo.smartproperty.di.dataModule
 import com.myolwinoo.smartproperty.di.viewModelModule
-import com.myolwinoo.smartproperty.features.LoginRoute
-import com.myolwinoo.smartproperty.features.loginScreen
+import com.myolwinoo.smartproperty.features.login.LoginRoute
+import com.myolwinoo.smartproperty.features.login.loginScreen
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
@@ -17,7 +18,8 @@ fun App() {
     KoinApplication(
         application = {
             modules(
-                viewModelModule
+                viewModelModule,
+                dataModule
             )
         }
     ) {
@@ -35,7 +37,7 @@ private fun AppNavHost() {
     val navController = rememberNavController()
     SPNavHost(
         navController = navController,
-        startDestination = AuthRoute
+        startDestination = MainRoute
     ) {
         navigation<AuthRoute>(
             startDestination = LoginRoute

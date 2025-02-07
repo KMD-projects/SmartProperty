@@ -4,20 +4,19 @@ adaptiveCmpVersion = "1.0.0"
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
-androidx-activityCompose = "1.10.0"
 composeCmpVersion = "1.7.0"
 composeCmpMaterialNavigationVersion = "1.7.0-beta02"
 compose-multiplatform = "1.7.0"
+coil3Version = "3.1.0"
 kotlin = "2.1.10"
 kotlinx-coroutines = "1.10.1"
 kotlinx-serialization = "1.8.0"
 koin-bom = "4.1.0-Beta5"
-
+ktor = "3.0.3"
 lifecycleCmpVersion = "2.8.4"
 navigationCmpVersion = "2.8.0-alpha10"
 
 [libraries]
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 jetbrains-compose-material-navigation = { group = "org.jetbrains.compose.material", name="material-navigation", version.ref = "composeCmpMaterialNavigationVersion" }
 jetbrains-compose-material3-adaptive-navigation-suite = { group = "org.jetbrains.compose.material3", name="material3-adaptive-navigation-suite", version.ref = "composeCmpVersion" }
 jetbrains-compose-material3-window-size = { group = "org.jetbrains.compose.material3", name="material3-window-size-class", version.ref = "composeCmpVersion" }
@@ -27,6 +26,7 @@ jetbrains-compose-adaptive-navigation = { group = "org.jetbrains.compose.materia
 jetbrains-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCmpVersion" }
 jetbrains-lifecycle-viewmodel = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleCmpVersion" }
 jetbrains-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleCmpVersion" }
+
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
@@ -35,6 +35,16 @@ koin-core = { group = "io.insert-koin", name = "koin-core" }
 koin-compose = { group = "io.insert-koin", name = "koin-compose" }
 koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel" }
 koin-compose-viewmodel-navigation = { group = "io.insert-koin", name = "koin-compose-viewmodel-navigation" }
+
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
+
+coil3-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3Version" }
+coil3-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil3Version" }
+coil3-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil3Version" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

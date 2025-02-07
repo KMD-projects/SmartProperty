@@ -1,5 +1,6 @@
 <resources>
-    <string name="label_home">ပင်မ</string>
+    <string name="label_explore">စူးစမ်းရန်</string>
+    <string name="label_wishlist">လိုချင်စရာများ</string>
     <string name="label_search">ရှာရန်</string>
     <string name="label_profile">ပရိုဖိုင်</string>
 

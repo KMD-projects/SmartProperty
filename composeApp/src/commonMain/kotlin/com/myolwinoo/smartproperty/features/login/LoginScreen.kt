@@ -1,4 +1,4 @@
-package com.myolwinoo.smartproperty.features
+package com.myolwinoo.smartproperty.features.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -6,9 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,6 +40,8 @@ import smartproperty.composeapp.generated.resources.label_email
 import smartproperty.composeapp.generated.resources.label_login
 import smartproperty.composeapp.generated.resources.label_password
 import smartproperty.composeapp.generated.resources.label_register
+import smartproperty.composeapp.generated.resources.visibility_off
+import smartproperty.composeapp.generated.resources.visibility_on
 
 @Serializable
 object LoginRoute
@@ -125,11 +124,11 @@ private fun Screen(
                     IconButton(onClick = { visiblePassword = !visiblePassword }) {
                         Icon(
                             modifier = Modifier.size(24.dp),
-                            imageVector = if (visiblePassword) {
-                                Icons.Filled.Home
+                            painter = if (visiblePassword) {
+                                Res.drawable.visibility_on
                             } else {
-                                Icons.Filled.Place
-                            },
+                                Res.drawable.visibility_off
+                            }.let { painterResource(it) },
                             contentDescription = null
                         )
                     }
