@@ -1,4 +1,4 @@
-package com.myolwinoo.smartproperty
+package com.myolwinoo.smartproperty.features.main
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -12,6 +12,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.myolwinoo.smartproperty.features.explore.ExploreScreen
+import com.myolwinoo.smartproperty.features.profile.ProfileScreen
 import com.myolwinoo.smartproperty.features.wishlists.WishlistsScreen
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.painterResource
@@ -33,10 +34,10 @@ fun NavGraphBuilder.mainScreen() {
 
 @Composable
 private fun Screen() {
-    var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.Explore) }
+    var currentDestination by rememberSaveable { mutableStateOf(MainDestinations.Explore) }
     NavigationSuiteScaffold(
         navigationSuiteItems = {
-            AppDestinations.entries.forEach {
+            MainDestinations.entries.forEach {
                 item(
                     icon = {
                         Icon(
@@ -52,9 +53,9 @@ private fun Screen() {
         }
     ) {
         when (currentDestination) {
-            AppDestinations.Explore -> ExploreScreen()
-            AppDestinations.WISHLISTS -> WishlistsScreen()
-            AppDestinations.PROFILE -> ProfileScreen()
+            MainDestinations.Explore -> ExploreScreen()
+            MainDestinations.WISHLISTS -> WishlistsScreen()
+            MainDestinations.PROFILE -> ProfileScreen()
         }
     }
 }

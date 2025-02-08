@@ -1,4 +1,4 @@
-package com.myolwinoo.smartproperty
+package com.myolwinoo.smartproperty.features.main
 
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.StringResource
@@ -10,7 +10,7 @@ import smartproperty.composeapp.generated.resources.label_profile
 import smartproperty.composeapp.generated.resources.label_wishlist
 import smartproperty.composeapp.generated.resources.search
 
-enum class AppDestinations(
+enum class MainDestinations(
     val label: StringResource,
     val icon: DrawableResource,
     val contentDescription: StringResource

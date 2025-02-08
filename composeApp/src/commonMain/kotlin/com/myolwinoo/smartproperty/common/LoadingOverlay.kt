@@ -8,6 +8,8 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.unit.dp
 import com.myolwinoo.smartproperty.design.theme.loadingOverlay
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -18,11 +20,13 @@ fun LoadingOverlay(
     Box(
         modifier = modifier
             .clickable {  }
-            .background(loadingOverlay)
+//            .background(loadingOverlay)
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        CircularProgressIndicator()
+        CircularProgressIndicator(
+            strokeWidth = 8.dp
+        )
     }
 }
 

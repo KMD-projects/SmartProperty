@@ -16,7 +16,6 @@ object PreviewData {
             amenities = listOf("WiFi", "AC", "Parking"),
             images = listOf(
                 "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070",
-                "https://plus.unsplash.com/premium_photo-1661874933205-969c5bfa3523?q=80&w=2128"
             ),
             available = true,
             latitude = 16.8409,
@@ -35,8 +34,7 @@ object PreviewData {
             location = "Downtown, Yangon",
             amenities = listOf("Gym", "Swimming Pool", "Security"),
             images = listOf(
-                "https://images.unsplash.com/photo-1600585154219-3b4b5921d5a0?q=80&w=2000",
-                "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000"
+                "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=2000"
             ),
             available = true,
             latitude = 16.7742,
@@ -55,8 +53,7 @@ object PreviewData {
             location = "Inya Road, Yangon",
             amenities = listOf("Private Pool", "Garden", "Security", "Garage"),
             images = listOf(
-                "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2000",
-                "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=2000"
+                "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2000"
             ),
             available = false,
             latitude = 16.8133,
@@ -75,8 +72,7 @@ object PreviewData {
             location = "Sanchaung, Yangon",
             amenities = listOf("Shared Kitchen", "WiFi", "Laundry"),
             images = listOf(
-                "https://images.unsplash.com/photo-1592595896551-a7291c4bba69?q=80&w=2000",
-                "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2000"
+                "https://plus.unsplash.com/premium_photo-1661874933205-969c5bfa3523?q=80&w=2128"
             ),
             available = true,
             latitude = 16.7991,

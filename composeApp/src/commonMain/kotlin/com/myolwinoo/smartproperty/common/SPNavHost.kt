@@ -1,4 +1,4 @@
-package com.myolwinoo.smartproperty
+package com.myolwinoo.smartproperty.common
 
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
