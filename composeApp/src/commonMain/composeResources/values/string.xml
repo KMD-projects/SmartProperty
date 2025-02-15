@@ -3,18 +3,34 @@
     <string name="label_wishlist">Wishlists</string>
     <string name="label_search">Search</string>
     <string name="label_profile">Profile</string>
-
     <string name="label_login">Login</string>
     <string name="label_register">Register</string>
-
+    <string name="label_logout">Logout</string>
     <string name="label_email">Email</string>
     <string name="label_password">Password</string>
+    <string name="label_confirm_password">Confirm Password</string>
     <string name="label_start_explore">Explore your favorite properties</string>
+    <string name="label_ok">OK</string>
+    <string name="label_name">Name</string>
+    <string name="label_phone">Phone Number</string>
+    <string name="label_address">Address</string>
+    <string name="label_help">Help Center</string>
+    <string name="label_feedback">Feedback</string>
+    <string name="label_terms">Terms of Service</string>
+    <string name="label_privacy_policy">Privacy Policy</string>
+    <string name="label_language">Language</string>
 
     <string name="title_login_error">Login Failed</string>
-    <string name="message_login_error">Incorrect username or password. Please try again.</string>
-    <string name="label_ok">OK</string>
-
     <string name="title_register_error">Register Failed</string>
+    <string name="title_welcome">Welcome!</string>
+    <string name="title_personal_info">Personal information</string>
+    <string name="title_support">Support</string>
+    <string name="title_legal">Legal</string>
+
+    <string name="message_login_error">Incorrect username or password. Please try again.</string>
     <string name="message_register_error">Failed to register. Please try again.</string>
+    <string name="message_login_part1">Login below or </string>
+    <string name="message_login_part2">create an account</string>
+    <string name="message_register_part1">Enter your account details below or </string>
+    <string name="message_register_part2">log in</string>
 </resources>

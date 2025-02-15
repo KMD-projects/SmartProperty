@@ -1,12 +1,30 @@
 package com.myolwinoo.smartproperty.common
 
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.myolwinoo.smartproperty.design.theme.AppDimens
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import smartproperty.composeapp.generated.resources.Res
+import smartproperty.composeapp.generated.resources.label_password
+import smartproperty.composeapp.generated.resources.visibility_off
+import smartproperty.composeapp.generated.resources.visibility_on
 
 @Composable
 fun SPTextField(
@@ -21,7 +39,7 @@ fun SPTextField(
 ) {
     OutlinedTextField(
         modifier = modifier
-            .widthIn(max = 560.dp),
+            .widthIn(max = AppDimens.maxWidth),
         value = value,
         onValueChange = onValueChange,
         label = label,
@@ -29,5 +47,40 @@ fun SPTextField(
         maxLines = maxLines,
         trailingIcon = trailingIcon,
         visualTransformation = visualTransformation
+    )
+}
+
+@Composable
+fun SPPasswordTextField(
+    modifier: Modifier = Modifier,
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    label: @Composable (() -> Unit),
+) {
+    var visiblePassword by remember { mutableStateOf(false) }
+    SPTextField(
+        modifier = modifier,
+        value = value,
+        onValueChange = onValueChange,
+        maxLines = 1,
+        label = label,
+        visualTransformation = if (visiblePassword) {
+            VisualTransformation.None
+        } else {
+            PasswordVisualTransformation(mask = '*')
+        },
+        trailingIcon = {
+            IconButton(onClick = { visiblePassword = !visiblePassword }) {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    painter = if (visiblePassword) {
+                        Res.drawable.visibility_on
+                    } else {
+                        Res.drawable.visibility_off
+                    }.let { painterResource(it) },
+                    contentDescription = null
+                )
+            }
+        }
     )
 }

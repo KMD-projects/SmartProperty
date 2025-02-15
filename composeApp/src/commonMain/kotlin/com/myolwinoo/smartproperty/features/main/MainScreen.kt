@@ -26,14 +26,20 @@ fun NavController.navigateToMain() {
     navigate(MainRoute)
 }
 
-fun NavGraphBuilder.mainScreen() {
+fun NavGraphBuilder.mainScreen(
+    onLogout: () -> Unit
+) {
     composable<MainRoute> {
-        Screen()
+        Screen(
+            onLogout = onLogout
+        )
     }
 }
 
 @Composable
-private fun Screen() {
+private fun Screen(
+    onLogout: () -> Unit
+) {
     var currentDestination by rememberSaveable { mutableStateOf(MainDestinations.Explore) }
     NavigationSuiteScaffold(
         navigationSuiteItems = {
@@ -55,7 +61,9 @@ private fun Screen() {
         when (currentDestination) {
             MainDestinations.Explore -> ExploreScreen()
             MainDestinations.WISHLISTS -> WishlistsScreen()
-            MainDestinations.PROFILE -> ProfileScreen()
+            MainDestinations.PROFILE -> ProfileScreen(
+                onLogout = onLogout
+            )
         }
     }
 }
@@ -63,5 +71,7 @@ private fun Screen() {
 @Preview
 @Composable
 private fun Preview() {
-    Screen()
+    Screen(
+        onLogout = {}
+    )
 }

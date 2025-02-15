@@ -3,10 +3,34 @@
     <string name="label_wishlist">လိုချင်စရာများ</string>
     <string name="label_search">ရှာရန်</string>
     <string name="label_profile">ပရိုဖိုင်</string>
-
     <string name="label_login">ဝင်ရန်</string>
     <string name="label_register">အကောင့်ဖွင့်</string>
-
+    <string name="label_logout">အကောင့်ထွက်ရန်</string>
     <string name="label_email">အီးမေးလ်</string>
     <string name="label_password">စကားဝှက်</string>
+    <string name="label_confirm_password">စကားဝှက်အတည်ပြုရန်</string>
+    <string name="label_start_explore">နှစ်သက်ရာအခန်းများကို ရှာဖွေရန်</string>
+    <string name="label_ok">အိုကေ</string>
+    <string name="label_name">အမည်</string>
+    <string name="label_phone">ဖုန်းနံပါတ်</string>
+    <string name="label_address">လိပ်စာ</string>
+    <string name="label_help">အကူအညီစင်တာ</string>
+    <string name="label_feedback">ပြောပြရန်</string>
+    <string name="label_terms">ဝန်ဆောင်မှုစည်းမျဉ်းများ</string>
+    <string name="label_privacy_policy">ကိုယ်ရေးကိုယ်တာမူဝါဒ</string>
+    <string name="label_language">ဘာသာစကား</string>
+
+    <string name="title_login_error">အကောင့်ဝင်ရန် မအောင်မြင်ပါ</string>
+    <string name="title_register_error">မှတ်ပုံတင်ရန် မအောင်မြင်ပါ</string>
+    <string name="title_welcome">ကြိုဆိုပါသည်!</string>
+    <string name="title_personal_info">ကိုယ်ရေးကိုယ်တာအချက်အလက်</string>
+    <string name="title_support">အထောက်အပံ့</string>
+    <string name="title_legal">ဥပဒေဆိုင်ရာ</string>
+
+    <string name="message_login_error">အသုံးပြုသူအမည် သို့မဟုတ် စကားဝှက် မှားယွင်းနေပါသည်။ ကျေးဇူးပြု၍ ထပ်ကြိုးစားပါ။</string>
+    <string name="message_register_error">မှတ်ပုံတင်ရန် မအောင်မြင်ပါ။ ကျေးဇူးပြု၍ ထပ်ကြိုးစားပါ။</string>
+    <string name="message_login_part1">အကောင့်ဝင်ရန် သို့မဟုတ် </string>
+    <string name="message_login_part2">အကောင့်အသစ်ဖွင့်ပါ</string>
+    <string name="message_register_part1">သင့်အကောင့်အချက်အလက်များကို ဖြည့်ပါ သို့မဟုတ် </string>
+    <string name="message_register_part2">အကောင့်ဝင်ပါ</string>
 </resources>

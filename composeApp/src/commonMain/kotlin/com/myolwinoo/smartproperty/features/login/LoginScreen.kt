@@ -1,53 +1,53 @@
 package com.myolwinoo.smartproperty.features.login
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.LinkInteractionListener
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.withLink
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.myolwinoo.smartproperty.common.LoadingOverlay
+import com.myolwinoo.smartproperty.common.SPPasswordTextField
 import com.myolwinoo.smartproperty.common.SPTextField
+import com.myolwinoo.smartproperty.design.theme.AppDimens
 import com.myolwinoo.smartproperty.design.theme.SPTheme
 import kotlinx.serialization.Serializable
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import smartproperty.composeapp.generated.resources.Res
-import smartproperty.composeapp.generated.resources.compose_multiplatform
 import smartproperty.composeapp.generated.resources.label_email
 import smartproperty.composeapp.generated.resources.label_login
 import smartproperty.composeapp.generated.resources.label_ok
 import smartproperty.composeapp.generated.resources.label_password
-import smartproperty.composeapp.generated.resources.label_register
 import smartproperty.composeapp.generated.resources.message_login_error
+import smartproperty.composeapp.generated.resources.message_login_part1
+import smartproperty.composeapp.generated.resources.message_login_part2
 import smartproperty.composeapp.generated.resources.title_login_error
-import smartproperty.composeapp.generated.resources.visibility_off
-import smartproperty.composeapp.generated.resources.visibility_on
+import smartproperty.composeapp.generated.resources.title_welcome
 
 @Serializable
 object LoginRoute
@@ -124,59 +124,90 @@ private fun Screen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painterResource(Res.drawable.compose_multiplatform),
-                contentDescription = null
+            Spacer(
+                Modifier.size(64.dp)
+            )
+            Text(
+                modifier = Modifier
+                    .padding(horizontal = AppDimens.Spacing.xl)
+                    .fillMaxWidth(),
+                text = stringResource(Res.string.title_welcome),
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Spacer(
+                Modifier.size(AppDimens.Spacing.m)
+            )
+            Text(
+                modifier = Modifier
+                    .padding(horizontal = AppDimens.Spacing.xl)
+                    .fillMaxWidth(),
+                text = buildAnnotatedString {
+                    append(stringResource(Res.string.message_login_part1))
+                    withStyle(
+                        style = SpanStyle(
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    ) {
+                        withLink(LinkAnnotation.Clickable(
+                            tag = "register",
+                            linkInteractionListener = object : LinkInteractionListener {
+                                override fun onClick(link: LinkAnnotation) {
+                                    onRegisterClick()
+                                }
+                            }
+                        )) {
+                            append(stringResource(Res.string.message_login_part2))
+                        }
+                    }
+                },
+                style = MaterialTheme.typography.bodyMedium
+            )
+            Spacer(
+                Modifier.size(AppDimens.Spacing.xl)
             )
             SPTextField(
+                modifier = Modifier
+                    .padding(horizontal = AppDimens.Spacing.xl)
+                    .fillMaxWidth(),
                 value = email,
                 onValueChange = onEmailChange,
                 maxLines = 1,
                 label = { Text(stringResource(Res.string.label_email)) },
                 suffix = { Text(text = "@gmail.com") }
             )
-            var visiblePassword by remember { mutableStateOf(false) }
-            SPTextField(
+            Spacer(
+                Modifier.size(AppDimens.Spacing.m)
+            )
+            Spacer(
+                Modifier.size(AppDimens.Spacing.m)
+            )
+            SPPasswordTextField(
+                modifier = Modifier
+                    .padding(horizontal = AppDimens.Spacing.xl)
+                    .fillMaxWidth(),
                 value = password,
                 onValueChange = onPasswordChange,
-                maxLines = 1,
-                label = { Text(stringResource(Res.string.label_password)) },
-                visualTransformation = if (visiblePassword) {
-                    VisualTransformation.None
-                } else {
-                    PasswordVisualTransformation(mask = '*')
-                },
-                trailingIcon = {
-                    IconButton(onClick = { visiblePassword = !visiblePassword }) {
-                        Icon(
-                            modifier = Modifier.size(24.dp),
-                            painter = if (visiblePassword) {
-                                Res.drawable.visibility_on
-                            } else {
-                                Res.drawable.visibility_off
-                            }.let { painterResource(it) },
-                            contentDescription = null
-                        )
-                    }
-                }
+                label = { Text(stringResource(Res.string.label_password)) }
+            )
+            Spacer(
+                modifier = Modifier.weight(1f)
             )
             Button(
+                modifier = Modifier
+                    .padding(
+                        start = AppDimens.Spacing.xl,
+                        end = AppDimens.Spacing.xl,
+                        bottom = AppDimens.Spacing.xxl
+                    )
+                    .fillMaxWidth()
+                    .widthIn(max = AppDimens.maxWidth),
                 enabled = isLoginEnabled,
                 onClick = { onLogin() }
             ) {
                 Text(
                     text = stringResource(Res.string.label_login)
-                )
-            }
-
-            Button(
-                onClick = { onRegisterClick() }
-            ) {
-                Text(
-                    text = stringResource(Res.string.label_register)
                 )
             }
         }
@@ -196,7 +227,7 @@ private fun Preview() {
             onEmailChange = {},
             password = TextFieldValue(),
             onPasswordChange = {},
-            isLoading = true,
+            isLoading = false,
             isLoginEnabled = true,
             onLogin = {},
             onRegisterClick = {},
