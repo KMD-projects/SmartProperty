@@ -6,11 +6,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,6 +31,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.myolwinoo.smartproperty.common.LoadingOverlay
 import com.myolwinoo.smartproperty.common.SPTextField
+import com.myolwinoo.smartproperty.design.theme.SPTheme
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -38,8 +41,11 @@ import smartproperty.composeapp.generated.resources.Res
 import smartproperty.composeapp.generated.resources.compose_multiplatform
 import smartproperty.composeapp.generated.resources.label_email
 import smartproperty.composeapp.generated.resources.label_login
+import smartproperty.composeapp.generated.resources.label_ok
 import smartproperty.composeapp.generated.resources.label_password
 import smartproperty.composeapp.generated.resources.label_register
+import smartproperty.composeapp.generated.resources.message_login_error
+import smartproperty.composeapp.generated.resources.title_login_error
 import smartproperty.composeapp.generated.resources.visibility_off
 import smartproperty.composeapp.generated.resources.visibility_on
 
@@ -73,8 +79,10 @@ fun NavGraphBuilder.loginScreen(
             onPasswordChange = viewModel::onPasswordChange,
             isLoading = viewModel.isLoading,
             isLoginEnabled = isLoginEnabled.value,
-            onLoginSuccess = viewModel::login,
-            onRegisterClick = onRegisterClick
+            onLogin = viewModel::login,
+            onRegisterClick = onRegisterClick,
+            showLoginError = viewModel.showLoginError,
+            dismissLoginError = viewModel::dismissLoginError
         )
     }
 }
@@ -87,9 +95,30 @@ private fun Screen(
     onPasswordChange: (TextFieldValue) -> Unit,
     isLoading: Boolean,
     isLoginEnabled: Boolean,
-    onLoginSuccess: () -> Unit,
-    onRegisterClick: () -> Unit
+    onLogin: () -> Unit,
+    onRegisterClick: () -> Unit,
+    showLoginError: Boolean,
+    dismissLoginError: () -> Unit,
 ) {
+    if (showLoginError) {
+        AlertDialog(
+            title = {
+                Text(stringResource(Res.string.title_login_error))
+            },
+            text = {
+                Text(stringResource(Res.string.message_login_error))
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = dismissLoginError
+                ) {
+                    Text(stringResource(Res.string.label_ok))
+                }
+            },
+            onDismissRequest = dismissLoginError
+        )
+    }
+
     Scaffold { innerPadding ->
         Column(
             modifier = Modifier
@@ -136,16 +165,20 @@ private fun Screen(
             )
             Button(
                 enabled = isLoginEnabled,
-                onClick = { onLoginSuccess() }
-            ) { Text(
-                text = stringResource(Res.string.label_login)
-            ) }
+                onClick = { onLogin() }
+            ) {
+                Text(
+                    text = stringResource(Res.string.label_login)
+                )
+            }
 
             Button(
                 onClick = { onRegisterClick() }
-            ) { Text(
-                text = stringResource(Res.string.label_register)
-            ) }
+            ) {
+                Text(
+                    text = stringResource(Res.string.label_register)
+                )
+            }
         }
 
         if (isLoading) {
@@ -157,14 +190,18 @@ private fun Screen(
 @Preview
 @Composable
 private fun Preview() {
-    Screen(
-        email = TextFieldValue(),
-        onEmailChange = {},
-        password = TextFieldValue(),
-        onPasswordChange = {},
-        isLoading = true,
-        isLoginEnabled = true,
-        onLoginSuccess = {},
-        onRegisterClick = {}
-    )
+    SPTheme {
+        Screen(
+            email = TextFieldValue(),
+            onEmailChange = {},
+            password = TextFieldValue(),
+            onPasswordChange = {},
+            isLoading = true,
+            isLoginEnabled = true,
+            onLogin = {},
+            onRegisterClick = {},
+            showLoginError = true,
+            dismissLoginError = {}
+        )
+    }
 }

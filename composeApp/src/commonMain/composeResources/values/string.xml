@@ -9,4 +9,12 @@
 
     <string name="label_email">Email</string>
     <string name="label_password">Password</string>
+    <string name="label_start_explore">Explore your favorite properties</string>
+
+    <string name="title_login_error">Login Failed</string>
+    <string name="message_login_error">Incorrect username or password. Please try again.</string>
+    <string name="label_ok">OK</string>
+
+    <string name="title_register_error">Register Failed</string>
+    <string name="message_register_error">Failed to register. Please try again.</string>
 </resources>

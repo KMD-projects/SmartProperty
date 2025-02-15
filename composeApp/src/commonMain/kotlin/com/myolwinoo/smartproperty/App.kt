@@ -52,7 +52,7 @@ fun AppNavHost() {
 
     SPNavHost(
         navController = navController,
-        startDestination = MainRoute
+        startDestination = AuthNavRoute
     ) {
         authNav(
             navController = navController,

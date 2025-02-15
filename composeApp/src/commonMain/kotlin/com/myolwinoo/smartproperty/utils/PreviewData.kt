@@ -1,9 +1,24 @@
-package com.myolwinoo.smartproperty
+package com.myolwinoo.smartproperty.utils
 
 import com.myolwinoo.smartproperty.data.model.Property
 import com.myolwinoo.smartproperty.data.model.PropertyType
+import com.myolwinoo.smartproperty.data.model.User
+import com.myolwinoo.smartproperty.data.model.UserRole
 
 object PreviewData {
+
+    val user = User(
+        id = "123",
+        name = "Emrys",
+        email = "emrys@gmail.com",
+        phone = "09123456789",
+        address = "test",
+        role = UserRole.RENTER,
+        profileImage = "",
+        verified = true,
+        createdAt = "",
+        updatedAt = "",
+    )
 
     val properties = listOf(
         Property(

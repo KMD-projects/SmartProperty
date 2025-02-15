@@ -5,10 +5,9 @@ data class User(
     val name: String,
     val email: String,
     val phone: String,
-    val passwordHash: String,
+    val address: String,
     val role: UserRole,
     val profileImage: String? = null,
-    val bio: String? = null,
     val verified: Boolean = false,
     val createdAt: String,
     val updatedAt: String

@@ -30,7 +30,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.myolwinoo.smartproperty.PreviewData
+import com.myolwinoo.smartproperty.utils.PreviewData
 import com.myolwinoo.smartproperty.data.model.Property
 import com.myolwinoo.smartproperty.design.theme.SPTheme
 import org.jetbrains.compose.resources.painterResource
@@ -67,7 +67,6 @@ fun PropertyItem(
             .padding(horizontal = 20.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column {
             // Property Image
