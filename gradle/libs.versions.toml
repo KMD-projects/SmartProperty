@@ -8,6 +8,7 @@ composeCmpVersion = "1.7.0"
 composeCmpMaterialNavigationVersion = "1.7.0-beta02"
 compose-multiplatform = "1.7.0"
 coil3Version = "3.1.0"
+datastore = "1.1.2"
 kotlin = "2.1.10"
 kotlinx-coroutines = "1.10.1"
 kotlinx-serialization = "1.8.0"
@@ -17,6 +18,8 @@ lifecycleCmpVersion = "2.8.4"
 navigationCmpVersion = "2.8.0-alpha10"
 
 [libraries]
+datastore-preference-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore" }
+
 jetbrains-compose-material-navigation = { group = "org.jetbrains.compose.material", name="material-navigation", version.ref = "composeCmpMaterialNavigationVersion" }
 jetbrains-compose-material3-adaptive-navigation-suite = { group = "org.jetbrains.compose.material3", name="material3-adaptive-navigation-suite", version.ref = "composeCmpVersion" }
 jetbrains-compose-material3-window-size = { group = "org.jetbrains.compose.material3", name="material3-window-size-class", version.ref = "composeCmpVersion" }
@@ -30,8 +33,13 @@ jetbrains-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycl
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+
 koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin-bom" }
+koin-test = { group = "io.insert-koin", name = "koin-test" }
+koin-test-junit4 = { group = "io.insert-koin", name = "koin-test-junit4" }
 koin-core = { group = "io.insert-koin", name = "koin-core" }
+koin-android = { group = "io.insert-koin", name = "koin-android" }
 koin-compose = { group = "io.insert-koin", name = "koin-compose" }
 koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel" }
 koin-compose-viewmodel-navigation = { group = "io.insert-koin", name = "koin-compose-viewmodel-navigation" }

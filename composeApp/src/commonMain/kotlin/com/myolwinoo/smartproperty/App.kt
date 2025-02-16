@@ -1,14 +1,15 @@
 package com.myolwinoo.smartproperty
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.myolwinoo.smartproperty.common.SPNavHost
+import com.myolwinoo.smartproperty.data.AccountManager
 import com.myolwinoo.smartproperty.design.theme.SPTheme
-import com.myolwinoo.smartproperty.di.dataModule
-import com.myolwinoo.smartproperty.di.viewModelModule
+import com.myolwinoo.smartproperty.di.appModule
 import com.myolwinoo.smartproperty.features.login.LoginRoute
 import com.myolwinoo.smartproperty.features.login.loginScreen
 import com.myolwinoo.smartproperty.features.main.MainRoute
@@ -18,6 +19,7 @@ import com.myolwinoo.smartproperty.features.register.registerScreen
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
+import org.koin.compose.koinInject
 
 @Composable
 @Preview
@@ -25,8 +27,7 @@ fun App() {
     KoinApplication(
         application = {
             modules(
-                viewModelModule,
-                dataModule
+                appModule
             )
         }
     ) {
@@ -37,8 +38,19 @@ fun App() {
 }
 
 @Composable
+@Preview
+fun AppWithoutKoin() {
+    SPTheme {
+        AppNavHost()
+    }
+}
+
+@Composable
 fun AppNavHost() {
     val navController = rememberNavController()
+    val accountManager = koinInject<AccountManager>()
+
+    val isLoggedIn = accountManager.isLoggedInFlow.collectAsStateWithLifecycle(null).value ?: return
 
     val navigateToMain = {
         navController.navigate(MainRoute) {
@@ -50,7 +62,11 @@ fun AppNavHost() {
 
     SPNavHost(
         navController = navController,
-        startDestination = AuthNavRoute
+        startDestination = if (isLoggedIn) {
+            MainRoute
+        } else {
+            AuthNavRoute
+        }
     ) {
         authNav(
             navController = navController,

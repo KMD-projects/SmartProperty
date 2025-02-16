@@ -33,12 +33,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import coil3.compose.AsyncImage
 import com.myolwinoo.smartproperty.design.theme.AppDimens
 import com.myolwinoo.smartproperty.design.theme.SPTheme
+import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 import smartproperty.composeapp.generated.resources.Res
 import smartproperty.composeapp.generated.resources.account_circle
 import smartproperty.composeapp.generated.resources.arrow_right
@@ -56,11 +60,23 @@ import smartproperty.composeapp.generated.resources.title_legal
 import smartproperty.composeapp.generated.resources.title_personal_info
 import smartproperty.composeapp.generated.resources.title_support
 
+@Serializable
+object ProfileRoute
+
+fun NavGraphBuilder.profileScreen() {
+    composable<ProfileRoute> {
+//        val viewModel: ProfileViewModel = koinViewModel<ProfileViewModel>()
+//        ProfileScreen(
+//            onLogout = viewModel::logout
+//        )
+    }
+}
+
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    onLogout: () -> Unit
 ) {
+    val viewModel: ProfileViewModel = koinViewModel<ProfileViewModel>()
     val statusBarInset = WindowInsets.statusBars.asPaddingValues()
     Column(
         modifier = modifier
@@ -151,7 +167,7 @@ fun ProfileScreen(
                 )
                 .fillMaxWidth()
                 .widthIn(max = AppDimens.maxWidth),
-            onClick = { onLogout() },
+            onClick = { viewModel.logout() },
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.errorContainer,
                 contentColor = MaterialTheme.colorScheme.onErrorContainer
@@ -276,7 +292,7 @@ private fun Item(
 private fun Preview() {
     SPTheme {
         ProfileScreen(
-            onLogout = {}
+//            onLogout = {}
         )
     }
 }
