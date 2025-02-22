@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myolwinoo.smartproperty.data.AccountManager
 import com.myolwinoo.smartproperty.data.model.User
+import com.myolwinoo.smartproperty.data.network.SPApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
@@ -12,7 +13,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
-    private val accountManager: AccountManager,
+    accountManager: AccountManager,
+    private val spApi: SPApi,
 ): ViewModel() {
 
     val profile: StateFlow<User?> = accountManager.userFlow
@@ -27,7 +29,7 @@ class ProfileViewModel(
 
     fun logout() {
         viewModelScope.launch {
-            accountManager.logout()
+            spApi.logout()
             _events.emit("logout")
         }
     }

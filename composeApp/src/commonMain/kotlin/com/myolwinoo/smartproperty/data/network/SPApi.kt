@@ -60,6 +60,13 @@ class SPApi(
         }
     }
 
+    suspend fun logout(): Result<Unit> {
+        return runCatching {
+            client.post("api/v1/logout")
+            accountManager.logout()
+        }
+    }
+
     suspend fun getProfile(): Result<User> {
         return runCatching {
             accountManager.getUser()
