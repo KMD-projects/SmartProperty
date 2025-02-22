@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalFoundationApi::class)
+@file:OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 
 package com.myolwinoo.smartproperty.features.explore
 
@@ -18,9 +18,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -69,7 +72,10 @@ fun ExploreScreen(
     Screen(
         modifier = modifier,
         isLoading = viewModel.isLoading,
-        properties = properties.value
+        properties = properties.value,
+        onClick = {},
+        onRefresh = viewModel::refresh,
+        onFavoriteClick = viewModel::toggleFavorite
     )
 }
 
@@ -77,12 +83,19 @@ fun ExploreScreen(
 private fun Screen(
     modifier: Modifier = Modifier,
     isLoading: Boolean,
-    properties: List<Property>
+    properties: List<Property>,
+    onRefresh: () -> Unit,
+    onClick: (String) -> Unit,
+    onFavoriteClick: (String) -> Unit
 ) {
     val statusBarInset = WindowInsets.statusBars.asPaddingValues()
-    if (isLoading) {
-        LoadingOverlay()
-    } else {
+    val pullToRefreshState = rememberPullToRefreshState()
+
+    PullToRefreshBox(
+        state = pullToRefreshState,
+        isRefreshing = isLoading,
+        onRefresh = onRefresh
+    ) {
         LazyColumn(
             modifier = modifier
                 .padding(top = statusBarInset.calculateTopPadding())
@@ -123,7 +136,9 @@ private fun Screen(
                 }
             }
             propertyList(
-                properties = properties
+                properties = properties,
+                onClick = onClick,
+                onFavoriteClick = onFavoriteClick
             )
         }
     }
@@ -134,6 +149,9 @@ private fun Screen(
 private fun Preview() {
     Screen(
         isLoading = false,
-        properties = listOf()
+        properties = listOf(),
+        onClick = {},
+        onRefresh = {},
+        onFavoriteClick = {}
     )
 }

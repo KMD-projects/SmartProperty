@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class ExploreViewModel(
     private val spApi: SPApi
-): ViewModel() {
+) : ViewModel() {
 
     private val _properties = MutableStateFlow<List<Property>>(emptyList())
     val properties: StateFlow<List<Property>> = _properties
@@ -23,6 +23,10 @@ class ExploreViewModel(
         private set
 
     init {
+        refresh()
+    }
+
+    fun refresh() {
         viewModelScope.launch {
             isLoading = true
             spApi.getPropertyList()
@@ -30,6 +34,23 @@ class ExploreViewModel(
                     _properties.update { result }
                 }
             isLoading = false
+        }
+    }
+
+    fun toggleFavorite(propertyId: String) {
+        viewModelScope.launch {
+            spApi.toggleFavorite(propertyId)
+                .onSuccess {
+                    _properties.update { list ->
+                        list.map {
+                            if (it.id == propertyId) {
+                                it.copy(isFavorite = !it.isFavorite)
+                            } else {
+                                it
+                            }
+                        }
+                    }
+                }
         }
     }
 }

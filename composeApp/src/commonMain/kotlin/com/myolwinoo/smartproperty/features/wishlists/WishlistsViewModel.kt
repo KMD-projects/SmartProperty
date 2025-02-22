@@ -23,6 +23,10 @@ class WishlistsViewModel(
         private set
 
     init {
+        refresh()
+    }
+
+    fun refresh() {
         viewModelScope.launch {
             isLoading = true
             spApi.getWishlists()
@@ -30,6 +34,19 @@ class WishlistsViewModel(
                     _properties.update { result }
                 }
             isLoading = false
+        }
+    }
+
+    fun toggleFavorite(propertyId: String) {
+        viewModelScope.launch {
+            spApi.toggleFavorite(propertyId)
+                .onSuccess {
+                    _properties.update { list ->
+                        list.filterNot {
+                            it.id == propertyId && it.isFavorite
+                        }
+                    }
+                }
         }
     }
 }

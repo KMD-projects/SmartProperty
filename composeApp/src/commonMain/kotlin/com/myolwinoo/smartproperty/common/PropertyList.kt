@@ -41,7 +41,9 @@ import smartproperty.composeapp.generated.resources.favorite_filled
 import smartproperty.composeapp.generated.resources.location_on
 
 fun LazyListScope.propertyList(
-    properties: List<Property>
+    properties: List<Property>,
+    onClick: (String) -> Unit,
+    onFavoriteClick: (String) -> Unit
 ) {
     items(
         items = properties,
@@ -49,8 +51,8 @@ fun LazyListScope.propertyList(
     ) {
         PropertyItem(
             property = it,
-            onClick = {},
-            onFavoriteClick = {}
+            onClick = onClick,
+            onFavoriteClick = onFavoriteClick
         )
     }
 }
@@ -58,14 +60,14 @@ fun LazyListScope.propertyList(
 @Composable
 fun PropertyItem(
     property: Property,
-    onClick: () -> Unit,
-    onFavoriteClick: () -> Unit
+    onClick: (String) -> Unit,
+    onFavoriteClick: (String) -> Unit
 ) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
-            .clickable { onClick() },
+            .clickable { onClick(property.id) },
         shape = RoundedCornerShape(12.dp),
     ) {
         Column {
@@ -97,7 +99,7 @@ fun PropertyItem(
                             .alignByBaseline()
                     )
                     IconButton(
-                        onClick = { onFavoriteClick() },
+                        onClick = { onFavoriteClick(property.id) },
                         modifier = Modifier
                             .size(32.dp)
                             .alignByBaseline()

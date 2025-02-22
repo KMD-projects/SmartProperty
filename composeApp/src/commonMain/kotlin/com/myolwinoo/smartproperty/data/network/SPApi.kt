@@ -93,7 +93,12 @@ class SPApi(
             .map { it.filter { it.isFavorite } }
     }
 
-//    suspend fun toggleFavorite(): Result<>
+    suspend fun toggleFavorite(propertyId: String): Result<Unit> {
+        return runCatching {
+            client.post("api/v1/properties/$propertyId/favorite")
+                .body<BaseResponse<List<Unit>>>()
+        }
+    }
 
     private fun mapUser(userData: UserData): User {
         return User(
