@@ -5,6 +5,7 @@ import com.myolwinoo.smartproperty.data.model.Property
 import com.myolwinoo.smartproperty.data.model.User
 import com.myolwinoo.smartproperty.data.model.UserRole
 import com.myolwinoo.smartproperty.data.network.model.BaseResponse
+import com.myolwinoo.smartproperty.data.network.model.PropertyData
 import com.myolwinoo.smartproperty.data.network.model.RegisterRequest
 import com.myolwinoo.smartproperty.data.network.model.UserData
 import com.myolwinoo.smartproperty.utils.PreviewData
@@ -79,8 +80,12 @@ class SPApi(
     }
 
     suspend fun getPropertyList(): Result<List<Property>> {
-        val properties = PreviewData.properties
-        return Result.success(PreviewData.properties)
+        return runCatching {
+            client.get("api/v1/properties")
+                .body<BaseResponse<List<PropertyData>>>()
+                .data
+                .map(::mapProperty)
+        }
     }
 
     suspend fun getWishlists(): Result<List<Property>> {
@@ -106,6 +111,34 @@ class SPApi(
             verified = false,
             createdAt = "",
             updatedAt = ""
+        )
+    }
+
+    private fun mapProperty(propertyData: PropertyData): Property {
+        return Property(
+            id = propertyData.id.orEmpty(),
+            landlordId = propertyData.landlord?.get("id").orEmpty(),
+            title = propertyData.title.orEmpty(),
+            description = propertyData.description.orEmpty(),
+            price = propertyData.price?.toDoubleOrNull() ?: 0.0,
+            location = propertyData.address.orEmpty(),
+            amenities = propertyData.amenities?.map { it["name"].orEmpty() }.orEmpty(),
+            // todo: update images here
+            images = listOf(
+                "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070",
+                "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=2000",
+                "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2000",
+                "https://plus.unsplash.com/premium_photo-1661874933205-969c5bfa3523?q=80&w=2128",
+                "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2000",
+                "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000"
+            ).shuffled(),
+            available = propertyData.isAvailable ?: false,
+            latitude = propertyData.latitude?.toDoubleOrNull() ?: 0.0,
+            longitude = propertyData.longitude?.toDoubleOrNull() ?: 0.0,
+            propertyType = propertyData.propertyType?.get("name").orEmpty(),
+            createdAt = propertyData.createdAt.orEmpty(),
+            updatedAt = propertyData.updatedAt.orEmpty(),
+            isFavorite = propertyData.isFavorite ?: false
         )
     }
 }

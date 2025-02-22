@@ -38,7 +38,7 @@ object PreviewData {
             available = true,
             latitude = 16.8409,
             longitude = 96.1735,
-            propertyType = PropertyType.APARTMENT,
+            propertyType = PropertyType.APARTMENT.name,
             createdAt = "2023-01-01",
             updatedAt = "2023-01-01",
             isFavorite = false
@@ -57,7 +57,7 @@ object PreviewData {
             available = true,
             latitude = 16.7742,
             longitude = 96.1584,
-            propertyType = PropertyType.CONDO,
+            propertyType = PropertyType.CONDO.name,
             createdAt = "2023-02-15",
             updatedAt = "2023-02-15",
             isFavorite = true
@@ -76,7 +76,7 @@ object PreviewData {
             available = false,
             latitude = 16.8133,
             longitude = 96.1566,
-            propertyType = PropertyType.HOUSE,
+            propertyType = PropertyType.HOUSE.name,
             createdAt = "2023-03-10",
             updatedAt = "2023-03-10",
             isFavorite = false
@@ -95,7 +95,7 @@ object PreviewData {
             available = true,
             latitude = 16.7991,
             longitude = 96.1441,
-            propertyType = PropertyType.ROOM,
+            propertyType = PropertyType.ROOM.name,
             createdAt = "2023-04-05",
             updatedAt = "2023-04-05",
             isFavorite = true
@@ -115,7 +115,7 @@ object PreviewData {
             available = true,
             latitude = 16.8211,
             longitude = 96.1525,
-            propertyType = PropertyType.CONDO,
+            propertyType = PropertyType.CONDO.name,
             createdAt = "2023-05-20",
             updatedAt = "2023-05-20",
             isFavorite = false

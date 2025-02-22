@@ -10,7 +10,7 @@ data class Property(
     val latitude: Double,
     val longitude: Double,
     val isFavorite: Boolean,
-    val propertyType: PropertyType,
+    val propertyType: String,
     val amenities: List<String>,
     val images: List<String>,
     val available: Boolean = true,
