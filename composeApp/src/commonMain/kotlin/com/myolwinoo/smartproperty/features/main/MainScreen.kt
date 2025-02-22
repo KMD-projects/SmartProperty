@@ -61,7 +61,9 @@ private fun Screen(
         when (currentDestination) {
             MainDestinations.Explore -> ExploreScreen()
             MainDestinations.WISHLISTS -> WishlistsScreen()
-            MainDestinations.PROFILE -> ProfileScreen()
+            MainDestinations.PROFILE -> ProfileScreen(
+                onLogout = onLogout
+            )
         }
     }
 }

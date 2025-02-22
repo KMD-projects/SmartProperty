@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +22,7 @@ import androidx.compose.ui.text.LinkInteractionListener
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
@@ -173,9 +175,11 @@ private fun Screen(
                     .fillMaxWidth(),
                 value = email,
                 onValueChange = onEmailChange,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email
+                ),
                 maxLines = 1,
-                label = { Text(stringResource(Res.string.label_email)) },
-                suffix = { Text(text = "@gmail.com") }
+                label = { Text(stringResource(Res.string.label_email)) }
             )
             Spacer(
                 Modifier.size(AppDimens.Spacing.m)

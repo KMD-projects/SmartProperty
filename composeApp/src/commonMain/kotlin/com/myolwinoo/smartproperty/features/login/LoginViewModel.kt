@@ -8,7 +8,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myolwinoo.smartproperty.data.network.SPApi
-import kotlinx.coroutines.delay
+import com.myolwinoo.smartproperty.utils.PreviewData
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
@@ -21,9 +21,9 @@ class LoginViewModel(
     private val spApi: SPApi
 ): ViewModel() {
 
-    var email by mutableStateOf(TextFieldValue(""))
+    var email by mutableStateOf(TextFieldValue(PreviewData.testEmail))
         private set
-    var password by mutableStateOf(TextFieldValue(""))
+    var password by mutableStateOf(TextFieldValue(PreviewData.testPassword))
         private set
     var isLoading by mutableStateOf(false)
         private set

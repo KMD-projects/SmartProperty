@@ -7,11 +7,12 @@
     <string name="label_register">အကောင့်ဖွင့်</string>
     <string name="label_logout">အကောင့်ထွက်ရန်</string>
     <string name="label_email">အီးမေးလ်</string>
+    <string name="label_username">အသုံးပြုသူအမည်</string>
+    <string name="label_name">အပြည့်အစုံအမည်</string>
     <string name="label_password">စကားဝှက်</string>
     <string name="label_confirm_password">စကားဝှက်အတည်ပြုရန်</string>
     <string name="label_start_explore">နှစ်သက်ရာအခန်းများကို ရှာဖွေရန်</string>
     <string name="label_ok">အိုကေ</string>
-    <string name="label_name">အမည်</string>
     <string name="label_phone">ဖုန်းနံပါတ်</string>
     <string name="label_address">လိပ်စာ</string>
     <string name="label_help">အကူအညီစင်တာ</string>

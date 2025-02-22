@@ -8,6 +8,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myolwinoo.smartproperty.data.network.SPApi
+import com.myolwinoo.smartproperty.data.network.model.RegisterRequest
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
@@ -20,11 +21,19 @@ class RegisterViewModel(
     private val spApi: SPApi
 ): ViewModel() {
 
+    var name by mutableStateOf(TextFieldValue(""))
+        private set
+    var username by mutableStateOf(TextFieldValue(""))
+        private set
     var email by mutableStateOf(TextFieldValue(""))
         private set
     var password by mutableStateOf(TextFieldValue(""))
         private set
     var confirmPassword by mutableStateOf(TextFieldValue(""))
+        private set
+    var phone by mutableStateOf(TextFieldValue(""))
+        private set
+    var address by mutableStateOf(TextFieldValue(""))
         private set
     var isLoading by mutableStateOf(false)
         private set
@@ -46,6 +55,22 @@ class RegisterViewModel(
     private val _events = MutableSharedFlow<String>()
     val events: SharedFlow<String> = _events
 
+    fun onNameChange(value: TextFieldValue) {
+        name = value
+    }
+
+    fun onUsernameChange(value: TextFieldValue) {
+        username = value
+    }
+
+    fun onPhoneChange(value: TextFieldValue) {
+        phone = value
+    }
+
+    fun onAddressChange(value: TextFieldValue) {
+        address = value
+    }
+
     fun onEmailChange(value: TextFieldValue) {
         email = value
     }
@@ -62,8 +87,15 @@ class RegisterViewModel(
         viewModelScope.launch {
             isLoading = true
             spApi.register(
-                email = email.text,
-                password = password.text
+                RegisterRequest(
+                    email = email.text,
+                    password = password.text,
+                    confirmPassword = confirmPassword.text,
+                    name = name.text,
+                    username = username.text,
+                    phone = phone.text,
+                    address = address.text
+                )
             ).onSuccess {
                 _events.emit("register_success")
             }.onFailure {

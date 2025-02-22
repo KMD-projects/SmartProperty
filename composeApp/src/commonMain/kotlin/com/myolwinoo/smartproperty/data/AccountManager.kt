@@ -8,6 +8,7 @@ import com.myolwinoo.smartproperty.data.model.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 
@@ -15,6 +16,7 @@ class AccountManager(
     private val dataStore: DataStore<Preferences>
 ) {
     private val keyLoggedInUser = stringPreferencesKey("logged_in_user")
+    private val keyToken = stringPreferencesKey("token")
 
     val userFlow = dataStore.data
         .map {
@@ -24,7 +26,7 @@ class AccountManager(
 
     val isLoggedInFlow = userFlow.map { it != null }
 
-    suspend fun isLoggedIn(): Boolean = getUser() != null
+    fun isLoggedIn(): Boolean = getToken() != null
 
     suspend fun getUser(): User? = withContext(Dispatchers.Default) {
         runCatching {
@@ -38,9 +40,30 @@ class AccountManager(
         }
     }
 
-    suspend fun removeUser() {
+    private suspend fun removeUser() {
         dataStore.edit {
             it.remove(keyLoggedInUser)
         }
+    }
+
+    fun getToken(): String? = runBlocking {
+        dataStore.data.first()[keyToken]
+    }
+
+    suspend fun saveToken(token: String) {
+        dataStore.edit {
+            it[keyToken] = token
+        }
+    }
+
+    private suspend fun removeToken() {
+        dataStore.edit {
+            it.remove(keyToken)
+        }
+    }
+
+    suspend fun logout() {
+        removeUser()
+        removeToken()
     }
 }

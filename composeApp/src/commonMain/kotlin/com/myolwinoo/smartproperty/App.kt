@@ -1,7 +1,6 @@
 package com.myolwinoo.smartproperty
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.navigation
@@ -50,7 +49,7 @@ fun AppNavHost() {
     val navController = rememberNavController()
     val accountManager = koinInject<AccountManager>()
 
-    val isLoggedIn = accountManager.isLoggedInFlow.collectAsStateWithLifecycle(null).value ?: return
+    val isLoggedIn = accountManager.isLoggedIn()
 
     val navigateToMain = {
         navController.navigate(MainRoute) {

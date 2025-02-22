@@ -7,6 +7,9 @@ import com.myolwinoo.smartproperty.data.model.UserRole
 
 object PreviewData {
 
+    val testEmail = "myo@test.com"
+    val testPassword = "password"
+
     val user = User(
         id = "123",
         name = "Emrys",

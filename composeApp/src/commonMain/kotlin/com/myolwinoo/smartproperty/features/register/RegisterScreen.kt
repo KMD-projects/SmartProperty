@@ -7,6 +7,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +24,7 @@ import androidx.compose.ui.text.LinkInteractionListener
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
@@ -39,12 +43,15 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import smartproperty.composeapp.generated.resources.Res
+import smartproperty.composeapp.generated.resources.label_address
 import smartproperty.composeapp.generated.resources.label_confirm_password
 import smartproperty.composeapp.generated.resources.label_email
-import smartproperty.composeapp.generated.resources.label_login
+import smartproperty.composeapp.generated.resources.label_name
 import smartproperty.composeapp.generated.resources.label_ok
 import smartproperty.composeapp.generated.resources.label_password
+import smartproperty.composeapp.generated.resources.label_phone
 import smartproperty.composeapp.generated.resources.label_register
+import smartproperty.composeapp.generated.resources.label_username
 import smartproperty.composeapp.generated.resources.message_register_error
 import smartproperty.composeapp.generated.resources.message_register_part1
 import smartproperty.composeapp.generated.resources.message_register_part2
@@ -75,6 +82,14 @@ fun NavGraphBuilder.registerScreen(
         }
 
         Screen(
+            name = viewModel.name,
+            onNameChange = viewModel::onNameChange,
+            username = viewModel.username,
+            onUsernameChange = viewModel::onUsernameChange,
+            phone = viewModel.phone,
+            onPhoneChange = viewModel::onPhoneChange,
+            address = viewModel.address,
+            onAddressChange = viewModel::onAddressChange,
             email = viewModel.email,
             onEmailChange = viewModel::onEmailChange,
             password = viewModel.password,
@@ -93,6 +108,14 @@ fun NavGraphBuilder.registerScreen(
 
 @Composable
 private fun Screen(
+    name: TextFieldValue,
+    onNameChange: (TextFieldValue) -> Unit,
+    username: TextFieldValue,
+    onUsernameChange: (TextFieldValue) -> Unit,
+    phone: TextFieldValue,
+    onPhoneChange: (TextFieldValue) -> Unit,
+    address: TextFieldValue,
+    onAddressChange: (TextFieldValue) -> Unit,
     email: TextFieldValue,
     onEmailChange: (TextFieldValue) -> Unit,
     password: TextFieldValue,
@@ -128,6 +151,7 @@ private fun Screen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(innerPadding),
         ) {
             Spacer(
@@ -176,11 +200,43 @@ private fun Screen(
                 modifier = Modifier
                     .padding(horizontal = AppDimens.Spacing.xl)
                     .fillMaxWidth(),
+                value = username,
+                onValueChange = onUsernameChange,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text
+                ),
+                maxLines = 1,
+                label = { Text(stringResource(Res.string.label_username)) }
+            )
+            Spacer(
+                Modifier.size(AppDimens.Spacing.m)
+            )
+            SPTextField(
+                modifier = Modifier
+                    .padding(horizontal = AppDimens.Spacing.xl)
+                    .fillMaxWidth(),
+                value = name,
+                onValueChange = onNameChange,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text
+                ),
+                maxLines = 1,
+                label = { Text(stringResource(Res.string.label_name)) }
+            )
+            Spacer(
+                Modifier.size(AppDimens.Spacing.m)
+            )
+            SPTextField(
+                modifier = Modifier
+                    .padding(horizontal = AppDimens.Spacing.xl)
+                    .fillMaxWidth(),
                 value = email,
                 onValueChange = onEmailChange,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email
+                ),
                 maxLines = 1,
-                label = { Text(stringResource(Res.string.label_email)) },
-                suffix = { Text(text = "@gmail.com") }
+                label = { Text(stringResource(Res.string.label_email)) }
             )
             Spacer(
                 Modifier.size(AppDimens.Spacing.m)
@@ -205,7 +261,37 @@ private fun Screen(
                 { Text(stringResource(Res.string.label_confirm_password)) }
             )
             Spacer(
-                modifier = Modifier.weight(1f)
+                Modifier.size(AppDimens.Spacing.m)
+            )
+            SPTextField(
+                modifier = Modifier
+                    .padding(horizontal = AppDimens.Spacing.xl)
+                    .fillMaxWidth(),
+                value = phone,
+                onValueChange = onPhoneChange,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Phone
+                ),
+                maxLines = 1,
+                label = { Text(stringResource(Res.string.label_phone)) }
+            )
+            Spacer(
+                Modifier.size(AppDimens.Spacing.m)
+            )
+            SPTextField(
+                modifier = Modifier
+                    .padding(horizontal = AppDimens.Spacing.xl)
+                    .fillMaxWidth(),
+                value = address,
+                onValueChange = onAddressChange,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text
+                ),
+                minLines = 4,
+                label = { Text(stringResource(Res.string.label_address)) }
+            )
+            Spacer(
+                Modifier.size(AppDimens.Spacing.xl)
             )
             Button(
                 modifier = Modifier
@@ -236,6 +322,14 @@ private fun Screen(
 private fun Preview() {
     SPTheme {
         Screen(
+            name = TextFieldValue(),
+            onNameChange = {},
+            username = TextFieldValue(),
+            onUsernameChange = {},
+            phone = TextFieldValue(),
+            onPhoneChange = {},
+            address = TextFieldValue(),
+            onAddressChange = {},
             onRegister = {},
             email = TextFieldValue(),
             onEmailChange = {},

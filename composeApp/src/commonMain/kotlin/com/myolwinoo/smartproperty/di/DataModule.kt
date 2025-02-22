@@ -9,7 +9,7 @@ import org.koin.dsl.module
 
 val dataModule = module {
 
-    single { HttpClientProvider.get() }
+    single { HttpClientProvider(get()).get() }
 
     single {
         val dataStoreProvider = get<DataStoreProvider>()

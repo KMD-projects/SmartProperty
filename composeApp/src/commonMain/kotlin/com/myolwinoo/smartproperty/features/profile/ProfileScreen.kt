@@ -24,6 +24,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import coil3.compose.AsyncImage
@@ -75,8 +77,21 @@ fun NavGraphBuilder.profileScreen() {
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
+    onLogout: () -> Unit
 ) {
     val viewModel: ProfileViewModel = koinViewModel<ProfileViewModel>()
+    val profileState = viewModel.profile.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                "logout" -> onLogout()
+            }
+        }
+    }
+
+    val profile = profileState.value ?: return
+
     val statusBarInset = WindowInsets.statusBars.asPaddingValues()
     Column(
         modifier = modifier
@@ -93,7 +108,7 @@ fun ProfileScreen(
         ) {
             Spacer(modifier = Modifier.height(16.dp))
             AsyncImage(
-                model = "",
+                model = profile.profileImage,
                 contentDescription = "Profile Image",
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(Res.drawable.account_circle),
@@ -103,38 +118,32 @@ fun ProfileScreen(
                     .clip(CircleShape)
                     .size(100.dp),
             )
-            Text(
-                text = "Emrys",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-            )
             Spacer(modifier = Modifier.height(12.dp))
         }
         Header(text = stringResource(Res.string.title_personal_info))
         EditItem(
             title = stringResource(Res.string.label_name),
-            data = "Emrys",
+            data = profile.name,
             onClick = {}
         )
         EditItem(
             title = stringResource(Res.string.label_phone),
-            data = "09123456789",
+            data = profile.phone.ifBlank { "Not specified" },
             onClick = {}
         )
         EditItem(
             title = stringResource(Res.string.label_email),
-            data = "abc@gmail.com",
+            data = profile.email.ifBlank { "Not specified" },
             onClick = {}
         )
         EditItem(
             title = stringResource(Res.string.label_address),
-            data = "Not specified",
+            data = profile.address.ifBlank { "Not specified" },
             onClick = {}
         )
         EditItem(
             title = stringResource(Res.string.label_language),
-            data = "Burmese",
+            data = "English",
             onClick = {}
         )
         Header(text = stringResource(Res.string.title_support))
@@ -292,7 +301,7 @@ private fun Item(
 private fun Preview() {
     SPTheme {
         ProfileScreen(
-//            onLogout = {}
+            onLogout = {}
         )
     }
 }

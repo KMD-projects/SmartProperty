@@ -84,12 +84,17 @@ kotlin {
             implementation(libs.koin.compose.viewmodel.navigation)
 
             implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.serialization.json)
 
             implementation(libs.coil3.compose)
             implementation(libs.coil3.compose.core)
             implementation(libs.coil3.network.ktor)
 
             implementation(libs.datastore.preference.core)
+
+            implementation(libs.napier)
         }
         androidMain.dependencies {
             implementation(compose.preview)
