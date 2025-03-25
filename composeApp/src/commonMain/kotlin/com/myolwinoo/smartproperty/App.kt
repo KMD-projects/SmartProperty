@@ -15,6 +15,8 @@ import com.myolwinoo.smartproperty.features.main.MainRoute
 import com.myolwinoo.smartproperty.features.main.mainScreen
 import com.myolwinoo.smartproperty.features.register.navigateRegister
 import com.myolwinoo.smartproperty.features.register.registerScreen
+import com.myolwinoo.smartproperty.features.search.navigateSearch
+import com.myolwinoo.smartproperty.features.search.searchScreen
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
@@ -79,7 +81,12 @@ fun AppNavHost() {
                         inclusive = true
                     }
                 }
-            }
+            },
+            navigateToSearch = navController::navigateSearch
+        )
+
+        searchScreen(
+            onBack = navController::navigateUp
         )
     }
 }

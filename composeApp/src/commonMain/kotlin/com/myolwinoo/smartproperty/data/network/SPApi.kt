@@ -2,6 +2,7 @@ package com.myolwinoo.smartproperty.data.network
 
 import com.myolwinoo.smartproperty.data.AccountManager
 import com.myolwinoo.smartproperty.data.model.Property
+import com.myolwinoo.smartproperty.data.model.SearchRequest
 import com.myolwinoo.smartproperty.data.model.User
 import com.myolwinoo.smartproperty.data.model.UserRole
 import com.myolwinoo.smartproperty.data.network.model.BaseResponse
@@ -9,6 +10,7 @@ import com.myolwinoo.smartproperty.data.network.model.PropertyData
 import com.myolwinoo.smartproperty.data.network.model.RegisterRequest
 import com.myolwinoo.smartproperty.data.network.model.UserData
 import com.myolwinoo.smartproperty.utils.PreviewData
+import com.myolwinoo.smartproperty.utils.PriceFormatter
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -63,7 +65,7 @@ class SPApi(
 
     suspend fun logout(): Result<Unit> {
         return runCatching {
-            client.post("api/v1/logout")
+//            client.post("api/v1/logout")
             accountManager.logout()
         }
     }
@@ -82,6 +84,29 @@ class SPApi(
     suspend fun getPropertyList(): Result<List<Property>> {
         return runCatching {
             client.get("api/v1/properties")
+                .body<BaseResponse<List<PropertyData>>>()
+                .data
+                .map(::mapProperty)
+        }
+    }
+
+    suspend fun search(request: SearchRequest): Result<List<Property>> {
+        return runCatching {
+            client.get("api/v1/properties") {
+                url {
+                    parameters.append("address", request.query)
+                    request.minPrice?.let {
+                        parameters.append("min_price", it.toString())
+                    }
+                    request.maxPrice?.let {
+                        parameters.append("max_price", it.toString())
+                    }
+                    request.priceSorting?.let {
+                        parameters.append("order", "price")
+                        parameters.append("order_by", it.rawValue)
+                    }
+                }
+            }
                 .body<BaseResponse<List<PropertyData>>>()
                 .data
                 .map(::mapProperty)
@@ -125,7 +150,7 @@ class SPApi(
             landlordId = propertyData.landlord?.get("id").orEmpty(),
             title = propertyData.title.orEmpty(),
             description = propertyData.description.orEmpty(),
-            price = propertyData.price?.toDoubleOrNull() ?: 0.0,
+            price = PriceFormatter.format(propertyData.price ?: 0.0),
             location = propertyData.address.orEmpty(),
             amenities = propertyData.amenities?.map { it["name"].orEmpty() }.orEmpty(),
             // todo: update images here

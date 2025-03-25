@@ -8,7 +8,7 @@ data class PropertyData(
     val id: String? = null,
     val title: String? = null,
     val description: String? = null,
-    val price: String? = null,
+    val price: Double? = null,
     val latitude: String? = null,
     val longitude: String? = null,
     val address: String? = null,

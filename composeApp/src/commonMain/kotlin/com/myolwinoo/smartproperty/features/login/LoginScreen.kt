@@ -11,9 +11,11 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -169,9 +171,10 @@ private fun Screen(
             Spacer(
                 Modifier.size(AppDimens.Spacing.xl)
             )
-            SPTextField(
+            OutlinedTextField(
                 modifier = Modifier
                     .padding(horizontal = AppDimens.Spacing.xl)
+                    .widthIn(max = AppDimens.maxWidth)
                     .fillMaxWidth(),
                 value = email,
                 onValueChange = onEmailChange,
@@ -190,6 +193,7 @@ private fun Screen(
             SPPasswordTextField(
                 modifier = Modifier
                     .padding(horizontal = AppDimens.Spacing.xl)
+                    .widthIn(max = AppDimens.maxWidth)
                     .fillMaxWidth(),
                 value = password,
                 onValueChange = onPasswordChange,
@@ -205,8 +209,8 @@ private fun Screen(
                         end = AppDimens.Spacing.xl,
                         bottom = AppDimens.Spacing.xxl
                     )
-                    .fillMaxWidth()
-                    .widthIn(max = AppDimens.maxWidth),
+                    .widthIn(max = AppDimens.maxWidth)
+                    .fillMaxWidth(),
                 enabled = isLoginEnabled,
                 onClick = { onLogin() }
             ) {

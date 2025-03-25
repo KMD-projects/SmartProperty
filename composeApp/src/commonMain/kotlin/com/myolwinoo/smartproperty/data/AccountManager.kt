@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.myolwinoo.smartproperty.data.model.User
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -48,6 +49,7 @@ class AccountManager(
 
     fun getToken(): String? = runBlocking {
         dataStore.data.first()[keyToken]
+            ?.ifBlank { null }
     }
 
     suspend fun saveToken(token: String) {

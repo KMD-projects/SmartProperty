@@ -11,6 +11,7 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.myolwinoo.smartproperty.features.appointments.AppointmentsScreen
 import com.myolwinoo.smartproperty.features.explore.ExploreScreen
 import com.myolwinoo.smartproperty.features.profile.ProfileScreen
 import com.myolwinoo.smartproperty.features.wishlists.WishlistsScreen
@@ -27,18 +28,21 @@ fun NavController.navigateToMain() {
 }
 
 fun NavGraphBuilder.mainScreen(
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    navigateToSearch: () -> Unit
 ) {
     composable<MainRoute> {
         Screen(
-            onLogout = onLogout
+            onLogout = onLogout,
+            navigateToSearch = navigateToSearch
         )
     }
 }
 
 @Composable
 private fun Screen(
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    navigateToSearch: () -> Unit
 ) {
     var currentDestination by rememberSaveable { mutableStateOf(MainDestinations.Explore) }
     NavigationSuiteScaffold(
@@ -59,10 +63,15 @@ private fun Screen(
         }
     ) {
         when (currentDestination) {
-            MainDestinations.Explore -> ExploreScreen()
+            MainDestinations.Explore -> ExploreScreen(
+                navigateToSearch = navigateToSearch
+            )
             MainDestinations.WISHLISTS -> WishlistsScreen()
             MainDestinations.PROFILE -> ProfileScreen(
                 onLogout = onLogout
+            )
+            MainDestinations.APPOINTMENTS -> AppointmentsScreen(
+
             )
         }
     }
@@ -72,6 +81,7 @@ private fun Screen(
 @Composable
 private fun Preview() {
     Screen(
-        onLogout = {}
+        onLogout = {},
+        navigateToSearch = {}
     )
 }

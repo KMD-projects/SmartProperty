@@ -5,7 +5,7 @@ data class Property(
     val landlordId: String,
     val title: String,
     val description: String,
-    val price: Double,
+    val price: String,
     val location: String,
     val latitude: Double,
     val longitude: Double,

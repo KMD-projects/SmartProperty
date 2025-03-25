@@ -29,7 +29,7 @@ object PreviewData {
             landlordId = "123",
             title = "Cozy Studio Apartment With Good Facilities",
             description = "Fully furnished studio with WiFi & AC.",
-            price = 500000.0,
+            price = "500,000",
             location = "Yangon, Myanmar",
             amenities = listOf("WiFi", "AC", "Parking"),
             images = listOf(
@@ -48,7 +48,7 @@ object PreviewData {
             landlordId = "456",
             title = "Modern Condo with City View",
             description = "Spacious condo with a stunning view of downtown Yangon.",
-            price = 1200000.0,
+            price = "1,200,000",
             location = "Downtown, Yangon",
             amenities = listOf("Gym", "Swimming Pool", "Security"),
             images = listOf(
@@ -67,7 +67,7 @@ object PreviewData {
             landlordId = "789",
             title = "Luxury Villa with Private Pool",
             description = "A stunning villa with a private pool and garden area.",
-            price = 5000000.0,
+            price = "5,000,000",
             location = "Inya Road, Yangon",
             amenities = listOf("Private Pool", "Garden", "Security", "Garage"),
             images = listOf(
@@ -86,7 +86,7 @@ object PreviewData {
             landlordId = "159",
             title = "Affordable Room in Shared House",
             description = "A budget-friendly private room in a shared house.",
-            price = 250000.0,
+            price = "250,000",
             location = "Sanchaung, Yangon",
             amenities = listOf("Shared Kitchen", "WiFi", "Laundry"),
             images = listOf(
@@ -105,7 +105,7 @@ object PreviewData {
             landlordId = "753",
             title = "Furnished Serviced Apartment",
             description = "Includes housekeeping, free WiFi, and breakfast.",
-            price = 2000000.0,
+            price = "2,000,000",
             location = "Bahan, Yangon",
             amenities = listOf("Housekeeping", "WiFi", "Gym"),
             images = listOf(

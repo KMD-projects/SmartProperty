@@ -67,7 +67,7 @@ fun SPPasswordTextField(
     label: @Composable (() -> Unit),
 ) {
     var visiblePassword by remember { mutableStateOf(false) }
-    SPTextField(
+    OutlinedTextField(
         modifier = modifier,
         value = value,
         onValueChange = onValueChange,

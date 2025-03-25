@@ -54,10 +54,12 @@ fun NavController.navigateExplore() {
 
 fun NavGraphBuilder.homeScreen(
     modifier: Modifier = Modifier,
+    navigateToSearch: () -> Unit
 ) {
     composable<ExploreRoute> {
         ExploreScreen(
-            modifier = modifier
+            modifier = modifier,
+            navigateToSearch = navigateToSearch
         )
     }
 }
@@ -65,6 +67,7 @@ fun NavGraphBuilder.homeScreen(
 @Composable
 fun ExploreScreen(
     modifier: Modifier = Modifier,
+    navigateToSearch: () -> Unit
 ) {
     val viewModel: ExploreViewModel = koinViewModel<ExploreViewModel>()
     val properties = viewModel.properties.collectAsStateWithLifecycle()
@@ -75,7 +78,8 @@ fun ExploreScreen(
         properties = properties.value,
         onClick = {},
         onRefresh = viewModel::refresh,
-        onFavoriteClick = viewModel::toggleFavorite
+        onFavoriteClick = viewModel::toggleFavorite,
+        navigateToSearch = navigateToSearch
     )
 }
 
@@ -86,7 +90,8 @@ private fun Screen(
     properties: List<Property>,
     onRefresh: () -> Unit,
     onClick: (String) -> Unit,
-    onFavoriteClick: (String) -> Unit
+    onFavoriteClick: (String) -> Unit,
+    navigateToSearch: () -> Unit
 ) {
     val statusBarInset = WindowInsets.statusBars.asPaddingValues()
     val pullToRefreshState = rememberPullToRefreshState()
@@ -113,9 +118,7 @@ private fun Screen(
                         containerColor = MaterialTheme.colorScheme.primaryContainer
                     ),
                     shape = RoundedCornerShape(50),
-                    onClick = {
-
-                    }
+                    onClick = { navigateToSearch() }
                 ) {
                     Row(
                         modifier = Modifier
@@ -152,6 +155,7 @@ private fun Preview() {
         properties = listOf(),
         onClick = {},
         onRefresh = {},
-        onFavoriteClick = {}
+        onFavoriteClick = {},
+        navigateToSearch = {}
     )
 }

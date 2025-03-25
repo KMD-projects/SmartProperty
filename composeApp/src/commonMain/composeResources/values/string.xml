@@ -1,9 +1,12 @@
 <resources>
     <string name="label_explore">Explore</string>
     <string name="label_wishlist">Wishlists</string>
+    <string name="label_appointment">Appointments</string>
     <string name="label_search">Search</string>
     <string name="label_profile">Profile</string>
     <string name="label_login">Login</string>
+    <string name="label_apply">Apply</string>
+    <string name="label_reset">Reset</string>
     <string name="label_register">Register</string>
     <string name="label_logout">Logout</string>
     <string name="label_username">Username</string>

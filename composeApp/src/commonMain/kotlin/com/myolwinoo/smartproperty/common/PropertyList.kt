@@ -116,7 +116,7 @@ fun PropertyItem(
                 Spacer(modifier = Modifier.height(4.dp))
                 Row {
                     Text(
-                        text = "${property.price.toInt()} MMK",
+                        text = "${property.price} MMK",
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.tertiary,
                         modifier = Modifier

@@ -4,6 +4,7 @@ import com.myolwinoo.smartproperty.features.explore.ExploreViewModel
 import com.myolwinoo.smartproperty.features.login.LoginViewModel
 import com.myolwinoo.smartproperty.features.profile.ProfileViewModel
 import com.myolwinoo.smartproperty.features.register.RegisterViewModel
+import com.myolwinoo.smartproperty.features.search.SearchViewModel
 import com.myolwinoo.smartproperty.features.wishlists.WishlistsViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -14,4 +15,5 @@ val viewModelModule = module {
     viewModelOf(::ExploreViewModel)
     viewModelOf(::WishlistsViewModel)
     viewModelOf(::ProfileViewModel)
+    viewModelOf(::SearchViewModel)
 }

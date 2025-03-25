@@ -21,8 +21,10 @@ class LoginViewModel(
     private val spApi: SPApi
 ): ViewModel() {
 
+    // TODO: remove preview data
     var email by mutableStateOf(TextFieldValue(PreviewData.testEmail))
         private set
+    // TODO: remove preview data
     var password by mutableStateOf(TextFieldValue(PreviewData.testPassword))
         private set
     var isLoading by mutableStateOf(false)
