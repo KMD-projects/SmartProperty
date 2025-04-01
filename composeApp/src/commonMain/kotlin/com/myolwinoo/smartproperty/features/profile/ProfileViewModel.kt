@@ -27,6 +27,12 @@ class ProfileViewModel(
     private val _events = MutableSharedFlow<String>()
     val events: SharedFlow<String> = _events
 
+    init {
+        viewModelScope.launch {
+            spApi.loadProfile()
+        }
+    }
+
     fun logout() {
         viewModelScope.launch {
             spApi.logout()

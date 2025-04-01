@@ -70,7 +70,7 @@ class SPApi(
         }
     }
 
-    suspend fun getProfile(): Result<User> {
+    suspend fun loadProfile(): Result<User> {
         return runCatching {
             accountManager.getUser()
                 ?.let { client.get("api/v1/users/${it.id}/profile") }
