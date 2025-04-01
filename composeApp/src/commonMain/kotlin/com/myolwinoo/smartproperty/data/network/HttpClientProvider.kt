@@ -1,5 +1,6 @@
 package com.myolwinoo.smartproperty.data.network
 
+import com.myolwinoo.smartproperty.AppConfiguration
 import com.myolwinoo.smartproperty.data.AccountManager
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
@@ -25,7 +26,7 @@ class HttpClientProvider(
         expectSuccess = true
 
         defaultRequest {
-            url("http://10.0.2.2:8000/")
+            url(AppConfiguration.BASE_URL)
             contentType(ContentType.Application.Json)
             headers {
                 accountManager.getToken()?.let {
