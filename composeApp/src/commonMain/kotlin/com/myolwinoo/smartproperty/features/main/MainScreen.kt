@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -55,7 +56,13 @@ private fun Screen(
                             contentDescription = stringResource(it.contentDescription)
                         )
                     },
-                    label = { Text(stringResource(it.label)) },
+                    label = {
+                        Text(
+                            text = stringResource(it.label),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    },
                     selected = it == currentDestination,
                     onClick = { currentDestination = it }
                 )
@@ -66,10 +73,12 @@ private fun Screen(
             MainDestinations.Explore -> ExploreScreen(
                 navigateToSearch = navigateToSearch
             )
+
             MainDestinations.WISHLISTS -> WishlistsScreen()
             MainDestinations.PROFILE -> ProfileScreen(
                 onLogout = onLogout
             )
+
             MainDestinations.APPOINTMENTS -> AppointmentsScreen(
 
             )
