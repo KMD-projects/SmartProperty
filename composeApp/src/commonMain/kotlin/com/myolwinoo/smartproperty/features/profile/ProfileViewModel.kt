@@ -1,5 +1,8 @@
 package com.myolwinoo.smartproperty.features.profile
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myolwinoo.smartproperty.data.AccountManager
@@ -24,12 +27,27 @@ class ProfileViewModel(
             initialValue = null
         )
 
+    var isLoading by mutableStateOf(false)
+        private set
+
     private val _events = MutableSharedFlow<String>()
     val events: SharedFlow<String> = _events
 
     init {
+        refresh()
+    }
+
+    fun refresh() {
         viewModelScope.launch {
+            isLoading = true
             spApi.loadProfile()
+            isLoading = false
+        }
+    }
+
+    fun becomeLandlord() {
+        viewModelScope.launch {
+            spApi.becomeLandlord()
         }
     }
 

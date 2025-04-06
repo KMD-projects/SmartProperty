@@ -9,6 +9,12 @@
     <string name="label_reset">Reset</string>
     <string name="label_register">Register</string>
     <string name="label_logout">Logout</string>
+    <string name="label_user_landlord">You are a landlord</string>
+    <string name="label_user_renter">You are a renter</string>
+    <string name="label_become_landlord">Become Landlord</string>
+    <string name="label_request_landlord_again">Request Landlord Again</string>
+    <string name="label_request_landlord_pending">Landlord request pending</string>
+    <string name="label_request_landlord_rejected">Your request got rejected</string>
     <string name="label_username">Username</string>
     <string name="label_name">Full Name</string>
     <string name="label_email">Email</string>

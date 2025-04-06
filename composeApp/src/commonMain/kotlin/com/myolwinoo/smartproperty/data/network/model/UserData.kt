@@ -15,6 +15,8 @@ data class UserData(
     val role: String? = null,
     @SerialName("profile_pic")
     val profilePic: String? = null,
+    @SerialName("requisition_status")
+    val requisitionStatus: String? = null,
 
     // during login, register
     @SerialName("access_token")

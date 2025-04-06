@@ -1,7 +1,10 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.myolwinoo.smartproperty.features.profile
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -18,11 +21,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -30,14 +36,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import coil3.compose.AsyncImage
+import com.myolwinoo.smartproperty.data.model.User
 import com.myolwinoo.smartproperty.design.theme.AppDimens
 import com.myolwinoo.smartproperty.design.theme.SPTheme
 import kotlinx.serialization.Serializable
@@ -65,12 +72,17 @@ import smartproperty.composeapp.generated.resources.title_support
 @Serializable
 object ProfileRoute
 
-fun NavGraphBuilder.profileScreen() {
+fun NavController.navigateProfile() {
+    navigate(ProfileRoute)
+}
+
+fun NavGraphBuilder.profileScreen(
+    onLogout: () -> Unit
+) {
     composable<ProfileRoute> {
-//        val viewModel: ProfileViewModel = koinViewModel<ProfileViewModel>()
-//        ProfileScreen(
-//            onLogout = viewModel::logout
-//        )
+        ProfileScreen(
+            onLogout = onLogout
+        )
     }
 }
 
@@ -90,118 +102,165 @@ fun ProfileScreen(
         }
     }
 
-    val profile = profileState.value ?: return
+    Screen(
+        modifier = modifier,
+        profile = profileState.value,
+        isLoading = viewModel.isLoading,
+        onRefresh = viewModel::refresh,
+        becomeLandlord = viewModel::becomeLandlord,
+        onLogout = viewModel::logout
+    )
+}
 
+@Composable
+private fun Screen(
+    modifier: Modifier = Modifier,
+    profile: User?,
+    isLoading: Boolean,
+    onRefresh: () -> Unit,
+    becomeLandlord: () -> Unit,
+    onLogout: () -> Unit
+) {
     val statusBarInset = WindowInsets.statusBars.asPaddingValues()
-    Column(
-        modifier = modifier
-            .padding(
-                top = statusBarInset.calculateTopPadding()
-            )
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+    val pullToRefreshState = rememberPullToRefreshState()
+
+    PullToRefreshBox(
+        state = pullToRefreshState,
+        isRefreshing = isLoading,
+        onRefresh = onRefresh
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = modifier
+                .padding(
+                    top = statusBarInset.calculateTopPadding()
+                )
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            AsyncImage(
-                model = profile.profileImage,
-                contentDescription = "Profile Image",
-                contentScale = ContentScale.Crop,
-                placeholder = painterResource(Res.drawable.account_circle),
-                error = painterResource(Res.drawable.account_circle),
-                colorFilter = ColorFilter.tint(LocalContentColor.current),
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .size(100.dp),
+            profile?.let {
+                userInformation(
+                    profile = it,
+                    becomeLandlord = becomeLandlord
+                )
+            }
+            EditItem(
+                title = stringResource(Res.string.label_language),
+                data = "English",
+                onClick = {}
             )
-            Spacer(modifier = Modifier.height(12.dp))
+            Header(text = stringResource(Res.string.title_support))
+            Item(
+                text = stringResource(Res.string.label_help),
+                onClick = {}
+            )
+            Item(
+                text = stringResource(Res.string.label_feedback),
+                onClick = {}
+            )
+            Header(text = stringResource(Res.string.title_legal))
+            Item(
+                text = stringResource(Res.string.label_terms),
+                onClick = {}
+            )
+            Item(
+                text = stringResource(Res.string.label_privacy_policy),
+                onClick = {}
+            )
+            Spacer(
+                modifier = Modifier
+                    .height(AppDimens.Spacing.xl)
+            )
+            Button(
+                modifier = Modifier
+                    .padding(
+                        start = AppDimens.Spacing.xl,
+                        end = AppDimens.Spacing.xl,
+                    )
+                    .fillMaxWidth()
+                    .widthIn(max = AppDimens.maxWidth),
+                onClick = onLogout,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer
+                )
+            ) {
+                Text(
+                    text = stringResource(Res.string.label_logout)
+                )
+            }
+            Spacer(
+                modifier = Modifier
+                    .height(AppDimens.Spacing.xl)
+            )
+            Text(
+                text = "Version 1.0.0",
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+            Spacer(
+                modifier = Modifier
+                    .height(AppDimens.Spacing.xxl)
+            )
         }
-        Header(text = stringResource(Res.string.title_personal_info))
-        EditItem(
-            title = stringResource(Res.string.label_name),
-            data = profile.name,
-            onClick = {}
-        )
-        EditItem(
-            title = stringResource(Res.string.label_phone),
-            data = profile.phone.ifBlank { "Not specified" },
-            onClick = {}
-        )
-        EditItem(
-            title = stringResource(Res.string.label_email),
-            data = profile.email.ifBlank { "Not specified" },
-            onClick = {}
-        )
-        EditItem(
-            title = stringResource(Res.string.label_address),
-            data = profile.address.ifBlank { "Not specified" },
-            onClick = {}
-        )
-        EditItem(
-            title = stringResource(Res.string.label_language),
-            data = "English",
-            onClick = {}
-        )
-        Header(text = stringResource(Res.string.title_support))
-        Item(
-            text = stringResource(Res.string.label_help),
-            onClick = {}
-        )
-        Item(
-            text = stringResource(Res.string.label_feedback),
-            onClick = {}
-        )
-        Header(text = stringResource(Res.string.title_legal))
-        Item(
-            text = stringResource(Res.string.label_terms),
-            onClick = {}
-        )
-        Item(
-            text = stringResource(Res.string.label_privacy_policy),
-            onClick = {}
-        )
-        Spacer(
+    }
+}
+
+@Composable
+fun ColumnScope.userInformation(
+    profile: User,
+    becomeLandlord: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.height(16.dp))
+        AsyncImage(
+            model = profile.profileImage,
+            contentDescription = "Profile Image",
+            contentScale = ContentScale.Crop,
+            placeholder = painterResource(Res.drawable.account_circle),
+            error = painterResource(Res.drawable.account_circle),
+            colorFilter = ColorFilter.tint(LocalContentColor.current),
             modifier = Modifier
-                .height(AppDimens.Spacing.xl)
+                .clip(CircleShape)
+                .size(100.dp),
         )
-        Button(
+        Spacer(modifier = Modifier.height(12.dp))
+        LandlordStatus(
             modifier = Modifier
                 .padding(
                     start = AppDimens.Spacing.xl,
                     end = AppDimens.Spacing.xl,
-                )
-                .fillMaxWidth()
-                .widthIn(max = AppDimens.maxWidth),
-            onClick = { viewModel.logout() },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.errorContainer,
-                contentColor = MaterialTheme.colorScheme.onErrorContainer
-            )
-        ) {
-            Text(
-                text = stringResource(Res.string.label_logout)
-            )
-        }
-        Spacer(
-            modifier = Modifier
-                .height(AppDimens.Spacing.xl)
-        )
-        Text(
-            text = "Version 1.0.0",
-            style = MaterialTheme.typography.bodySmall,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-        )
-        Spacer(
-            modifier = Modifier
-                .height(AppDimens.Spacing.xxl)
+                ),
+            profile = profile,
+            onBecomeLandlord = becomeLandlord
         )
     }
+    Header(text = stringResource(Res.string.title_personal_info))
+    EditItem(
+        title = stringResource(Res.string.label_name),
+        data = profile.name,
+        onClick = {}
+    )
+    EditItem(
+        title = stringResource(Res.string.label_phone),
+        data = profile.phone.ifBlank { "Not specified" },
+        onClick = {}
+    )
+    EditItem(
+        title = stringResource(Res.string.label_email),
+        data = profile.email.ifBlank { "Not specified" },
+        onClick = {}
+    )
+    EditItem(
+        title = stringResource(Res.string.label_address),
+        data = profile.address.ifBlank { "Not specified" },
+        onClick = {}
+    )
 }
 
 @Composable
@@ -300,8 +359,12 @@ private fun Item(
 @Composable
 private fun Preview() {
     SPTheme {
-        ProfileScreen(
-            onLogout = {}
+        Screen(
+            profile = null,
+            isLoading = false,
+            onLogout = {},
+            onRefresh = {},
+            becomeLandlord = {}
         )
     }
 }

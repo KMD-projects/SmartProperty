@@ -17,6 +17,7 @@ object PreviewData {
         phone = "09123456789",
         address = "test",
         role = UserRole.RENTER,
+        requisitionStatus = null,
         profileImage = "",
         verified = true,
         createdAt = "",

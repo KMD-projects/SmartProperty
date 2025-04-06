@@ -2,6 +2,7 @@ package com.myolwinoo.smartproperty.data.network
 
 import com.myolwinoo.smartproperty.data.AccountManager
 import com.myolwinoo.smartproperty.data.model.Property
+import com.myolwinoo.smartproperty.data.model.RequisitionStatus
 import com.myolwinoo.smartproperty.data.model.SearchRequest
 import com.myolwinoo.smartproperty.data.model.User
 import com.myolwinoo.smartproperty.data.model.UserRole
@@ -70,6 +71,12 @@ class SPApi(
         }
     }
 
+    suspend fun becomeLandlord(): Result<Unit> {
+        return runCatching {
+            client.post("api/v1/landlord-requests")
+        }.map { loadProfile() }
+    }
+
     suspend fun loadProfile(): Result<User> {
         return runCatching {
             accountManager.getUser()
@@ -136,6 +143,11 @@ class SPApi(
                 "renter" -> UserRole.RENTER
                 "landlord" -> UserRole.LANDLORD
                 else -> UserRole.RENTER
+            },
+            requisitionStatus = when(userData.requisitionStatus) {
+                "pending" -> RequisitionStatus.PENDING
+                "rejected" -> RequisitionStatus.REJECTED
+                else -> null
             },
             profileImage = userData.profilePic.orEmpty(),
             verified = false,

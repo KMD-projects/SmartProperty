@@ -10,8 +10,9 @@ data class User(
     val phone: String,
     val address: String,
     val role: UserRole,
-    val profileImage: String? = null,
-    val verified: Boolean = false,
+    val requisitionStatus: RequisitionStatus?,
+    val profileImage: String?,
+    val verified: Boolean,
     val createdAt: String,
     val updatedAt: String
 )

@@ -22,7 +22,10 @@ class AccountManager(
     val userFlow = dataStore.data
         .map {
             it[keyLoggedInUser]
-                ?.let { Json.decodeFromString<User>(it) }
+                ?.let {
+                    runCatching { Json.decodeFromString<User>(it) }
+                        .getOrNull()
+                }
         }
 
     val isLoggedInFlow = userFlow.map { it != null }
