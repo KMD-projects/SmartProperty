@@ -247,7 +247,8 @@ private fun Screen(
                     .fillMaxWidth(),
                 value = password,
                 onValueChange = onPasswordChange,
-                { Text(stringResource(Res.string.label_password)) }
+                showSupportingText = true,
+                label = { Text(stringResource(Res.string.label_password)) }
             )
             Spacer(
                 Modifier.size(AppDimens.Spacing.m)
@@ -258,7 +259,8 @@ private fun Screen(
                     .fillMaxWidth(),
                 value = confirmPassword,
                 onValueChange = onConfirmPasswordChange,
-                { Text(stringResource(Res.string.label_confirm_password)) }
+                showSupportingText = false,
+                label = { Text(stringResource(Res.string.label_confirm_password)) }
             )
             Spacer(
                 Modifier.size(AppDimens.Spacing.m)

@@ -1,7 +1,5 @@
 package com.myolwinoo.smartproperty.common
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardActions
@@ -25,7 +23,7 @@ import com.myolwinoo.smartproperty.design.theme.AppDimens
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import smartproperty.composeapp.generated.resources.Res
-import smartproperty.composeapp.generated.resources.label_password
+import smartproperty.composeapp.generated.resources.hint_password_requirements
 import smartproperty.composeapp.generated.resources.visibility_off
 import smartproperty.composeapp.generated.resources.visibility_on
 
@@ -65,6 +63,7 @@ fun SPPasswordTextField(
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
     label: @Composable (() -> Unit),
+    showSupportingText: Boolean,
 ) {
     var visiblePassword by remember { mutableStateOf(false) }
     OutlinedTextField(
@@ -80,6 +79,11 @@ fun SPPasswordTextField(
             VisualTransformation.None
         } else {
             PasswordVisualTransformation(mask = '*')
+        },
+        supportingText = {
+            if (showSupportingText) {
+                Text(stringResource(Res.string.hint_password_requirements))
+            }
         },
         trailingIcon = {
             IconButton(onClick = { visiblePassword = !visiblePassword }) {

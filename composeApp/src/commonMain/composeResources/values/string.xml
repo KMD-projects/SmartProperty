@@ -43,4 +43,6 @@
     <string name="message_login_part2">create an account</string>
     <string name="message_register_part1">Enter your account details below or </string>
     <string name="message_register_part2">log in</string>
+
+    <string name="hint_password_requirements">Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.</string>
 </resources>

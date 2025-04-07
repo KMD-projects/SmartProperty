@@ -8,6 +8,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myolwinoo.smartproperty.data.network.SPApi
+import com.myolwinoo.smartproperty.utils.InputValidator
 import com.myolwinoo.smartproperty.utils.PreviewData
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -43,10 +44,14 @@ class LoginViewModel(
     var showLoginError by mutableStateOf(false)
         private set
 
-    private val _events = MutableSharedFlow<String>()
-    val events: SharedFlow<String> = _events
+    var emailError by mutableStateOf<String?>(null)
+        private set
+
+    private val _events = MutableSharedFlow<LoginEvent>()
+    val events: SharedFlow<LoginEvent> = _events
 
     fun onEmailChange(value: TextFieldValue) {
+        emailError = null
         email = value
     }
 
@@ -56,12 +61,17 @@ class LoginViewModel(
 
     fun login() {
         viewModelScope.launch {
+            if (!InputValidator.isValidEmail(email.text)) {
+                emailError = "Invalid email"
+                return@launch
+            }
+
             isLoading = true
             spApi.login(
                 email = email.text,
                 password = password.text
             ).onSuccess {
-                _events.emit("login_success")
+                _events.emit(LoginEvent.LoginSuccess)
             }.onFailure {
                 showLoginError = true
             }

@@ -15,7 +15,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -35,7 +34,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.myolwinoo.smartproperty.common.LoadingOverlay
 import com.myolwinoo.smartproperty.common.SPPasswordTextField
-import com.myolwinoo.smartproperty.common.SPTextField
 import com.myolwinoo.smartproperty.design.theme.AppDimens
 import com.myolwinoo.smartproperty.design.theme.SPTheme
 import kotlinx.serialization.Serializable
@@ -71,7 +69,7 @@ fun NavGraphBuilder.loginScreen(
         LaunchedEffect(Unit) {
             viewModel.events.collect { event ->
                 when (event) {
-                    "login_success" -> onLoginSuccess()
+                    LoginEvent.LoginSuccess -> onLoginSuccess()
                 }
             }
         }
@@ -79,6 +77,7 @@ fun NavGraphBuilder.loginScreen(
         Screen(
             email = viewModel.email,
             onEmailChange = viewModel::onEmailChange,
+            emailError = viewModel.emailError,
             password = viewModel.password,
             onPasswordChange = viewModel::onPasswordChange,
             isLoading = viewModel.isLoading,
@@ -95,6 +94,7 @@ fun NavGraphBuilder.loginScreen(
 private fun Screen(
     email: TextFieldValue,
     onEmailChange: (TextFieldValue) -> Unit,
+    emailError: String?,
     password: TextFieldValue,
     onPasswordChange: (TextFieldValue) -> Unit,
     isLoading: Boolean,
@@ -154,7 +154,8 @@ private fun Screen(
                             fontWeight = FontWeight.Bold
                         )
                     ) {
-                        withLink(LinkAnnotation.Clickable(
+                        withLink(
+                            LinkAnnotation.Clickable(
                             tag = "register",
                             linkInteractionListener = object : LinkInteractionListener {
                                 override fun onClick(link: LinkAnnotation) {
@@ -181,8 +182,10 @@ private fun Screen(
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email
                 ),
+                isError = emailError != null,
                 maxLines = 1,
-                label = { Text(stringResource(Res.string.label_email)) }
+                label = { Text(stringResource(Res.string.label_email)) },
+                supportingText = { emailError?.let { Text(it) } }
             )
             Spacer(
                 Modifier.size(AppDimens.Spacing.m)
@@ -197,6 +200,7 @@ private fun Screen(
                     .fillMaxWidth(),
                 value = password,
                 onValueChange = onPasswordChange,
+                showSupportingText = false,
                 label = { Text(stringResource(Res.string.label_password)) }
             )
             Spacer(
@@ -233,6 +237,7 @@ private fun Preview() {
         Screen(
             email = TextFieldValue(),
             onEmailChange = {},
+            emailError = null,
             password = TextFieldValue(),
             onPasswordChange = {},
             isLoading = false,
