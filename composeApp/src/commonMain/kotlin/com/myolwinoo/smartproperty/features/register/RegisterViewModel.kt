@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myolwinoo.smartproperty.data.network.SPApi
 import com.myolwinoo.smartproperty.data.network.model.RegisterRequest
+import com.myolwinoo.smartproperty.utils.InputValidator
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
@@ -38,16 +39,29 @@ class RegisterViewModel(
     var isLoading by mutableStateOf(false)
         private set
     val isRegisterEnabled: StateFlow<Boolean> = combine(
+        snapshotFlow { username.text },
         snapshotFlow { email.text },
         snapshotFlow { password.text },
         snapshotFlow { confirmPassword.text },
-    ) { email, password, confirmPassword ->
-        email.isNotBlank() && password.isNotBlank() && confirmPassword.isNotBlank()
+    ) { username, email, password, confirmPassword ->
+        username.isNotBlank()
+                && email.isNotBlank()
+                && password.isNotBlank()
+                && confirmPassword.isNotBlank()
     }.stateIn(
         viewModelScope,
         started = WhileSubscribed(5000),
         initialValue = false
     )
+
+    var emailError by mutableStateOf<String?>(null)
+        private set
+
+    var passwordError by mutableStateOf<String?>(null)
+        private set
+
+    var confirmPasswordError by mutableStateOf<String?>(null)
+        private set
 
     var showRegisterError by mutableStateOf(false)
         private set
@@ -72,19 +86,43 @@ class RegisterViewModel(
     }
 
     fun onEmailChange(value: TextFieldValue) {
+        emailError = null
         email = value
     }
 
     fun onPasswordChange(value: TextFieldValue) {
+        passwordError = null
+        confirmPasswordError = null
         password = value
     }
 
     fun onConfirmPasswordChange(value: TextFieldValue) {
+        confirmPasswordError = null
         confirmPassword = value
     }
 
     fun register() {
         viewModelScope.launch {
+            var hasError = false
+            if (!InputValidator.isValidEmail(email.text)) {
+                emailError = "Invalid email"
+                hasError = true
+            }
+
+            if (!InputValidator.isValidPassword(password.text)) {
+                passwordError = "Invalid password"
+                hasError = true
+            }
+
+            if (password.text != confirmPassword.text) {
+                confirmPasswordError = "Passwords do not match"
+                hasError = true
+            }
+
+            if (hasError) {
+                return@launch
+            }
+
             isLoading = true
             spApi.register(
                 RegisterRequest(

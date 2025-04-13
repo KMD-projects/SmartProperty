@@ -13,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -35,7 +36,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.myolwinoo.smartproperty.common.LoadingOverlay
 import com.myolwinoo.smartproperty.common.SPPasswordTextField
-import com.myolwinoo.smartproperty.common.SPTextField
 import com.myolwinoo.smartproperty.design.theme.AppDimens
 import com.myolwinoo.smartproperty.design.theme.SPTheme
 import kotlinx.serialization.Serializable
@@ -92,10 +92,13 @@ fun NavGraphBuilder.registerScreen(
             onAddressChange = viewModel::onAddressChange,
             email = viewModel.email,
             onEmailChange = viewModel::onEmailChange,
+            emailError = viewModel.emailError,
             password = viewModel.password,
             onPasswordChange = viewModel::onPasswordChange,
+            passwordError = viewModel.passwordError,
             confirmPassword = viewModel.confirmPassword,
             onConfirmPasswordChange = viewModel::onConfirmPasswordChange,
+            confirmPasswordError = viewModel.confirmPasswordError,
             isRegisterEnabled = isRegisterEnabled.value,
             isLoading = viewModel.isLoading,
             onRegister = viewModel::register,
@@ -118,10 +121,13 @@ private fun Screen(
     onAddressChange: (TextFieldValue) -> Unit,
     email: TextFieldValue,
     onEmailChange: (TextFieldValue) -> Unit,
+    emailError: String?,
     password: TextFieldValue,
     onPasswordChange: (TextFieldValue) -> Unit,
+    passwordError: String?,
     confirmPassword: TextFieldValue,
     onConfirmPasswordChange: (TextFieldValue) -> Unit,
+    confirmPasswordError: String?,
     isRegisterEnabled: Boolean,
     isLoading: Boolean,
     onRegister: () -> Unit,
@@ -196,7 +202,7 @@ private fun Screen(
             Spacer(
                 Modifier.size(AppDimens.Spacing.xl)
             )
-            SPTextField(
+            OutlinedTextField(
                 modifier = Modifier
                     .padding(horizontal = AppDimens.Spacing.xl)
                     .fillMaxWidth(),
@@ -211,7 +217,7 @@ private fun Screen(
             Spacer(
                 Modifier.size(AppDimens.Spacing.m)
             )
-            SPTextField(
+            OutlinedTextField(
                 modifier = Modifier
                     .padding(horizontal = AppDimens.Spacing.xl)
                     .fillMaxWidth(),
@@ -226,7 +232,7 @@ private fun Screen(
             Spacer(
                 Modifier.size(AppDimens.Spacing.m)
             )
-            SPTextField(
+            OutlinedTextField(
                 modifier = Modifier
                     .padding(horizontal = AppDimens.Spacing.xl)
                     .fillMaxWidth(),
@@ -236,6 +242,8 @@ private fun Screen(
                     keyboardType = KeyboardType.Email
                 ),
                 maxLines = 1,
+                isError = emailError != null,
+                supportingText = { emailError?.let { Text(it) } },
                 label = { Text(stringResource(Res.string.label_email)) }
             )
             Spacer(
@@ -247,7 +255,8 @@ private fun Screen(
                     .fillMaxWidth(),
                 value = password,
                 onValueChange = onPasswordChange,
-                showSupportingText = true,
+                showSupportingText = passwordError != null,
+                errorText = passwordError,
                 label = { Text(stringResource(Res.string.label_password)) }
             )
             Spacer(
@@ -260,12 +269,13 @@ private fun Screen(
                 value = confirmPassword,
                 onValueChange = onConfirmPasswordChange,
                 showSupportingText = false,
+                errorText = confirmPasswordError,
                 label = { Text(stringResource(Res.string.label_confirm_password)) }
             )
             Spacer(
                 Modifier.size(AppDimens.Spacing.m)
             )
-            SPTextField(
+            OutlinedTextField(
                 modifier = Modifier
                     .padding(horizontal = AppDimens.Spacing.xl)
                     .fillMaxWidth(),
@@ -280,7 +290,7 @@ private fun Screen(
             Spacer(
                 Modifier.size(AppDimens.Spacing.m)
             )
-            SPTextField(
+            OutlinedTextField(
                 modifier = Modifier
                     .padding(horizontal = AppDimens.Spacing.xl)
                     .fillMaxWidth(),
@@ -335,10 +345,13 @@ private fun Preview() {
             onRegister = {},
             email = TextFieldValue(),
             onEmailChange = {},
+            emailError = null,
             password = TextFieldValue(),
             onPasswordChange = {},
+            passwordError = null,
             confirmPassword = TextFieldValue(),
             onConfirmPasswordChange = {},
+            confirmPasswordError = null,
             isLoading = false,
             isRegisterEnabled = true,
             showRegisterError = false,

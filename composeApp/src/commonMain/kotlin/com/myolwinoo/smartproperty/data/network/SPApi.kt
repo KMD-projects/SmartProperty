@@ -10,7 +10,6 @@ import com.myolwinoo.smartproperty.data.network.model.BaseResponse
 import com.myolwinoo.smartproperty.data.network.model.PropertyData
 import com.myolwinoo.smartproperty.data.network.model.RegisterRequest
 import com.myolwinoo.smartproperty.data.network.model.UserData
-import com.myolwinoo.smartproperty.utils.PreviewData
 import com.myolwinoo.smartproperty.utils.PriceFormatter
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body

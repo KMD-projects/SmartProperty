@@ -1,12 +1,9 @@
 package com.myolwinoo.smartproperty.features.profile
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,9 +21,9 @@ import smartproperty.composeapp.generated.resources.Res
 import smartproperty.composeapp.generated.resources.label_become_landlord
 import smartproperty.composeapp.generated.resources.label_request_landlord_again
 import smartproperty.composeapp.generated.resources.label_request_landlord_pending
+import smartproperty.composeapp.generated.resources.label_request_landlord_rejected
 import smartproperty.composeapp.generated.resources.label_user_landlord
 import smartproperty.composeapp.generated.resources.label_user_renter
-import smartproperty.composeapp.generated.resources.label_request_landlord_rejected
 
 @Composable
 fun LandlordStatus(
@@ -40,7 +37,7 @@ fun LandlordStatus(
     ) {
         when(profile.role) {
             UserRole.RENTER -> {
-                when(val status = profile.requisitionStatus) {
+                when(profile.requisitionStatus) {
                     RequisitionStatus.PENDING -> {
                         Text(
                             text = stringResource(Res.string.label_request_landlord_pending),

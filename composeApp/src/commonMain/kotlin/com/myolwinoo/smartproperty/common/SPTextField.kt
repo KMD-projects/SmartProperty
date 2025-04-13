@@ -1,8 +1,6 @@
 package com.myolwinoo.smartproperty.common
 
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,7 +17,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.myolwinoo.smartproperty.design.theme.AppDimens
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import smartproperty.composeapp.generated.resources.Res
@@ -28,42 +25,13 @@ import smartproperty.composeapp.generated.resources.visibility_off
 import smartproperty.composeapp.generated.resources.visibility_on
 
 @Composable
-fun SPTextField(
-    modifier: Modifier = Modifier,
-    value: TextFieldValue,
-    maxLines: Int = Int.MAX_VALUE,
-    minLines: Int = 1,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
-    onValueChange: (TextFieldValue) -> Unit,
-    label: @Composable (() -> Unit)? = null,
-    suffix: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-) {
-    OutlinedTextField(
-        modifier = modifier
-            .widthIn(max = AppDimens.maxWidth),
-        value = value,
-        onValueChange = onValueChange,
-        label = label,
-        suffix = suffix,
-        maxLines = maxLines,
-        minLines = minLines,
-        trailingIcon = trailingIcon,
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        visualTransformation = visualTransformation
-    )
-}
-
-@Composable
 fun SPPasswordTextField(
     modifier: Modifier = Modifier,
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
     label: @Composable (() -> Unit),
-    showSupportingText: Boolean,
+    errorText: String? = null,
+    showSupportingText: Boolean = false,
 ) {
     var visiblePassword by remember { mutableStateOf(false) }
     OutlinedTextField(
@@ -80,9 +48,15 @@ fun SPPasswordTextField(
         } else {
             PasswordVisualTransformation(mask = '*')
         },
+        isError = errorText != null,
         supportingText = {
-            if (showSupportingText) {
-                Text(stringResource(Res.string.hint_password_requirements))
+            when {
+                errorText != null -> {
+                    Text(errorText)
+                }
+                showSupportingText -> {
+                    Text(stringResource(Res.string.hint_password_requirements))
+                }
             }
         },
         trailingIcon = {

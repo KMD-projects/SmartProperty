@@ -200,7 +200,6 @@ private fun Screen(
                     .fillMaxWidth(),
                 value = password,
                 onValueChange = onPasswordChange,
-                showSupportingText = false,
                 label = { Text(stringResource(Res.string.label_password)) }
             )
             Spacer(
