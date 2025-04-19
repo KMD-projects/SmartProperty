@@ -54,12 +54,14 @@ fun NavController.navigateExplore() {
 
 fun NavGraphBuilder.homeScreen(
     modifier: Modifier = Modifier,
-    navigateToSearch: () -> Unit
+    navigateToSearch: () -> Unit,
+    navigateToPropertyDetail: (String) -> Unit
 ) {
     composable<ExploreRoute> {
         ExploreScreen(
             modifier = modifier,
-            navigateToSearch = navigateToSearch
+            navigateToSearch = navigateToSearch,
+            navigateToPropertyDetail = navigateToPropertyDetail
         )
     }
 }
@@ -67,7 +69,8 @@ fun NavGraphBuilder.homeScreen(
 @Composable
 fun ExploreScreen(
     modifier: Modifier = Modifier,
-    navigateToSearch: () -> Unit
+    navigateToSearch: () -> Unit,
+    navigateToPropertyDetail: (String) -> Unit
 ) {
     val viewModel: ExploreViewModel = koinViewModel<ExploreViewModel>()
     val properties = viewModel.properties.collectAsStateWithLifecycle()
@@ -76,10 +79,10 @@ fun ExploreScreen(
         modifier = modifier,
         isLoading = viewModel.isLoading,
         properties = properties.value,
-        onClick = {},
         onRefresh = viewModel::refresh,
         onFavoriteClick = viewModel::toggleFavorite,
-        navigateToSearch = navigateToSearch
+        navigateToSearch = navigateToSearch,
+        navigateToPropertyDetail = navigateToPropertyDetail
     )
 }
 
@@ -89,9 +92,9 @@ private fun Screen(
     isLoading: Boolean,
     properties: List<Property>,
     onRefresh: () -> Unit,
-    onClick: (String) -> Unit,
     onFavoriteClick: (String) -> Unit,
-    navigateToSearch: () -> Unit
+    navigateToSearch: () -> Unit,
+    navigateToPropertyDetail: (String) -> Unit
 ) {
     val statusBarInset = WindowInsets.statusBars.asPaddingValues()
     val pullToRefreshState = rememberPullToRefreshState()
@@ -140,7 +143,7 @@ private fun Screen(
             }
             propertyList(
                 properties = properties,
-                onClick = onClick,
+                onClick = navigateToPropertyDetail,
                 onFavoriteClick = onFavoriteClick
             )
         }
@@ -153,9 +156,9 @@ private fun Preview() {
     Screen(
         isLoading = false,
         properties = listOf(),
-        onClick = {},
         onRefresh = {},
         onFavoriteClick = {},
-        navigateToSearch = {}
+        navigateToSearch = {},
+        navigateToPropertyDetail = {}
     )
 }

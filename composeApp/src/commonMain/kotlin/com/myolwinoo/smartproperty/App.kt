@@ -13,6 +13,10 @@ import com.myolwinoo.smartproperty.features.login.LoginRoute
 import com.myolwinoo.smartproperty.features.login.loginScreen
 import com.myolwinoo.smartproperty.features.main.MainRoute
 import com.myolwinoo.smartproperty.features.main.mainScreen
+import com.myolwinoo.smartproperty.features.propertydetail.appointmentform.appointmentForm
+import com.myolwinoo.smartproperty.features.propertydetail.appointmentform.navigateAppointmentForm
+import com.myolwinoo.smartproperty.features.propertydetail.navigatePropertyDetailScreen
+import com.myolwinoo.smartproperty.features.propertydetail.propertyDetailScreen
 import com.myolwinoo.smartproperty.features.register.navigateRegister
 import com.myolwinoo.smartproperty.features.register.registerScreen
 import com.myolwinoo.smartproperty.features.search.navigateSearch
@@ -82,10 +86,21 @@ fun AppNavHost() {
                     }
                 }
             },
-            navigateToSearch = navController::navigateSearch
+            navigateToSearch = navController::navigateSearch,
+            navigateToPropertyDetail = navController::navigatePropertyDetailScreen
         )
 
         searchScreen(
+            onBack = navController::navigateUp,
+            navigateToPropertyDetail = navController::navigatePropertyDetailScreen
+        )
+
+        propertyDetailScreen(
+            onBack = navController::navigateUp,
+            navigateToAppointmentForm = navController::navigateAppointmentForm
+        )
+
+        appointmentForm(
             onBack = navController::navigateUp
         )
     }

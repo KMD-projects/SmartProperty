@@ -1,5 +1,8 @@
 package com.myolwinoo.smartproperty.utils
 
+import com.myolwinoo.smartproperty.data.model.Appointment
+import com.myolwinoo.smartproperty.data.model.AppointmentAction
+import com.myolwinoo.smartproperty.data.model.AppointmentStatus
 import com.myolwinoo.smartproperty.data.model.Property
 import com.myolwinoo.smartproperty.data.model.PropertyType
 import com.myolwinoo.smartproperty.data.model.User
@@ -42,7 +45,9 @@ object PreviewData {
             propertyType = PropertyType.APARTMENT.name,
             createdAt = "2023-01-01",
             updatedAt = "2023-01-01",
-            isFavorite = false
+            appointmentStatus = null,
+            isFavorite = false,
+            isOwnProperty = false
         ),
         Property(
             id = "2",
@@ -61,7 +66,9 @@ object PreviewData {
             propertyType = PropertyType.CONDO.name,
             createdAt = "2023-02-15",
             updatedAt = "2023-02-15",
-            isFavorite = true
+            appointmentStatus = null,
+            isFavorite = true,
+            isOwnProperty = false
         ),
         Property(
             id = "3",
@@ -80,7 +87,9 @@ object PreviewData {
             propertyType = PropertyType.HOUSE.name,
             createdAt = "2023-03-10",
             updatedAt = "2023-03-10",
-            isFavorite = false
+            appointmentStatus = null,
+            isFavorite = false,
+            isOwnProperty = false
         ),
         Property(
             id = "4",
@@ -99,7 +108,9 @@ object PreviewData {
             propertyType = PropertyType.ROOM.name,
             createdAt = "2023-04-05",
             updatedAt = "2023-04-05",
-            isFavorite = true
+            appointmentStatus = null,
+            isFavorite = true,
+            isOwnProperty = false
         ),
         Property(
             id = "5",
@@ -119,7 +130,68 @@ object PreviewData {
             propertyType = PropertyType.CONDO.name,
             createdAt = "2023-05-20",
             updatedAt = "2023-05-20",
-            isFavorite = false
+            appointmentStatus = null,
+            isFavorite = false,
+            isOwnProperty = false
+        )
+    )
+
+    val appointments = listOf(
+        Appointment(
+            id = "1",
+            renterName = "John Doe",
+            renterProfileUrl = "https://example.com/profiles/john_doe.jpg",
+            landlordName = "Jane Smith",
+            landlordProfileUrl = "https://example.com/profiles/jane_smith.jpg",
+            property = properties.get(0),
+            status = AppointmentStatus.PENDING,
+            fromDate = "2023-10-01",
+            toDate = "2023-10-05",
+            description = "Viewing appointment for a cozy studio apartment.",
+            remark = "Renter prefers morning hours.",
+            action = AppointmentAction.NONE
+        ),
+        Appointment(
+            id = "2",
+            renterName = "Alice Brown",
+            renterProfileUrl = "https://example.com/profiles/alice_brown.jpg",
+            landlordName = "Bob Johnson",
+            landlordProfileUrl = "https://example.com/profiles/bob_johnson.jpg",
+            property = properties.get(1),
+            status = AppointmentStatus.ACCEPTED,
+            fromDate = "2023-10-10",
+            toDate = "2023-10-12",
+            description = "Appointment to discuss rental terms for a modern condo.",
+            remark = "Landlord requested a deposit discussion.",
+            action = AppointmentAction.NONE
+        ),
+        Appointment(
+            id = "3",
+            renterName = "Charlie Davis",
+            renterProfileUrl = "https://example.com/profiles/charlie_davis.jpg",
+            landlordName = "Diana Evans",
+            landlordProfileUrl = "https://example.com/profiles/diana_evans.jpg",
+            property = properties.get(2),
+            status = AppointmentStatus.REJECTED,
+            fromDate = "2023-10-15",
+            toDate = "2023-10-16",
+            description = "Inquiry about luxury villa availability.",
+            remark = "Landlord rejected due to unavailability.",
+            action = AppointmentAction.NONE
+        ),
+        Appointment(
+            id = "4",
+            renterName = "Eve Foster",
+            renterProfileUrl = "https://example.com/profiles/eve_foster.jpg",
+            landlordName = "Frank Green",
+            landlordProfileUrl = "https://example.com/profiles/frank_green.jpg",
+            property = properties.get(3),
+            status = AppointmentStatus.CANCELLED,
+            fromDate = "2023-10-20",
+            toDate = "2023-10-22",
+            description = "Tour of an affordable room in a shared house.",
+            remark = "Renter canceled due to scheduling conflict.",
+            action = AppointmentAction.NONE
         )
     )
 }

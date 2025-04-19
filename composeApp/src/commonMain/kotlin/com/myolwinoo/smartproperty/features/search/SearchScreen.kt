@@ -52,14 +52,15 @@ import smartproperty.composeapp.generated.resources.ic_filter_filled
 import smartproperty.composeapp.generated.resources.label_search
 
 @Serializable
-object SearchRoute
+private object SearchRoute
 
 fun NavController.navigateSearch() {
     navigate(SearchRoute)
 }
 
 fun NavGraphBuilder.searchScreen(
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    navigateToPropertyDetail: (String) -> Unit
 ) {
     composable<SearchRoute> {
         val viewModel: SearchViewModel = koinViewModel()

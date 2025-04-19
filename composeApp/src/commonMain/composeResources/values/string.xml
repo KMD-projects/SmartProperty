@@ -29,6 +29,11 @@
     <string name="label_terms">Terms of Service</string>
     <string name="label_privacy_policy">Privacy Policy</string>
     <string name="label_language">Language</string>
+    <string name="label_from">From</string>
+    <string name="label_to">To</string>
+    <string name="label_date">Date</string>
+    <string name="label_time">Time</string>
+    <string name="label_book_appointment">Book Appointment</string>
 
     <string name="title_login_error">Login Failed</string>
     <string name="title_register_error">Register Failed</string>
@@ -36,6 +41,10 @@
     <string name="title_personal_info">Personal information</string>
     <string name="title_support">Support</string>
     <string name="title_legal">Legal</string>
+    <string name="title_make_appointment">Make Appointment</string>
+    <string name="title_cancel_appointment">Cancel Appointment</string>
+    <string name="title_view_appointments">View Appointments</string>
+    <string name="title_edit_details">Edit Details</string>
 
     <string name="message_login_error">Incorrect username or password. Please try again.</string>
     <string name="message_register_error">Failed to register. Please try again.</string>

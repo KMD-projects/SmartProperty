@@ -76,6 +76,7 @@ kotlin {
             implementation(libs.jetbrains.compose.adaptive.navigation)
 
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.datetime)
 
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)

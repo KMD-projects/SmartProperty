@@ -1,21 +1,29 @@
 package com.myolwinoo.smartproperty.data.network
 
 import com.myolwinoo.smartproperty.data.AccountManager
+import com.myolwinoo.smartproperty.data.model.Appointment
+import com.myolwinoo.smartproperty.data.model.AppointmentAction
+import com.myolwinoo.smartproperty.data.model.AppointmentStatus
 import com.myolwinoo.smartproperty.data.model.Property
 import com.myolwinoo.smartproperty.data.model.RequisitionStatus
 import com.myolwinoo.smartproperty.data.model.SearchRequest
 import com.myolwinoo.smartproperty.data.model.User
 import com.myolwinoo.smartproperty.data.model.UserRole
+import com.myolwinoo.smartproperty.data.network.model.AppointmentData
 import com.myolwinoo.smartproperty.data.network.model.BaseResponse
+import com.myolwinoo.smartproperty.data.network.model.CreateAppointmentRequest
 import com.myolwinoo.smartproperty.data.network.model.PropertyData
 import com.myolwinoo.smartproperty.data.network.model.RegisterRequest
 import com.myolwinoo.smartproperty.data.network.model.UserData
+import com.myolwinoo.smartproperty.utils.DateUtils
 import com.myolwinoo.smartproperty.utils.PriceFormatter
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.post
+import io.ktor.client.request.put
 import io.ktor.client.request.setBody
+import io.ktor.http.parameters
 
 class SPApi(
     private val client: HttpClient,
@@ -92,7 +100,52 @@ class SPApi(
             client.get("api/v1/properties")
                 .body<BaseResponse<List<PropertyData>>>()
                 .data
-                .map(::mapProperty)
+                .map { mapProperty(it) }
+        }
+    }
+
+    suspend fun getProperty(id: String): Result<Property> {
+        return runCatching {
+            client.get("api/v1/properties/$id")
+                .body<BaseResponse<PropertyData>>()
+                .data
+                .let { mapProperty(it) }
+        }
+    }
+
+    suspend fun getAppointments(
+        role: UserRole? = null,
+        status: AppointmentStatus? = null,
+        propertyId: String? = null
+    ): Result<List<Appointment>> {
+        val viewAs = role ?: accountManager.getUser()?.role
+        return runCatching {
+            client.get("api/v1/appointments") {
+                url {
+                    propertyId?.let { parameters.append("property_id", it) }
+                    status?.let { parameters.append("status", it.rawValue) }
+                    viewAs?.let { parameters.append("as", it.rawValue) }
+                }
+            }
+                .body<BaseResponse<List<AppointmentData>>>()
+                .data
+                .map { mapAppointment(it) }
+        }
+    }
+
+    suspend fun updateAppointmentStatus(
+        appointmentId: String,
+        status: AppointmentStatus
+    ): Result<Unit> {
+        return runCatching {
+            client.put("api/v1/appointments/$appointmentId") {
+                url {
+                    parameters.append("status", status.rawValue)
+                }
+            }
+                .body<BaseResponse<AppointmentData>>()
+                .data
+                .let { mapAppointment(it) }
         }
     }
 
@@ -115,19 +168,35 @@ class SPApi(
             }
                 .body<BaseResponse<List<PropertyData>>>()
                 .data
-                .map(::mapProperty)
+                .map { mapProperty(it) }
         }
     }
 
     suspend fun getWishlists(): Result<List<Property>> {
-        return getPropertyList()
-            .map { it.filter { it.isFavorite } }
+        return runCatching {
+            client.get("api/v1/properties") {
+                url {
+                    parameters.append("filter", "favorite")
+                }
+            }
+                .body<BaseResponse<List<PropertyData>>>()
+                .data
+                .map { mapProperty(it) }
+        }
     }
 
     suspend fun toggleFavorite(propertyId: String): Result<Unit> {
         return runCatching {
             client.post("api/v1/properties/$propertyId/favorite")
                 .body<BaseResponse<List<Unit>>>()
+        }
+    }
+
+    suspend fun makeAppointment(request: CreateAppointmentRequest): Result<Unit> {
+        return runCatching {
+            client.post("api/v1/appointments") {
+                setBody(request)
+            }.body<BaseResponse<AppointmentData>>()
         }
     }
 
@@ -138,16 +207,9 @@ class SPApi(
             email = userData.email.orEmpty(),
             phone = userData.phone.orEmpty(),
             address = userData.address.orEmpty(),
-            role = when(userData.role.orEmpty()) {
-                "renter" -> UserRole.RENTER
-                "landlord" -> UserRole.LANDLORD
-                else -> UserRole.RENTER
-            },
-            requisitionStatus = when(userData.requisitionStatus) {
-                "pending" -> RequisitionStatus.PENDING
-                "rejected" -> RequisitionStatus.REJECTED
-                else -> null
-            },
+            role = UserRole.fromRawValue(userData.role),
+            requisitionStatus = RequisitionStatus
+                .fromRawValue(userData.requisitionStatus),
             profileImage = userData.profilePic.orEmpty(),
             verified = false,
             createdAt = "",
@@ -155,10 +217,36 @@ class SPApi(
         )
     }
 
-    private fun mapProperty(propertyData: PropertyData): Property {
+    private suspend fun mapAppointment(data: AppointmentData): Appointment {
+        val userRole = accountManager.getUser()?.role ?: UserRole.RENTER
+        val status = AppointmentStatus.fromRawValue(data.status)
+        return Appointment(
+            id = data.id.orEmpty(),
+            property = mapProperty(data.property!!),
+            status = status,
+            fromDate = DateUtils.toDisplayDate(data.from.orEmpty()),
+            toDate = DateUtils.toDisplayDate(data.to.orEmpty()),
+            description = data.description.orEmpty(),
+            remark = data.remark.orEmpty(),
+            renterName = data.user?.get("username").orEmpty(),
+            renterProfileUrl = data.user?.get("profile_pic").orEmpty(),
+            landlordName = data.requestTo?.get("username").orEmpty(),
+            landlordProfileUrl = data.requestTo?.get("profile_pic").orEmpty(),
+            action = when {
+                status == AppointmentStatus.PENDING && userRole == UserRole.LANDLORD ->
+                    AppointmentAction.ACCEPT_REJECT
+                status == AppointmentStatus.PENDING ->
+                    AppointmentAction.CANCEL
+                else -> AppointmentAction.NONE
+            }
+        )
+    }
+
+    private suspend fun mapProperty(propertyData: PropertyData): Property {
+        val landlordId = propertyData.landlord?.get("id").orEmpty()
         return Property(
             id = propertyData.id.orEmpty(),
-            landlordId = propertyData.landlord?.get("id").orEmpty(),
+            landlordId = landlordId,
             title = propertyData.title.orEmpty(),
             description = propertyData.description.orEmpty(),
             price = PriceFormatter.format(propertyData.price ?: 0.0),
@@ -179,7 +267,10 @@ class SPApi(
             propertyType = propertyData.propertyType?.get("name").orEmpty(),
             createdAt = propertyData.createdAt.orEmpty(),
             updatedAt = propertyData.updatedAt.orEmpty(),
-            isFavorite = propertyData.isFavorite ?: false
+            isFavorite = propertyData.isFavorite ?: false,
+            appointmentStatus = AppointmentStatus
+                .fromRawValue(propertyData.appointmentStatus),
+            isOwnProperty = landlordId == accountManager.getUser()?.id
         )
     }
 }

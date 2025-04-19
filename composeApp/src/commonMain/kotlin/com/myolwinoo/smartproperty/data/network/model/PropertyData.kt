@@ -1,5 +1,6 @@
 package com.myolwinoo.smartproperty.data.network.model
 
+import com.myolwinoo.smartproperty.data.model.AppointmentStatus
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -21,6 +22,8 @@ data class PropertyData(
     val landlord: Map<String, String?>? = null,
     val amenities: List<Map<String, String?>>? = null,
     val images: List<String>? = null,
+    @SerialName("last_appointment_status")
+    val appointmentStatus: String? = null,
     @SerialName("created_at")
     val createdAt: String? = null,
     @SerialName("updated_at")

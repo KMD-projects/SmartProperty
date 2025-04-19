@@ -11,10 +11,11 @@ datastore = "1.1.4"
 kotlin = "2.1.20"
 kotlinx-coroutines = "1.10.2"
 kotlinx-serialization = "1.8.1"
+kotlinx-datetime = "0.6.2"
 koin-bom = "4.1.0-Beta7"
 ktor = "3.1.2"
 lifecycleCmpVersion = "2.8.4"
-navigationCmpVersion = "2.9.0-alpha15"
+navigationCmpVersion = "2.9.0-alpha16"
 napier = "2.7.1"
 
 [libraries]
@@ -32,6 +33,7 @@ jetbrains-lifecycle-runtime-compose = { group = "org.jetbrains.androidx.lifecycl
 
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
 
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 

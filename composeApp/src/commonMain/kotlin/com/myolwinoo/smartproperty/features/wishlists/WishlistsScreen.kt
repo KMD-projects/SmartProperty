@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
@@ -19,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.myolwinoo.smartproperty.common.LoadingOverlay
 import com.myolwinoo.smartproperty.common.propertyList
 import com.myolwinoo.smartproperty.data.model.Property
+import com.myolwinoo.smartproperty.design.theme.AppDimens
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -58,11 +62,21 @@ private fun Screen(
             modifier = modifier
                 .fillMaxSize(),
             contentPadding = PaddingValues(
-                top = statusBarInset.calculateTopPadding(),
+                top = statusBarInset.calculateTopPadding() + AppDimens.Spacing.xl,
                 bottom = 20.dp
             ),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
+            stickyHeader {
+                Text(
+                    modifier = Modifier.padding(
+                        horizontal = AppDimens.Spacing.xl,
+                        vertical = AppDimens.Spacing.m
+                    ),
+                    text = "Your Wishlists",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            }
             propertyList(
                 properties = properties,
                 onClick = onClick,

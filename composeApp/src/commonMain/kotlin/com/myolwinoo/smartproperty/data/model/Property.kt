@@ -14,6 +14,8 @@ data class Property(
     val amenities: List<String>,
     val images: List<String>,
     val available: Boolean = true,
+    val appointmentStatus: AppointmentStatus?,
+    val isOwnProperty: Boolean,
     val createdAt: String,
     val updatedAt: String
 )
