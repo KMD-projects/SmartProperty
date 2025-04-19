@@ -2,17 +2,22 @@
 
 package com.myolwinoo.smartproperty.features.search
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -30,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -37,9 +43,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import coil3.compose.AsyncImage
 import com.myolwinoo.smartproperty.data.model.Property
 import com.myolwinoo.smartproperty.design.theme.AppDimens
 import com.myolwinoo.smartproperty.design.theme.SPTheme
+import com.myolwinoo.smartproperty.utils.PreviewData
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -94,7 +102,8 @@ fun NavGraphBuilder.searchScreen(
             filtered = hasFiltered.value,
             onFilterClick = {
                 showFilterSheet = true
-            }
+            },
+            navigateToPropertyDetail = navigateToPropertyDetail
         )
     }
 }
@@ -106,7 +115,8 @@ private fun SearchScreen(
     query: TextFieldValue,
     onQueryChange: (TextFieldValue) -> Unit,
     filtered: Boolean,
-    onFilterClick: () -> Unit
+    onFilterClick: () -> Unit,
+    navigateToPropertyDetail: (String) -> Unit
 ) {
     Scaffold { innerPadding ->
         Column(
@@ -172,22 +182,62 @@ private fun SearchScreen(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(AppDimens.Spacing.m),
                 contentPadding = PaddingValues(
-                    vertical = AppDimens.Spacing.l,
-                    horizontal = AppDimens.Spacing.xl
+                    vertical = AppDimens.Spacing.l
                 )
             ) {
                 items(
                     items = searchResult,
                     key = { it.id }
                 ) {
-                    Column {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                navigateToPropertyDetail(it.id)
+                            }
+                    ) {
+                        if (it.images.isNotEmpty()) {
+                            Row(
+                                modifier = Modifier
+                                    .horizontalScroll(rememberScrollState()),
+                                horizontalArrangement = Arrangement.spacedBy(AppDimens.Spacing.m)
+                            ) {
+                                Spacer(
+                                    modifier = Modifier.size(AppDimens.Spacing.xl)
+                                )
+                                it.images.forEach {
+                                    AsyncImage(
+                                        model = it,
+                                        contentDescription = "Property Image",
+                                        modifier = Modifier
+                                            .size(60.dp),
+                                        contentScale = ContentScale.Crop
+                                    )
+                                }
+                                Spacer(
+                                    modifier = Modifier.size(AppDimens.Spacing.xl)
+                                )
+                            }
+                        }
                         Text(
+                            modifier = Modifier
+                                .padding(
+                                    horizontal = AppDimens.Spacing.xl
+                                ),
                             text = it.title
                         )
                         Text(
+                            modifier = Modifier
+                                .padding(
+                                    horizontal = AppDimens.Spacing.xl
+                                ),
                             text = it.location
                         )
                         Text(
+                            modifier = Modifier
+                                .padding(
+                                    horizontal = AppDimens.Spacing.xl
+                                ),
                             text = it.price.toString()
                         )
                     }
@@ -203,11 +253,12 @@ private fun Preview() {
     SPTheme {
         SearchScreen(
             onBack = {},
-            searchResult = emptyList(),
+            searchResult = PreviewData.properties,
             query = TextFieldValue(),
             onQueryChange = {},
             filtered = true,
-            onFilterClick = {}
+            onFilterClick = {},
+            navigateToPropertyDetail = {}
         )
     }
 }
