@@ -12,13 +12,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,7 +27,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -43,6 +47,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import coil3.compose.AsyncImage
+import com.myolwinoo.smartproperty.common.RatingDialog
 import com.myolwinoo.smartproperty.data.model.Property
 import com.myolwinoo.smartproperty.data.model.UserRole
 import com.myolwinoo.smartproperty.design.theme.AppDimens
@@ -55,13 +60,12 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import smartproperty.composeapp.generated.resources.Res
-import smartproperty.composeapp.generated.resources.favorite
-import smartproperty.composeapp.generated.resources.favorite_filled
 import smartproperty.composeapp.generated.resources.ic_back
+import smartproperty.composeapp.generated.resources.ic_star
+import smartproperty.composeapp.generated.resources.label_rate
 import smartproperty.composeapp.generated.resources.location_on
-import smartproperty.composeapp.generated.resources.title_make_appointment
+import smartproperty.composeapp.generated.resources.title_rating
 import kotlin.math.absoluteValue
-
 
 @Serializable
 private data class PropertyDetailRoute(val propertyId: String)
@@ -82,11 +86,27 @@ fun NavGraphBuilder.propertyDetailScreen(
         val property = viewModel.property.collectAsStateWithLifecycle()
         val userRole = viewModel.userRole.collectAsStateWithLifecycle()
 
+        var showRatingDialog by remember { mutableStateOf(false) }
+
         LifecycleResumeEffect(Unit) {
 
             viewModel.refresh()
 
             onPauseOrDispose {}
+        }
+
+        if (showRatingDialog) {
+            RatingDialog(
+                rating = viewModel.rating,
+                onRatingChanged = viewModel::setRatingValue,
+                onSubmit = {
+                    viewModel.submitRating()
+                    showRatingDialog = false
+                },
+                onDismissRequest = {
+                    showRatingDialog = false
+                }
+            )
         }
 
         Screen(
@@ -96,6 +116,9 @@ fun NavGraphBuilder.propertyDetailScreen(
             onFavoriteClick = viewModel::toggleFavorite,
             navigateToAppointmentForm = {
                 navigateToAppointmentForm(propertyId)
+            },
+            onRate = {
+                showRatingDialog = true
             }
         )
     }
@@ -107,7 +130,8 @@ private fun Screen(
     userRole: UserRole?,
     onBack: () -> Unit,
     onFavoriteClick: (String) -> Unit,
-    navigateToAppointmentForm: () -> Unit
+    navigateToAppointmentForm: () -> Unit,
+    onRate: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -194,6 +218,14 @@ private fun Screen(
 
                     Spacer(modifier = Modifier.height(AppDimens.Spacing.l))
 
+                    PropertyRating(
+                        avgRating = property.avgRating,
+                        hasReviewed = property.hasReviewed,
+                        onRate = onRate
+                    )
+
+                    Spacer(modifier = Modifier.height(AppDimens.Spacing.l))
+
                     Text(
                         text = property.description,
                         style = MaterialTheme.typography.bodyLarge,
@@ -265,7 +297,8 @@ private fun Preview() {
             userRole = UserRole.LANDLORD,
             onBack = {},
             onFavoriteClick = {},
-            navigateToAppointmentForm = {}
+            navigateToAppointmentForm = {},
+            onRate = {}
         )
     }
 }

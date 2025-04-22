@@ -13,6 +13,7 @@ import com.myolwinoo.smartproperty.data.network.model.AppointmentData
 import com.myolwinoo.smartproperty.data.network.model.BaseResponse
 import com.myolwinoo.smartproperty.data.network.model.CreateAppointmentRequest
 import com.myolwinoo.smartproperty.data.network.model.PropertyData
+import com.myolwinoo.smartproperty.data.network.model.RatingData
 import com.myolwinoo.smartproperty.data.network.model.RegisterRequest
 import com.myolwinoo.smartproperty.data.network.model.UserData
 import com.myolwinoo.smartproperty.utils.DateUtils
@@ -200,6 +201,14 @@ class SPApi(
         }
     }
 
+    suspend fun submitRating(propertyId: String, rating: Int): Result<Unit> {
+        return runCatching {
+            client.post("api/v1/properties/$propertyId/reviews") {
+                setBody(mapOf("rating" to rating))
+            }.body<BaseResponse<RatingData>>()
+        }
+    }
+
     private fun mapUser(userData: UserData): User {
         return User(
             id = userData.id.orEmpty(),
@@ -270,7 +279,10 @@ class SPApi(
             isFavorite = propertyData.isFavorite ?: false,
             appointmentStatus = AppointmentStatus
                 .fromRawValue(propertyData.appointmentStatus),
-            isOwnProperty = landlordId == accountManager.getUser()?.id
+            isOwnProperty = landlordId == accountManager.getUser()?.id,
+            avgRating = propertyData.avgRating ?: 0f,
+            viewcount = propertyData.viewCount ?: 0,
+            hasReviewed = propertyData.hasReviewed ?: false,
         )
     }
 }

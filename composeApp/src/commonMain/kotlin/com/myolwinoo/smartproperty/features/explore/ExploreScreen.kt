@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,12 +36,14 @@ import androidx.navigation.compose.composable
 import com.myolwinoo.smartproperty.common.LoadingOverlay
 import com.myolwinoo.smartproperty.common.propertyList
 import com.myolwinoo.smartproperty.data.model.Property
+import com.myolwinoo.smartproperty.design.theme.AppDimens
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import smartproperty.composeapp.generated.resources.Res
+import smartproperty.composeapp.generated.resources.ic_edit
 import smartproperty.composeapp.generated.resources.label_register
 import smartproperty.composeapp.generated.resources.label_start_explore
 import smartproperty.composeapp.generated.resources.search
@@ -55,13 +58,15 @@ fun NavController.navigateExplore() {
 fun NavGraphBuilder.homeScreen(
     modifier: Modifier = Modifier,
     navigateToSearch: () -> Unit,
-    navigateToPropertyDetail: (String) -> Unit
+    navigateToPropertyDetail: (String) -> Unit,
+    onCreateProperty: () -> Unit
 ) {
     composable<ExploreRoute> {
         ExploreScreen(
             modifier = modifier,
             navigateToSearch = navigateToSearch,
-            navigateToPropertyDetail = navigateToPropertyDetail
+            navigateToPropertyDetail = navigateToPropertyDetail,
+            onCreateProperty = onCreateProperty
         )
     }
 }
@@ -70,19 +75,23 @@ fun NavGraphBuilder.homeScreen(
 fun ExploreScreen(
     modifier: Modifier = Modifier,
     navigateToSearch: () -> Unit,
-    navigateToPropertyDetail: (String) -> Unit
+    navigateToPropertyDetail: (String) -> Unit,
+    onCreateProperty: () -> Unit
 ) {
     val viewModel: ExploreViewModel = koinViewModel<ExploreViewModel>()
     val properties = viewModel.properties.collectAsStateWithLifecycle()
+    val showCreateProperty = viewModel.showCreateProperty.collectAsStateWithLifecycle()
 
     Screen(
         modifier = modifier,
         isLoading = viewModel.isLoading,
+        showCreateProperty = showCreateProperty.value,
         properties = properties.value,
         onRefresh = viewModel::refresh,
         onFavoriteClick = viewModel::toggleFavorite,
         navigateToSearch = navigateToSearch,
-        navigateToPropertyDetail = navigateToPropertyDetail
+        navigateToPropertyDetail = navigateToPropertyDetail,
+        onCreateProperty = onCreateProperty
     )
 }
 
@@ -90,11 +99,13 @@ fun ExploreScreen(
 private fun Screen(
     modifier: Modifier = Modifier,
     isLoading: Boolean,
+    showCreateProperty: Boolean,
     properties: List<Property>,
     onRefresh: () -> Unit,
     onFavoriteClick: (String) -> Unit,
     navigateToSearch: () -> Unit,
-    navigateToPropertyDetail: (String) -> Unit
+    navigateToPropertyDetail: (String) -> Unit,
+    onCreateProperty: () -> Unit
 ) {
     val statusBarInset = WindowInsets.statusBars.asPaddingValues()
     val pullToRefreshState = rememberPullToRefreshState()
@@ -147,6 +158,20 @@ private fun Screen(
                 onFavoriteClick = onFavoriteClick
             )
         }
+
+        if (showCreateProperty) {
+            ExtendedFloatingActionButton(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(
+                        bottom = AppDimens.Spacing.xl,
+                        end = AppDimens.Spacing.xl
+                    ),
+                onClick = { onCreateProperty() },
+                icon = { Icon(painterResource(Res.drawable.ic_edit), "") },
+                text = { Text(text = "Create Property") },
+            )
+        }
     }
 }
 
@@ -156,9 +181,11 @@ private fun Preview() {
     Screen(
         isLoading = false,
         properties = listOf(),
+        showCreateProperty = true,
         onRefresh = {},
         onFavoriteClick = {},
         navigateToSearch = {},
-        navigateToPropertyDetail = {}
+        navigateToPropertyDetail = {},
+        onCreateProperty = {}
     )
 }

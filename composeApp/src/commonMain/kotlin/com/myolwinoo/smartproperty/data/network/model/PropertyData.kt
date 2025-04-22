@@ -27,5 +27,11 @@ data class PropertyData(
     @SerialName("created_at")
     val createdAt: String? = null,
     @SerialName("updated_at")
-    val updatedAt: String? = null
+    val updatedAt: String? = null,
+    @SerialName("average_rating")
+    val avgRating: Float? = null,
+    @SerialName("view_count")
+    val viewCount: Long? = null,
+    @SerialName("has_reviewed")
+    val hasReviewed: Boolean? = null,
 )

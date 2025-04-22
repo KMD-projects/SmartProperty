@@ -34,7 +34,9 @@
     <string name="label_date">Date</string>
     <string name="label_time">Time</string>
     <string name="label_book_appointment">Book Appointment</string>
+    <string name="label_rate">Rate</string>
 
+    <string name="title_rating">Rating</string>
     <string name="title_login_error">Login Failed</string>
     <string name="title_register_error">Register Failed</string>
     <string name="title_welcome">Welcome!</string>

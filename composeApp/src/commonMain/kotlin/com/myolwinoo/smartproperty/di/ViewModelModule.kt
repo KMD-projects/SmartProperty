@@ -6,6 +6,7 @@ import com.myolwinoo.smartproperty.features.login.LoginViewModel
 import com.myolwinoo.smartproperty.features.profile.ProfileViewModel
 import com.myolwinoo.smartproperty.features.propertydetail.PropertyDetailViewModel
 import com.myolwinoo.smartproperty.features.propertydetail.appointmentform.AppointmentFormViewModel
+import com.myolwinoo.smartproperty.features.propertyform.PropertyFormViewModel
 import com.myolwinoo.smartproperty.features.register.RegisterViewModel
 import com.myolwinoo.smartproperty.features.search.SearchViewModel
 import com.myolwinoo.smartproperty.features.wishlists.WishlistsViewModel
@@ -22,4 +23,5 @@ val viewModelModule = module {
     viewModelOf(::SearchViewModel)
     viewModelOf(::PropertyDetailViewModel)
     viewModelOf(::AppointmentFormViewModel)
+    viewModelOf(::PropertyFormViewModel)
 }

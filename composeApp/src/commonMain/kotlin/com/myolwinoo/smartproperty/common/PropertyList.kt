@@ -2,8 +2,10 @@
 
 package com.myolwinoo.smartproperty.common
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -26,18 +28,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.myolwinoo.smartproperty.utils.PreviewData
 import com.myolwinoo.smartproperty.data.model.Property
+import com.myolwinoo.smartproperty.design.theme.AppDimens
 import com.myolwinoo.smartproperty.design.theme.SPTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import smartproperty.composeapp.generated.resources.Res
 import smartproperty.composeapp.generated.resources.favorite
 import smartproperty.composeapp.generated.resources.favorite_filled
+import smartproperty.composeapp.generated.resources.ic_star
 import smartproperty.composeapp.generated.resources.location_on
 
 fun LazyListScope.propertyList(
@@ -71,15 +76,66 @@ fun PropertyItem(
         shape = RoundedCornerShape(12.dp),
     ) {
         Column {
-            // Property Image
-            AsyncImage(
-                model = property.images.firstOrNull(),
-                contentDescription = "Property Image",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(180.dp),
-                contentScale = ContentScale.Crop
-            )
+
+            Box {
+                // Property Image
+                AsyncImage(
+                    model = property.images.firstOrNull(),
+                    contentDescription = "Property Image",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(180.dp),
+                    contentScale = ContentScale.Crop
+                )
+
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .background(Brush.horizontalGradient(
+                            colors = listOf(
+                                MaterialTheme.colorScheme.background.copy(alpha = 0.1f),
+                                MaterialTheme.colorScheme.background.copy(alpha = 0.5f)
+                            )
+                        ))
+                )
+
+                IconButton(
+                    onClick = { onFavoriteClick(property.id) },
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(AppDimens.Spacing.m)
+                ) {
+                    Icon(
+                        painter = painterResource(
+                            if (property.isFavorite) Res.drawable.favorite_filled else Res.drawable.favorite
+                        ),
+                        contentDescription = "Favorite",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(AppDimens.Spacing.l),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        modifier = Modifier,
+                        painter = painterResource(Res.drawable.ic_star),
+                        contentDescription = "Rating",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = property.avgRating.toString(),
+                        style = MaterialTheme.typography.labelSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier
+                            .padding(start = 2.dp)
+                    )
+                }
+            }
 
             // Property Details
             Column(
@@ -89,30 +145,13 @@ fun PropertyItem(
                         horizontal = 12.dp
                     )
             ) {
-                Row {
-                    Text(
-                        text = property.title,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .weight(1f)
-                            .alignByBaseline()
-                    )
-                    IconButton(
-                        onClick = { onFavoriteClick(property.id) },
-                        modifier = Modifier
-                            .size(32.dp)
-                            .alignByBaseline()
-                    ) {
-                        Icon(
-                            painter = painterResource(
-                                if (property.isFavorite) Res.drawable.favorite_filled else Res.drawable.favorite
-                            ),
-                            contentDescription = "Favorite",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                }
+                Text(
+                    text = property.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
                 Spacer(modifier = Modifier.height(4.dp))
                 Row {
                     Text(

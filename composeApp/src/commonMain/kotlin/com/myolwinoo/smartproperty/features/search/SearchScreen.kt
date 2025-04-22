@@ -14,11 +14,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -44,6 +48,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import coil3.compose.AsyncImage
+import com.myolwinoo.smartproperty.common.propertyList
 import com.myolwinoo.smartproperty.data.model.Property
 import com.myolwinoo.smartproperty.design.theme.AppDimens
 import com.myolwinoo.smartproperty.design.theme.SPTheme
@@ -189,59 +194,65 @@ private fun SearchScreen(
                     items = searchResult,
                     key = { it.id }
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                navigateToPropertyDetail(it.id)
-                            }
-                    ) {
-                        if (it.images.isNotEmpty()) {
-                            Row(
-                                modifier = Modifier
-                                    .horizontalScroll(rememberScrollState()),
-                                horizontalArrangement = Arrangement.spacedBy(AppDimens.Spacing.m)
-                            ) {
-                                Spacer(
-                                    modifier = Modifier.size(AppDimens.Spacing.xl)
-                                )
-                                it.images.forEach {
-                                    AsyncImage(
-                                        model = it,
-                                        contentDescription = "Property Image",
-                                        modifier = Modifier
-                                            .size(60.dp),
-                                        contentScale = ContentScale.Crop
-                                    )
-                                }
-                                Spacer(
-                                    modifier = Modifier.size(AppDimens.Spacing.xl)
-                                )
-                            }
-                        }
-                        Text(
-                            modifier = Modifier
-                                .padding(
-                                    horizontal = AppDimens.Spacing.xl
-                                ),
-                            text = it.title
-                        )
-                        Text(
-                            modifier = Modifier
-                                .padding(
-                                    horizontal = AppDimens.Spacing.xl
-                                ),
-                            text = it.location
-                        )
-                        Text(
-                            modifier = Modifier
-                                .padding(
-                                    horizontal = AppDimens.Spacing.xl
-                                ),
-                            text = it.price.toString()
-                        )
-                    }
+                    SearchResultItem(
+                        property = it,
+                        onClick = navigateToPropertyDetail
+                    )
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun SearchResultItem(
+    property: Property,
+    onClick: (String) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+            .clickable { onClick(property.id) },
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(12.dp)
+        ) {
+            // Property Image
+            AsyncImage(
+                model = property.images.firstOrNull(),
+                contentDescription = "Property Image",
+                modifier = Modifier
+                    .size(80.dp)
+                    .align(Alignment.CenterVertically),
+                contentScale = ContentScale.Crop
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            // Property Details
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterVertically)
+            ) {
+                Text(
+                    text = property.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "${property.price} MMK /month",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = property.location,
+                    style = MaterialTheme.typography.bodySmall
+                )
             }
         }
     }

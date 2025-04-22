@@ -1,5 +1,8 @@
 package com.myolwinoo.smartproperty.features.propertydetail
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myolwinoo.smartproperty.data.AccountManager
@@ -24,6 +27,9 @@ class PropertyDetailViewModel(
     private val _property = MutableStateFlow<Property?>(null)
     val property: StateFlow<Property?> = _property
 
+    var rating by mutableStateOf(0)
+        private set
+
     val userRole = accountManager.userFlow
         .map { it?.role }
         .stateIn(
@@ -45,6 +51,10 @@ class PropertyDetailViewModel(
         }
     }
 
+    fun setRatingValue(rating: Int) {
+        this.rating = rating
+    }
+
     fun toggleFavorite(propertyId: String) {
         viewModelScope.launch {
             spApi.toggleFavorite(propertyId)
@@ -53,6 +63,13 @@ class PropertyDetailViewModel(
                         data?.copy(isFavorite = !data.isFavorite)
                     }
                 }
+        }
+    }
+
+    fun submitRating() {
+        viewModelScope.launch {
+            spApi.submitRating(propertyId, rating)
+                .onSuccess { refresh() }
         }
     }
 

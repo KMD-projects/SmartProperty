@@ -47,7 +47,10 @@ object PreviewData {
             updatedAt = "2023-01-01",
             appointmentStatus = null,
             isFavorite = false,
-            isOwnProperty = false
+            isOwnProperty = false,
+            viewcount = 100,
+            avgRating = 3.5f,
+            hasReviewed = false
         ),
         Property(
             id = "2",
@@ -68,7 +71,10 @@ object PreviewData {
             updatedAt = "2023-02-15",
             appointmentStatus = null,
             isFavorite = true,
-            isOwnProperty = false
+            isOwnProperty = false,
+            viewcount = 100,
+            avgRating = 3.5f,
+            hasReviewed = false
         ),
         Property(
             id = "3",
@@ -89,7 +95,10 @@ object PreviewData {
             updatedAt = "2023-03-10",
             appointmentStatus = null,
             isFavorite = false,
-            isOwnProperty = false
+            isOwnProperty = false,
+            viewcount = 100,
+            avgRating = 3.5f,
+            hasReviewed = false
         ),
         Property(
             id = "4",
@@ -110,7 +119,10 @@ object PreviewData {
             updatedAt = "2023-04-05",
             appointmentStatus = null,
             isFavorite = true,
-            isOwnProperty = false
+            isOwnProperty = false,
+            viewcount = 100,
+            avgRating = 3.5f,
+            hasReviewed = false
         ),
         Property(
             id = "5",
@@ -132,7 +144,10 @@ object PreviewData {
             updatedAt = "2023-05-20",
             appointmentStatus = null,
             isFavorite = false,
-            isOwnProperty = false
+            isOwnProperty = false,
+            viewcount = 100,
+            avgRating = 3.5f,
+            hasReviewed = false
         )
     )
 

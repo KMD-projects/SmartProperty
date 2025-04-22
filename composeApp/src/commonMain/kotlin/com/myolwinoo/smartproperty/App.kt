@@ -17,6 +17,8 @@ import com.myolwinoo.smartproperty.features.propertydetail.appointmentform.appoi
 import com.myolwinoo.smartproperty.features.propertydetail.appointmentform.navigateAppointmentForm
 import com.myolwinoo.smartproperty.features.propertydetail.navigatePropertyDetailScreen
 import com.myolwinoo.smartproperty.features.propertydetail.propertyDetailScreen
+import com.myolwinoo.smartproperty.features.propertyform.navigatePropertyForm
+import com.myolwinoo.smartproperty.features.propertyform.propertyForm
 import com.myolwinoo.smartproperty.features.register.navigateRegister
 import com.myolwinoo.smartproperty.features.register.registerScreen
 import com.myolwinoo.smartproperty.features.search.navigateSearch
@@ -87,7 +89,10 @@ fun AppNavHost() {
                 }
             },
             navigateToSearch = navController::navigateSearch,
-            navigateToPropertyDetail = navController::navigatePropertyDetailScreen
+            navigateToPropertyDetail = navController::navigatePropertyDetailScreen,
+            onCreateProperty = {
+                navController.navigatePropertyForm(null)
+            }
         )
 
         searchScreen(
@@ -101,6 +106,10 @@ fun AppNavHost() {
         )
 
         appointmentForm(
+            onBack = navController::navigateUp
+        )
+
+        propertyForm(
             onBack = navController::navigateUp
         )
     }

@@ -31,13 +31,15 @@ fun NavController.navigateToMain() {
 fun NavGraphBuilder.mainScreen(
     onLogout: () -> Unit,
     navigateToSearch: () -> Unit,
-    navigateToPropertyDetail: (String) -> Unit
+    navigateToPropertyDetail: (String) -> Unit,
+    onCreateProperty: () -> Unit
 ) {
     composable<MainRoute> {
         Screen(
             onLogout = onLogout,
             navigateToSearch = navigateToSearch,
-            navigateToPropertyDetail = navigateToPropertyDetail
+            navigateToPropertyDetail = navigateToPropertyDetail,
+            onCreateProperty = onCreateProperty
         )
     }
 }
@@ -46,7 +48,8 @@ fun NavGraphBuilder.mainScreen(
 private fun Screen(
     onLogout: () -> Unit,
     navigateToSearch: () -> Unit,
-    navigateToPropertyDetail: (String) -> Unit
+    navigateToPropertyDetail: (String) -> Unit,
+    onCreateProperty: () -> Unit
 ) {
     var currentDestination by rememberSaveable { mutableStateOf(MainDestinations.Explore) }
     NavigationSuiteScaffold(
@@ -75,7 +78,8 @@ private fun Screen(
         when (currentDestination) {
             MainDestinations.Explore -> ExploreScreen(
                 navigateToSearch = navigateToSearch,
-                navigateToPropertyDetail = navigateToPropertyDetail
+                navigateToPropertyDetail = navigateToPropertyDetail,
+                onCreateProperty = onCreateProperty
             )
 
             MainDestinations.WISHLISTS -> WishlistsScreen()
@@ -83,9 +87,7 @@ private fun Screen(
                 onLogout = onLogout
             )
 
-            MainDestinations.APPOINTMENTS -> AppointmentsScreen(
-
-            )
+            MainDestinations.APPOINTMENTS -> AppointmentsScreen()
         }
     }
 }
@@ -96,6 +98,7 @@ private fun Preview() {
     Screen(
         onLogout = {},
         navigateToSearch = {},
-        navigateToPropertyDetail = {}
+        navigateToPropertyDetail = {},
+        onCreateProperty = {}
     )
 }
