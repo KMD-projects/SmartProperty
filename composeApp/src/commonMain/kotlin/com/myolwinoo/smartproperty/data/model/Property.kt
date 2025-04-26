@@ -12,7 +12,7 @@ data class Property(
     val isFavorite: Boolean,
     val propertyType: String,
     val amenities: List<String>,
-    val images: List<String>,
+    val images: List<PropertyImage>,
     val available: Boolean = true,
     val viewcount: Long,
     val avgRating: Float,
@@ -21,8 +21,8 @@ data class Property(
     val hasReviewed: Boolean,
     val createdAt: String,
     val updatedAt: String
-)
-
-enum class PropertyType {
-    APARTMENT, HOUSE, ROOM, CONDO, DORMITORY
+) {
+    val firstImage = images.firstOrNull()
+        ?.let { it as? PropertyImage.Remote }
+        ?.url
 }

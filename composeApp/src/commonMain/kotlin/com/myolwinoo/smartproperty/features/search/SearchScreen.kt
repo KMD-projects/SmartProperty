@@ -65,7 +65,7 @@ import smartproperty.composeapp.generated.resources.ic_filter_filled
 import smartproperty.composeapp.generated.resources.label_search
 
 @Serializable
-private object SearchRoute
+object SearchRoute
 
 fun NavController.navigateSearch() {
     navigate(SearchRoute)

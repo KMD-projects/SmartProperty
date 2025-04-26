@@ -4,6 +4,7 @@ import com.myolwinoo.smartproperty.data.model.Appointment
 import com.myolwinoo.smartproperty.data.model.AppointmentAction
 import com.myolwinoo.smartproperty.data.model.AppointmentStatus
 import com.myolwinoo.smartproperty.data.model.Property
+import com.myolwinoo.smartproperty.data.model.PropertyImage
 import com.myolwinoo.smartproperty.data.model.PropertyType
 import com.myolwinoo.smartproperty.data.model.User
 import com.myolwinoo.smartproperty.data.model.UserRole
@@ -37,12 +38,15 @@ object PreviewData {
             location = "Yangon, Myanmar",
             amenities = listOf("WiFi", "AC", "Parking"),
             images = listOf(
-                "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070",
+                PropertyImage.Remote(
+                    id = "1",
+                    url = "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=2070"
+                ),
             ),
             available = true,
             latitude = 16.8409,
             longitude = 96.1735,
-            propertyType = PropertyType.APARTMENT.name,
+            propertyType = "Apartment",
             createdAt = "2023-01-01",
             updatedAt = "2023-01-01",
             appointmentStatus = null,
@@ -61,12 +65,15 @@ object PreviewData {
             location = "Downtown, Yangon",
             amenities = listOf("Gym", "Swimming Pool", "Security"),
             images = listOf(
-                "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=2000"
+                PropertyImage.Remote(
+                    id = "1",
+                    url = "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?q=80&w=2000"
+                )
             ),
             available = true,
             latitude = 16.7742,
             longitude = 96.1584,
-            propertyType = PropertyType.CONDO.name,
+            propertyType = "Condo",
             createdAt = "2023-02-15",
             updatedAt = "2023-02-15",
             appointmentStatus = null,
@@ -85,12 +92,15 @@ object PreviewData {
             location = "Inya Road, Yangon",
             amenities = listOf("Private Pool", "Garden", "Security", "Garage"),
             images = listOf(
-                "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2000"
+                PropertyImage.Remote(
+                    id = "1",
+                    url = "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2000"
+                )
             ),
             available = false,
             latitude = 16.8133,
             longitude = 96.1566,
-            propertyType = PropertyType.HOUSE.name,
+            propertyType = "House",
             createdAt = "2023-03-10",
             updatedAt = "2023-03-10",
             appointmentStatus = null,
@@ -109,12 +119,15 @@ object PreviewData {
             location = "Sanchaung, Yangon",
             amenities = listOf("Shared Kitchen", "WiFi", "Laundry"),
             images = listOf(
-                "https://plus.unsplash.com/premium_photo-1661874933205-969c5bfa3523?q=80&w=2128"
+                PropertyImage.Remote(
+                    id = "1",
+                    url = "https://plus.unsplash.com/premium_photo-1661874933205-969c5bfa3523?q=80&w=2128"
+                )
             ),
             available = true,
             latitude = 16.7991,
             longitude = 96.1441,
-            propertyType = PropertyType.ROOM.name,
+            propertyType = "Room",
             createdAt = "2023-04-05",
             updatedAt = "2023-04-05",
             appointmentStatus = null,
@@ -133,13 +146,19 @@ object PreviewData {
             location = "Bahan, Yangon",
             amenities = listOf("Housekeeping", "WiFi", "Gym"),
             images = listOf(
-                "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2000",
-                "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000"
+                PropertyImage.Remote(
+                    id = "1",
+                    url = "https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2000"
+                ),
+                PropertyImage.Remote(
+                    id = "1",
+                    url = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000"
+                )
             ),
             available = true,
             latitude = 16.8211,
             longitude = 96.1525,
-            propertyType = PropertyType.CONDO.name,
+            propertyType = "Condo",
             createdAt = "2023-05-20",
             updatedAt = "2023-05-20",
             appointmentStatus = null,

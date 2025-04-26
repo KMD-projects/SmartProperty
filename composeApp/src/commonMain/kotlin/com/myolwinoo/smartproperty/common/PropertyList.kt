@@ -80,7 +80,7 @@ fun PropertyItem(
             Box {
                 // Property Image
                 AsyncImage(
-                    model = property.images.firstOrNull(),
+                    model = property.firstImage,
                     contentDescription = "Property Image",
                     modifier = Modifier
                         .fillMaxWidth()

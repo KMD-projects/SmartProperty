@@ -2,6 +2,7 @@
 
 package com.myolwinoo.smartproperty.features.wishlists
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
@@ -41,6 +42,7 @@ fun WishlistsScreen(modifier: Modifier = Modifier) {
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun Screen(
     modifier: Modifier = Modifier,

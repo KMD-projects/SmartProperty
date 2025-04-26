@@ -2,30 +2,37 @@
 
 package com.myolwinoo.smartproperty.features.propertyform
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.myolwinoo.smartproperty.common.DateTimePicker
+import com.myolwinoo.smartproperty.data.model.Amenity
+import com.myolwinoo.smartproperty.data.model.PropertyImage
+import com.myolwinoo.smartproperty.data.model.PropertyType
 import com.myolwinoo.smartproperty.design.theme.AppDimens
 import com.myolwinoo.smartproperty.design.theme.SPTheme
 import kotlinx.serialization.Serializable
@@ -36,18 +43,20 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import smartproperty.composeapp.generated.resources.Res
 import smartproperty.composeapp.generated.resources.ic_back
-import smartproperty.composeapp.generated.resources.label_book_appointment
-import smartproperty.composeapp.generated.resources.label_date
-import smartproperty.composeapp.generated.resources.title_make_appointment
-import smartproperty.composeapp.generated.resources.label_from
-import smartproperty.composeapp.generated.resources.label_time
-import smartproperty.composeapp.generated.resources.label_to
+import smartproperty.composeapp.generated.resources.label_address
+import smartproperty.composeapp.generated.resources.label_create
+import smartproperty.composeapp.generated.resources.label_description
+import smartproperty.composeapp.generated.resources.label_latitude
+import smartproperty.composeapp.generated.resources.label_longitude
+import smartproperty.composeapp.generated.resources.label_price
+import smartproperty.composeapp.generated.resources.label_title
+import smartproperty.composeapp.generated.resources.title_create_property
 
 @Serializable
-private data class PropertyFormRoute(val propertyId: String?)
+private data class PropertyFormRoute(val propertyId: String)
 
 fun NavController.navigatePropertyForm(
-    propertyId: String?
+    propertyId: String
 ) {
     navigate(PropertyFormRoute(propertyId))
 }
@@ -71,17 +80,28 @@ fun NavGraphBuilder.propertyForm(
 
         Screen(
             onBack = onBack,
-            fromDate = viewModel.fromDate,
-            onFromDateChange = viewModel::onFromDateChange,
-            toDate = viewModel.toDate,
-            onToDateChange = viewModel::onToDateChange,
+            title = viewModel.title,
+            onTitleChanged = { viewModel.title = it },
+            address = viewModel.address,
+            onAddressChange = { viewModel.address = it },
+            price = viewModel.price,
+            onPriceChange = { viewModel.price = it },
             description = viewModel.description,
-            onDescriptionChange = viewModel::onDescriptionChange,
-            fromTime = viewModel.fromTime,
-            onFromTimeChange = viewModel::onFromTimeChange,
-            toTime = viewModel.toTime,
-            onToTimeChange = viewModel::onToTimeChange,
-            onSubmit = {}
+            onDescriptionChange = { viewModel.description = it },
+            latitude = viewModel.latitude,
+            onLatitudeChange = { viewModel.latitude = it },
+            longitude = viewModel.longitude,
+            onLongitudeChange = { viewModel.longitude = it },
+            images = viewModel.images,
+            onAddImages = viewModel::addImages,
+            onRemoveImage = viewModel::removeImage,
+            propertyTypes = viewModel.propertyTypes,
+            selectedPropertyType = viewModel.selectedPropertyType,
+            onPropertyTypeSelected = viewModel::selectPropertyType,
+            amenities = viewModel.amenities,
+            selectedAmenities = viewModel.selectedAmenities,
+            onAmenitySelected = viewModel::selectAmenity,
+            onCreate = viewModel::create
         )
     }
 }
@@ -89,24 +109,35 @@ fun NavGraphBuilder.propertyForm(
 @Composable
 private fun Screen(
     onBack: () -> Unit,
-    fromDate: TextFieldValue,
-    onFromDateChange: (TextFieldValue) -> Unit,
-    fromTime: TextFieldValue,
-    onFromTimeChange: (TextFieldValue) -> Unit,
-    toDate: TextFieldValue,
-    onToDateChange: (TextFieldValue) -> Unit,
-    toTime: TextFieldValue,
-    onToTimeChange: (TextFieldValue) -> Unit,
+    title: TextFieldValue,
+    onTitleChanged: (TextFieldValue) -> Unit,
+    address: TextFieldValue,
+    onAddressChange: (TextFieldValue) -> Unit,
+    price: TextFieldValue,
+    onPriceChange: (TextFieldValue) -> Unit,
     description: TextFieldValue,
     onDescriptionChange: (TextFieldValue) -> Unit,
-    onSubmit: () -> Unit
+    latitude: TextFieldValue,
+    onLatitudeChange: (TextFieldValue) -> Unit,
+    longitude: TextFieldValue,
+    onLongitudeChange: (TextFieldValue) -> Unit,
+    images: List<PropertyImage>,
+    onAddImages: (List<ByteArray>) -> Unit,
+    onRemoveImage: (String) -> Unit,
+    propertyTypes: List<PropertyType>,
+    selectedPropertyType: PropertyType?,
+    onPropertyTypeSelected: (PropertyType) -> Unit,
+    amenities: List<Amenity>,
+    selectedAmenities: List<Amenity>,
+    onAmenitySelected: (Amenity) -> Unit,
+    onCreate: () -> Unit
 ) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = stringResource(Res.string.title_make_appointment),
+                        text = stringResource(Res.string.title_create_property),
                     )
                 },
                 navigationIcon = {
@@ -123,55 +154,111 @@ private fun Screen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(AppDimens.Spacing.l)
         ) {
-            Text(
+            OutlinedTextField(
                 modifier = Modifier
                     .padding(horizontal = AppDimens.Spacing.xl)
                     .fillMaxWidth(),
-                text = stringResource(Res.string.label_from),
-                style = MaterialTheme.typography.titleMedium
+                value = title,
+                onValueChange = onTitleChanged,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text
+                ),
+                label = { Text(stringResource(Res.string.label_title)) }
             )
-            DateTimePicker(
-                modifier = Modifier.padding(horizontal = AppDimens.Spacing.xl),
-                dateLabel = stringResource(Res.string.label_date),
-                date = fromDate,
-                onDateChange = onFromDateChange,
-                isDateError = false,
-                timeLabel = stringResource(Res.string.label_time),
-                time = fromTime,
-                onTimeChange = onFromTimeChange,
-                isTimeError = false
-            )
-            Spacer(modifier = Modifier.height(AppDimens.Spacing.l))
-            Text(
-                modifier = Modifier
-                    .padding(horizontal = AppDimens.Spacing.xl)
-                    .fillMaxWidth(),
-                text = stringResource(Res.string.label_to),
-                style = MaterialTheme.typography.titleMedium
-            )
-            DateTimePicker(
-                modifier = Modifier.padding(horizontal = AppDimens.Spacing.xl),
-                dateLabel = stringResource(Res.string.label_date),
-                date = toDate,
-                onDateChange = onToDateChange,
-                isDateError = false,
-                timeLabel = stringResource(Res.string.label_time),
-                time = toTime,
-                onTimeChange = onToTimeChange,
-                isTimeError = false
-            )
-            Spacer(modifier = Modifier.height(AppDimens.Spacing.l))
             OutlinedTextField(
                 modifier = Modifier
                     .padding(horizontal = AppDimens.Spacing.xl)
                     .fillMaxWidth(),
                 value = description,
                 onValueChange = onDescriptionChange,
-                label = { Text("Description") },
-                minLines = 4
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text
+                ),
+                minLines = 4,
+                label = { Text(stringResource(Res.string.label_description)) }
             )
-            Spacer(modifier = Modifier.height(AppDimens.Spacing.xl))
+            OutlinedTextField(
+                modifier = Modifier
+                    .padding(horizontal = AppDimens.Spacing.xl)
+                    .fillMaxWidth(),
+                value = price,
+                onValueChange = onPriceChange,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number
+                ),
+                maxLines = 1,
+                label = { Text(stringResource(Res.string.label_price)) }
+            )
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = AppDimens.Spacing.xl)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(AppDimens.Spacing.l)
+            ) {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .weight(1f),
+                    value = latitude,
+                    onValueChange = onLatitudeChange,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Decimal
+                    ),
+                    maxLines = 1,
+                    label = { Text(stringResource(Res.string.label_latitude)) }
+                )
+                OutlinedTextField(
+                    modifier = Modifier
+                        .weight(1f),
+                    value = longitude,
+                    onValueChange = onLongitudeChange,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Decimal
+                    ),
+                    maxLines = 1,
+                    label = { Text(stringResource(Res.string.label_longitude)) }
+                )
+            }
+
+            OutlinedTextField(
+                modifier = Modifier
+                    .padding(horizontal = AppDimens.Spacing.xl)
+                    .fillMaxWidth(),
+                value = address,
+                onValueChange = onAddressChange,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text
+                ),
+                minLines = 4,
+                label = { Text(stringResource(Res.string.label_address)) }
+            )
+            PropertyTypeChooser(
+                modifier = Modifier
+                    .padding(horizontal = AppDimens.Spacing.xl)
+                    .fillMaxWidth(),
+                items = propertyTypes,
+                onSelected = onPropertyTypeSelected,
+                selectedItem = selectedPropertyType
+            )
+            AmenityChooser(
+                modifier = Modifier
+                    .padding(horizontal = AppDimens.Spacing.xl)
+                    .fillMaxWidth(),
+                items = amenities,
+                onSelected = onAmenitySelected,
+                selectedItems = selectedAmenities
+            )
+            ImageChooser(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                sideSpacing = AppDimens.Spacing.xl,
+                images = images,
+                onAddImages = onAddImages,
+                onRemoveImage = onRemoveImage
+            )
+            Spacer(modifier = Modifier.height(AppDimens.Spacing.l))
             Button(
                 modifier = Modifier
                     .padding(
@@ -181,10 +268,10 @@ private fun Screen(
                     )
                     .widthIn(max = AppDimens.maxWidth)
                     .fillMaxWidth(),
-                onClick = { onSubmit() }
+                onClick = { onCreate() }
             ) {
                 Text(
-                    text = stringResource(Res.string.label_book_appointment)
+                    text = stringResource(Res.string.label_create)
                 )
             }
         }
@@ -197,17 +284,28 @@ private fun Preview() {
     SPTheme {
         Screen(
             onBack = {},
-            fromDate = TextFieldValue(),
-            onFromDateChange = {},
-            toDate = TextFieldValue(),
-            onToDateChange = {},
+            title = TextFieldValue(),
+            onTitleChanged = {},
+            address = TextFieldValue(),
+            onAddressChange = {},
+            price = TextFieldValue(),
+            onPriceChange = {},
             description = TextFieldValue(),
             onDescriptionChange = {},
-            fromTime = TextFieldValue(),
-            onFromTimeChange = {},
-            toTime = TextFieldValue(),
-            onToTimeChange = {},
-            onSubmit = {}
+            latitude = TextFieldValue(),
+            onLatitudeChange = {},
+            longitude = TextFieldValue(),
+            onLongitudeChange = {},
+            images = listOf(),
+            onAddImages = {},
+            onRemoveImage = {},
+            propertyTypes = listOf(),
+            selectedPropertyType = null,
+            onPropertyTypeSelected = {},
+            amenities = listOf(),
+            selectedAmenities = listOf(),
+            onAmenitySelected = {},
+            onCreate = {}
         )
     }
 }

@@ -13,6 +13,11 @@
         android:usesCleartextTraffic="true"
         android:enableOnBackInvokedCallback="true"
         android:localeConfig="@xml/locales_config">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="<map-api-key>" />
+
         <activity
             android:exported="true"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|mnc|colorMode|density|fontScale|fontWeightAdjustment|keyboard|layoutDirection|locale|mcc|navigation|smallestScreenSize|touchscreen|uiMode"

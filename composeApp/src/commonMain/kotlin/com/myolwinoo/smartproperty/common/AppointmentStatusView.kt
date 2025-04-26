@@ -26,7 +26,7 @@ fun AppointmentStatusView(
                 ),
                 shape = RoundedCornerShape(percent = 50),
                 onClick = {},
-                label = { Text(text = status.rawValue.capitalize()) },
+                label = { Text(text = status.rawValue) },
             )
         }
 
@@ -39,7 +39,7 @@ fun AppointmentStatusView(
                 ),
                 shape = RoundedCornerShape(percent = 50),
                 onClick = {},
-                label = { Text(text = status.rawValue.capitalize()) },
+                label = { Text(text = status.rawValue) },
             )
         }
 
@@ -52,7 +52,7 @@ fun AppointmentStatusView(
                 ),
                 shape = RoundedCornerShape(percent = 50),
                 onClick = {},
-                label = { Text(text = status.rawValue.capitalize()) },
+                label = { Text(text = status.rawValue) },
             )
         }
 
@@ -65,7 +65,7 @@ fun AppointmentStatusView(
                 ),
                 shape = RoundedCornerShape(percent = 50),
                 onClick = {},
-                label = { Text(text = status.rawValue.capitalize()) },
+                label = { Text(text = status.rawValue) },
             )
         }
     }

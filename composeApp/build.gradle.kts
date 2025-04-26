@@ -97,12 +97,19 @@ kotlin {
             implementation(libs.datastore.preference.core)
 
             implementation(libs.napier)
+
+            // peekaboo-ui
+            implementation(libs.peekaboo.ui)
+            // peekaboo-image-picker
+            implementation(libs.peekaboo.image.picker)
         }
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.ktor.client.okhttp)
 
             implementation(libs.koin.android)
+
+            implementation(libs.google.maps.android.compose)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

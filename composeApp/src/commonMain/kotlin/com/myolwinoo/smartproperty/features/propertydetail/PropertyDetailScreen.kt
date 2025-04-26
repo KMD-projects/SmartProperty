@@ -49,9 +49,11 @@ import androidx.navigation.toRoute
 import coil3.compose.AsyncImage
 import com.myolwinoo.smartproperty.common.RatingDialog
 import com.myolwinoo.smartproperty.data.model.Property
+import com.myolwinoo.smartproperty.data.model.PropertyImage
 import com.myolwinoo.smartproperty.data.model.UserRole
 import com.myolwinoo.smartproperty.design.theme.AppDimens
 import com.myolwinoo.smartproperty.design.theme.SPTheme
+import com.myolwinoo.smartproperty.map.MapView
 import com.myolwinoo.smartproperty.utils.PreviewData
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.painterResource
@@ -62,6 +64,8 @@ import org.koin.core.parameter.parametersOf
 import smartproperty.composeapp.generated.resources.Res
 import smartproperty.composeapp.generated.resources.ic_back
 import smartproperty.composeapp.generated.resources.ic_star
+import smartproperty.composeapp.generated.resources.label_amenities
+import smartproperty.composeapp.generated.resources.label_property_type
 import smartproperty.composeapp.generated.resources.label_rate
 import smartproperty.composeapp.generated.resources.location_on
 import smartproperty.composeapp.generated.resources.title_rating
@@ -188,7 +192,7 @@ private fun Screen(
                                 .alignByBaseline()
                         )
                     }
-                    Spacer(modifier = Modifier.height(6.dp))
+                    Spacer(modifier = Modifier.height(AppDimens.Spacing.m))
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -202,11 +206,32 @@ private fun Screen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(6.dp))
+                    if (property.propertyType.isNotBlank()) {
+                        Spacer(modifier = Modifier.height(AppDimens.Spacing.m))
 
-                    // Amenities List (Show first 3)
-                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        property.amenities.take(3).forEach { amenity ->
+                        Text(
+                            text = stringResource(Res.string.label_property_type),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Spacer(modifier = Modifier.height(AppDimens.Spacing.s))
+                        SuggestionChip(
+                            shape = RoundedCornerShape(percent = 50),
+                            onClick = {},
+                            label = { Text(text = property.propertyType) },
+                            modifier = Modifier
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(AppDimens.Spacing.m))
+
+                    Text(
+                        text = stringResource(Res.string.label_amenities),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    Spacer(modifier = Modifier.height(AppDimens.Spacing.s))
+                    // Amenities List
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(AppDimens.Spacing.m)) {
+                        property.amenities.forEach { amenity ->
                             SuggestionChip(
                                 shape = RoundedCornerShape(percent = 50),
                                 onClick = {},
@@ -232,6 +257,18 @@ private fun Screen(
                         modifier = Modifier
                             .fillMaxWidth()
                     )
+
+                    Spacer(modifier = Modifier.height(AppDimens.Spacing.l))
+
+                    MapView(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp),
+                        latitude = property.latitude,
+                        longitude = property.longitude,
+                        markerTitle = property.title,
+                        markerSnippet = property.location
+                    )
                 }
             }
             PropertyDetailFooter(
@@ -252,7 +289,7 @@ private fun Screen(
 }
 
 @Composable
-private fun Pager(images: List<String>) {
+private fun Pager(images: List<PropertyImage>) {
     val pagerState = rememberPagerState(pageCount = {
         images.size
     })
@@ -277,7 +314,7 @@ private fun Pager(images: List<String>) {
                 }
         ) {
             AsyncImage(
-                model = images[page],
+                model = (images[page] as PropertyImage.Remote).url,
                 contentDescription = "Property Image $page",
                 modifier = Modifier
                     .fillMaxWidth()

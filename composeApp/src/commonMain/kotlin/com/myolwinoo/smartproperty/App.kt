@@ -91,7 +91,7 @@ fun AppNavHost() {
             navigateToSearch = navController::navigateSearch,
             navigateToPropertyDetail = navController::navigatePropertyDetailScreen,
             onCreateProperty = {
-                navController.navigatePropertyForm(null)
+                navController.navigatePropertyForm("")
             }
         )
 

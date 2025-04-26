@@ -5,7 +5,7 @@ android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
 composeCmpMaterialNavigationVersion = "1.7.0-beta02"
-compose-multiplatform = "1.8.0-beta01"
+compose-multiplatform = "1.8.0-beta02"
 coil3Version = "3.1.0"
 datastore = "1.1.4"
 kotlin = "2.1.20"
@@ -17,6 +17,8 @@ ktor = "3.1.2"
 lifecycleCmpVersion = "2.8.4"
 navigationCmpVersion = "2.9.0-alpha16"
 napier = "2.7.1"
+peekaboo = "0.5.2"
+google-maps-android = "6.6.0"
 
 [libraries]
 datastore-preference-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastore" }
@@ -59,6 +61,11 @@ coil3-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.re
 coil3-network-ktor = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil3Version" }
 
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
+
+google-maps-android-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "google-maps-android" }
+
+peekaboo-ui = { module = "io.github.onseok:peekaboo-ui", version.ref = "peekaboo" }
+peekaboo-image-picker = { module = "io.github.onseok:peekaboo-image-picker", version.ref = "peekaboo" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
