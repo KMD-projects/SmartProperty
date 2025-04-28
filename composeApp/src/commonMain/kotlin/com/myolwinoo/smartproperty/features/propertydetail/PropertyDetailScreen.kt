@@ -62,12 +62,14 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.parameter.parametersOf
 import smartproperty.composeapp.generated.resources.Res
+import smartproperty.composeapp.generated.resources.currency
 import smartproperty.composeapp.generated.resources.ic_back
 import smartproperty.composeapp.generated.resources.ic_star
 import smartproperty.composeapp.generated.resources.label_amenities
 import smartproperty.composeapp.generated.resources.label_property_type
 import smartproperty.composeapp.generated.resources.label_rate
 import smartproperty.composeapp.generated.resources.location_on
+import smartproperty.composeapp.generated.resources.month
 import smartproperty.composeapp.generated.resources.title_rating
 import kotlin.math.absoluteValue
 
@@ -197,14 +199,14 @@ private fun Screen(
                     Spacer(modifier = Modifier.height(4.dp))
                     Row {
                         Text(
-                            text = "${property.price} MMK",
+                            text = "${property.price} ${stringResource(Res.string.currency)}",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.tertiary,
                             modifier = Modifier
                                 .alignByBaseline()
                         )
                         Text(
-                            text = "/month",
+                            text = "/${stringResource(Res.string.month)}",
                             style = MaterialTheme.typography.labelSmall,
                             modifier = Modifier
                                 .alignByBaseline()

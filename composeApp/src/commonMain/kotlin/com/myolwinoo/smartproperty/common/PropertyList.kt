@@ -38,12 +38,15 @@ import com.myolwinoo.smartproperty.data.model.Property
 import com.myolwinoo.smartproperty.design.theme.AppDimens
 import com.myolwinoo.smartproperty.design.theme.SPTheme
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import smartproperty.composeapp.generated.resources.Res
+import smartproperty.composeapp.generated.resources.currency
 import smartproperty.composeapp.generated.resources.favorite
 import smartproperty.composeapp.generated.resources.favorite_filled
 import smartproperty.composeapp.generated.resources.ic_star
 import smartproperty.composeapp.generated.resources.location_on
+import smartproperty.composeapp.generated.resources.month
 
 fun LazyListScope.propertyList(
     properties: List<Property>,
@@ -155,14 +158,14 @@ fun PropertyItem(
                 Spacer(modifier = Modifier.height(4.dp))
                 Row {
                     Text(
-                        text = "${property.price} MMK",
+                        text = "${property.price} ${stringResource(Res.string.currency)}",
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.tertiary,
                         modifier = Modifier
                             .alignByBaseline()
                     )
                     Text(
-                        text = "/month",
+                        text = "/${stringResource(Res.string.month)}",
                         style = MaterialTheme.typography.labelSmall,
                         modifier = Modifier
                             .alignByBaseline()

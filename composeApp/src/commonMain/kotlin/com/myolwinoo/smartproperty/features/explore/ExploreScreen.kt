@@ -47,6 +47,7 @@ import smartproperty.composeapp.generated.resources.ic_edit
 import smartproperty.composeapp.generated.resources.label_register
 import smartproperty.composeapp.generated.resources.label_start_explore
 import smartproperty.composeapp.generated.resources.search
+import smartproperty.composeapp.generated.resources.title_create_property
 
 @Serializable
 object ExploreRoute
@@ -169,7 +170,7 @@ private fun Screen(
                     ),
                 onClick = { onCreateProperty() },
                 icon = { Icon(painterResource(Res.drawable.ic_edit), "") },
-                text = { Text(text = "Create Property") },
+                text = { Text(text = stringResource(Res.string.title_create_property)) },
             )
         }
     }

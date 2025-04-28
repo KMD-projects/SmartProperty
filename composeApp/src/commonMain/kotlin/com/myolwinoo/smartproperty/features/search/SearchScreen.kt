@@ -59,10 +59,12 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import smartproperty.composeapp.generated.resources.Res
+import smartproperty.composeapp.generated.resources.currency
 import smartproperty.composeapp.generated.resources.ic_back
 import smartproperty.composeapp.generated.resources.ic_filter
 import smartproperty.composeapp.generated.resources.ic_filter_filled
 import smartproperty.composeapp.generated.resources.label_search
+import smartproperty.composeapp.generated.resources.month
 
 @Serializable
 object SearchRoute
@@ -244,7 +246,7 @@ fun SearchResultItem(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "${property.price} MMK /month",
+                    text = "${property.price} ${stringResource(Res.string.currency)} /${stringResource(Res.string.month)}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.tertiary
                 )

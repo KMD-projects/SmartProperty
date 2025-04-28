@@ -344,9 +344,13 @@ class SPApi(
             location = propertyData.address.orEmpty(),
             amenities = propertyData.amenities?.map { it["name"].orEmpty() }.orEmpty(),
             images = propertyData.images?.map {
+                val base = AppConfiguration.BASE_URL
+                val baseDropped = base.dropLast(1)
+                val url = it["url"].orEmpty()
+                    .replace("http://smart-property.test/", base)
                 PropertyImage.Remote(
                     id = it["id"].orEmpty(),
-                    url = "${AppConfiguration.BASE_URL.dropLast(1)}${it["url"].orEmpty()}".also {
+                    url = "${url}".also {
                         Napier.i("Image URL: $it")
                     }
                 )

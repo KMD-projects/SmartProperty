@@ -1,6 +1,7 @@
 <resources>
     <string name="label_explore">စူးစမ်းရန်</string>
-    <string name="label_wishlist">လိုချင်စရာများ</string>
+    <string name="label_wishlist">နှစ်သက်စရာများ</string>
+    <string name="label_appointment">ချိန်းဆိုမှုများ</string>
     <string name="label_search">ရှာရန်</string>
     <string name="label_profile">ပရိုဖိုင်</string>
     <string name="label_login">ဝင်ရန်</string>
@@ -28,10 +29,15 @@
     <string name="title_support">အထောက်အပံ့</string>
     <string name="title_legal">ဥပဒေဆိုင်ရာ</string>
 
+    <string name="title_create_property">အသစ်တင်ရန်</string>
+
     <string name="message_login_error">အသုံးပြုသူအမည် သို့မဟုတ် စကားဝှက် မှားယွင်းနေပါသည်။ ကျေးဇူးပြု၍ ထပ်ကြိုးစားပါ။</string>
     <string name="message_register_error">မှတ်ပုံတင်ရန် မအောင်မြင်ပါ။ ကျေးဇူးပြု၍ ထပ်ကြိုးစားပါ။</string>
     <string name="message_login_part1">အကောင့်ဝင်ရန် သို့မဟုတ် </string>
     <string name="message_login_part2">အကောင့်အသစ်ဖွင့်ပါ</string>
     <string name="message_register_part1">သင့်အကောင့်အချက်အလက်များကို ဖြည့်ပါ သို့မဟုတ် </string>
     <string name="message_register_part2">အကောင့်ဝင်ပါ</string>
+
+    <string name="currency">ကျပ်</string>
+    <string name="month">လ</string>
 </resources>
