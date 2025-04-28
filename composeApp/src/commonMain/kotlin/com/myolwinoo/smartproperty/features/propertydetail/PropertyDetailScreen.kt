@@ -91,12 +91,24 @@ fun NavGraphBuilder.propertyDetailScreen(
         val userRole = viewModel.userRole.collectAsStateWithLifecycle()
 
         var showRatingDialog by remember { mutableStateOf(false) }
+        var showAllRatingDialog by remember { mutableStateOf(false) }
 
         LifecycleResumeEffect(Unit) {
 
             viewModel.refresh()
 
             onPauseOrDispose {}
+        }
+
+        if (showAllRatingDialog){
+            ReviewListDialog(
+                onDismissRequest = {
+                    showAllRatingDialog = false
+                },
+                onDelete = {  },
+                onEdit = {  },
+                ratings = property.value?.reviews.orEmpty()
+            )
         }
 
         if (showRatingDialog) {
@@ -123,6 +135,9 @@ fun NavGraphBuilder.propertyDetailScreen(
             },
             onRate = {
                 showRatingDialog = true
+            },
+            onShowAllRating = {
+                showAllRatingDialog = true
             }
         )
     }
@@ -135,7 +150,9 @@ private fun Screen(
     onBack: () -> Unit,
     onFavoriteClick: (String) -> Unit,
     navigateToAppointmentForm: () -> Unit,
-    onRate: () -> Unit
+    onRate: () -> Unit,
+    onShowAllRating: () -> Unit,
+
 ) {
     Scaffold(
         topBar = {
@@ -176,6 +193,7 @@ private fun Screen(
                         modifier = Modifier
                             .fillMaxWidth()
                     )
+
                     Spacer(modifier = Modifier.height(4.dp))
                     Row {
                         Text(
@@ -192,17 +210,19 @@ private fun Screen(
                                 .alignByBaseline()
                         )
                     }
-                    Spacer(modifier = Modifier.height(AppDimens.Spacing.m))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            painter = painterResource(Res.drawable.location_on),
-                            contentDescription = "Location"
-                        )
+
+                    if (property.description.isNotBlank()) {
+                        Spacer(modifier = Modifier.height(AppDimens.Spacing.m))
                         Text(
-                            text = property.location,
-                            style = MaterialTheme.typography.bodyMedium
+                            text = "Description",
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                        Spacer(modifier = Modifier.height(AppDimens.Spacing.s))
+                        Text(
+                            text = property.description,
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier
+                                .fillMaxWidth()
                         )
                     }
 
@@ -223,7 +243,6 @@ private fun Screen(
                     }
 
                     Spacer(modifier = Modifier.height(AppDimens.Spacing.m))
-
                     Text(
                         text = stringResource(Res.string.label_amenities),
                         style = MaterialTheme.typography.titleMedium
@@ -242,24 +261,23 @@ private fun Screen(
                     }
 
                     Spacer(modifier = Modifier.height(AppDimens.Spacing.l))
-
-                    PropertyRating(
-                        avgRating = property.avgRating,
-                        hasReviewed = property.hasReviewed,
-                        onRate = onRate
-                    )
-
-                    Spacer(modifier = Modifier.height(AppDimens.Spacing.l))
-
                     Text(
-                        text = property.description,
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier
-                            .fillMaxWidth()
+                        text = "Location",
+                        style = MaterialTheme.typography.titleMedium
                     )
-
-                    Spacer(modifier = Modifier.height(AppDimens.Spacing.l))
-
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(vertical = AppDimens.Spacing.m)
+                    ) {
+                        Icon(
+                            painter = painterResource(Res.drawable.location_on),
+                            contentDescription = "Location"
+                        )
+                        Text(
+                            text = property.location,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
                     MapView(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -269,6 +287,18 @@ private fun Screen(
                         markerTitle = property.title,
                         markerSnippet = property.location
                     )
+
+                    Spacer(modifier = Modifier.height(AppDimens.Spacing.xl))
+                    PropertyRating(
+                        onRate = onRate,
+                        property = property,
+                        onSeeAll = {
+                            onShowAllRating()
+                        },
+                        onDelete = {},
+                        onEdit = {},
+                    )
+                    Spacer(modifier = Modifier.height(AppDimens.Spacing.l))
                 }
             }
             PropertyDetailFooter(
@@ -335,7 +365,8 @@ private fun Preview() {
             onBack = {},
             onFavoriteClick = {},
             navigateToAppointmentForm = {},
-            onRate = {}
+            onRate = {},
+            onShowAllRating = {},
         )
     }
 }

@@ -33,4 +33,5 @@ data class PropertyData(
     val viewCount: Long? = null,
     @SerialName("has_reviewed")
     val hasReviewed: Boolean? = null,
+    val reviews: List<RatingData>? = null
 )

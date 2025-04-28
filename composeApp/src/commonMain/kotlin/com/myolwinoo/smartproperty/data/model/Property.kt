@@ -20,9 +20,17 @@ data class Property(
     val isOwnProperty: Boolean,
     val hasReviewed: Boolean,
     val createdAt: String,
-    val updatedAt: String
+    val updatedAt: String,
+    val reviews: List<Rating>
 ) {
     val firstImage = images.firstOrNull()
         ?.let { it as? PropertyImage.Remote }
         ?.url
+
+    val ownReview = reviews.firstOrNull { it.isUserComment }
+
+    val topReviews = reviews
+        .filterNot { it.isUserComment }
+        .sortedByDescending { it.rating }
+        .take(if (ownReview != null) 2 else 3)
 }

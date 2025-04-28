@@ -9,6 +9,7 @@ import com.myolwinoo.smartproperty.data.model.AppointmentStatus
 import com.myolwinoo.smartproperty.data.model.Property
 import com.myolwinoo.smartproperty.data.model.PropertyImage
 import com.myolwinoo.smartproperty.data.model.PropertyType
+import com.myolwinoo.smartproperty.data.model.Rating
 import com.myolwinoo.smartproperty.data.model.RequisitionStatus
 import com.myolwinoo.smartproperty.data.model.SearchRequest
 import com.myolwinoo.smartproperty.data.model.User
@@ -253,6 +254,10 @@ class SPApi(
             client.post("api/v1/properties/$propertyId/reviews") {
                 setBody(mapOf("rating" to rating))
             }.body<BaseResponse<RatingData>>()
+                .data
+                .let {
+
+                }
         }
     }
 
@@ -359,6 +364,19 @@ class SPApi(
             avgRating = propertyData.avgRating ?: 0f,
             viewcount = propertyData.viewCount ?: 0,
             hasReviewed = propertyData.hasReviewed ?: false,
+            reviews = propertyData.reviews?.map { mapRatings(it) }.orEmpty()
+        )
+    }
+
+    private suspend fun mapRatings(ratingData: RatingData): Rating{
+        return Rating(
+            id = ratingData.id.orEmpty(),
+            rating = ratingData.rating ?: 0f,
+            comment = ratingData.comment.orEmpty(),
+            username = ratingData.reviewedBy?.get("username").orEmpty(),
+            profilePic = ratingData.reviewedBy?.get("profile_pic").orEmpty(),
+            isUserComment = ratingData.reviewedBy?.get("id") == accountManager.getUser()?.id,
+
         )
     }
 }

@@ -5,7 +5,7 @@ import com.myolwinoo.smartproperty.data.model.AppointmentAction
 import com.myolwinoo.smartproperty.data.model.AppointmentStatus
 import com.myolwinoo.smartproperty.data.model.Property
 import com.myolwinoo.smartproperty.data.model.PropertyImage
-import com.myolwinoo.smartproperty.data.model.PropertyType
+import com.myolwinoo.smartproperty.data.model.Rating
 import com.myolwinoo.smartproperty.data.model.User
 import com.myolwinoo.smartproperty.data.model.UserRole
 
@@ -54,7 +54,41 @@ object PreviewData {
             isOwnProperty = false,
             viewcount = 100,
             avgRating = 3.5f,
-            hasReviewed = false
+            hasReviewed = false,
+            reviews = listOf(
+                Rating(
+                    id = "1",
+                    rating = 4.5f,
+                    comment = "Great place to stay!",
+                    username = "John Doe",
+                    profilePic = "https://example.com/profiles/john_doe.jpg",
+                    isUserComment = true
+                ),
+                Rating(
+                    id = "2",
+                    rating = 3.0f,
+                    comment = "Average experience.",
+                    username = "Jane Smith",
+                    profilePic = "https://example.com/profiles/jane_smith.jpg",
+                    isUserComment = false
+                ),
+                Rating(
+                    id = "3",
+                    rating = 5.0f,
+                    comment = "Absolutely loved this place!",
+                    username = "Alice Brown",
+                    profilePic = "https://example.com/profiles/alice_brown.jpg",
+                    isUserComment = false
+                ),
+                Rating(
+                    id = "4",
+                    rating = 4.0f,
+                    comment = "Good value for money.",
+                    username = "Charlie Davis",
+                    profilePic = "https://example.com/profiles/charlie_davis.jpg",
+                    isUserComment = false
+                ),
+            )
         ),
         Property(
             id = "2",
@@ -81,7 +115,17 @@ object PreviewData {
             isOwnProperty = false,
             viewcount = 100,
             avgRating = 3.5f,
-            hasReviewed = false
+            hasReviewed = false,
+            reviews = listOf(
+                Rating(
+                    id = "3",
+                    rating = 5.0f,
+                    comment = "Absolutely loved this place!",
+                    username = "Alice Brown",
+                    profilePic = "https://example.com/profiles/alice_brown.jpg",
+                    isUserComment = false
+                )
+            )
         ),
         Property(
             id = "3",
@@ -108,7 +152,17 @@ object PreviewData {
             isOwnProperty = false,
             viewcount = 100,
             avgRating = 3.5f,
-            hasReviewed = false
+            hasReviewed = false,
+            reviews = listOf(
+                Rating(
+                    id = "3",
+                    rating = 5.0f,
+                    comment = "Absolutely loved this place!",
+                    username = "Alice Brown",
+                    profilePic = "https://example.com/profiles/alice_brown.jpg",
+                    isUserComment = false
+                )
+            )
         ),
         Property(
             id = "4",
@@ -135,7 +189,17 @@ object PreviewData {
             isOwnProperty = false,
             viewcount = 100,
             avgRating = 3.5f,
-            hasReviewed = false
+            hasReviewed = false,
+            reviews = listOf(
+                Rating(
+                    id = "4",
+                    rating = 4.0f,
+                    comment = "Good value for money.",
+                    username = "Charlie Davis",
+                    profilePic = "https://example.com/profiles/charlie_davis.jpg",
+                    isUserComment = false
+                )
+            )
         ),
         Property(
             id = "5",
@@ -166,7 +230,17 @@ object PreviewData {
             isOwnProperty = false,
             viewcount = 100,
             avgRating = 3.5f,
-            hasReviewed = false
+            hasReviewed = false,
+            reviews = listOf(
+                Rating(
+                    id = "5",
+                    rating = 4.5f,
+                    comment = "Very comfortable and well-maintained.",
+                    username = "Diana Evans",
+                    profilePic = "https://example.com/profiles/diana_evans.jpg",
+                    isUserComment = false
+                )
+            )
         )
     )
 
