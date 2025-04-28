@@ -38,6 +38,7 @@
     <string name="label_create">Create</string>
     <string name="label_title">Title</string>
     <string name="label_description">Description</string>
+    <string name="label_review">Review</string>
     <string name="label_price">Price</string>
     <string name="label_latitude">Latitude</string>
     <string name="label_longitude">Longitude</string>

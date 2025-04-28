@@ -20,14 +20,16 @@ import com.myolwinoo.smartproperty.data.network.model.CreateAppointmentRequest
 import com.myolwinoo.smartproperty.data.network.model.CreatePropertyRequest
 import com.myolwinoo.smartproperty.data.network.model.PropertyData
 import com.myolwinoo.smartproperty.data.network.model.RatingData
+import com.myolwinoo.smartproperty.data.network.model.RatingRequest
 import com.myolwinoo.smartproperty.data.network.model.RegisterRequest
 import com.myolwinoo.smartproperty.data.network.model.UserData
 import com.myolwinoo.smartproperty.utils.DateUtils
-import com.myolwinoo.smartproperty.utils.PriceFormatter
+import com.myolwinoo.smartproperty.utils.DecimalFormatter
 import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.onUpload
+import io.ktor.client.request.delete
 import io.ktor.client.request.forms.formData
 import io.ktor.client.request.forms.submitFormWithBinaryData
 import io.ktor.client.request.get
@@ -36,8 +38,6 @@ import io.ktor.client.request.put
 import io.ktor.client.request.setBody
 import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
-import io.ktor.http.parameters
-import kotlin.text.get
 
 class SPApi(
     private val client: HttpClient,
@@ -249,15 +249,35 @@ class SPApi(
         }
     }
 
-    suspend fun submitRating(propertyId: String, rating: Int): Result<Unit> {
+    suspend fun submitRating(
+        propertyId: String,
+        request: RatingRequest
+    ): Result<Unit> {
         return runCatching {
             client.post("api/v1/properties/$propertyId/reviews") {
-                setBody(mapOf("rating" to rating))
+                setBody(request)
             }.body<BaseResponse<RatingData>>()
-                .data
-                .let {
+        }
+    }
 
-                }
+    suspend fun updateReview(
+        propertyId: String,
+        reviewId: String,
+        request: RatingRequest
+    ): Result<Unit> {
+        return runCatching {
+            client.put("api/v1/properties/$propertyId/reviews/$reviewId") {
+                setBody(request)
+            }.body<BaseResponse<RatingData>>()
+        }
+    }
+
+    suspend fun deleteReview(
+        propertyId: String,
+        reviewId: String
+    ): Result<Unit> {
+        return runCatching {
+            client.delete("api/v1/properties/$propertyId/reviews/$reviewId")
         }
     }
 
@@ -340,7 +360,7 @@ class SPApi(
             landlordId = landlordId,
             title = propertyData.title.orEmpty(),
             description = propertyData.description.orEmpty(),
-            price = PriceFormatter.format(propertyData.price ?: 0.0),
+            price = DecimalFormatter.format(propertyData.price ?: 0.0),
             location = propertyData.address.orEmpty(),
             amenities = propertyData.amenities?.map { it["name"].orEmpty() }.orEmpty(),
             images = propertyData.images?.map {
@@ -365,7 +385,7 @@ class SPApi(
             appointmentStatus = AppointmentStatus
                 .fromRawValue(propertyData.appointmentStatus),
             isOwnProperty = landlordId == accountManager.getUser()?.id,
-            avgRating = propertyData.avgRating ?: 0f,
+            avgRating = DecimalFormatter.formatToOneDecimal(propertyData.avgRating?.toDouble() ?: 0.0),
             viewcount = propertyData.viewCount ?: 0,
             hasReviewed = propertyData.hasReviewed ?: false,
             reviews = propertyData.reviews?.map { mapRatings(it) }.orEmpty()
@@ -375,7 +395,7 @@ class SPApi(
     private suspend fun mapRatings(ratingData: RatingData): Rating{
         return Rating(
             id = ratingData.id.orEmpty(),
-            rating = ratingData.rating ?: 0f,
+            rating = ratingData.rating?.toFloat() ?: 0f,
             comment = ratingData.comment.orEmpty(),
             username = ratingData.reviewedBy?.get("username").orEmpty(),
             profilePic = ratingData.reviewedBy?.get("profile_pic").orEmpty(),

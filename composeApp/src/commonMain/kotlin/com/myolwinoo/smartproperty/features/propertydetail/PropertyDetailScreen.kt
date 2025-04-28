@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -27,7 +26,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -64,13 +62,10 @@ import org.koin.core.parameter.parametersOf
 import smartproperty.composeapp.generated.resources.Res
 import smartproperty.composeapp.generated.resources.currency
 import smartproperty.composeapp.generated.resources.ic_back
-import smartproperty.composeapp.generated.resources.ic_star
 import smartproperty.composeapp.generated.resources.label_amenities
 import smartproperty.composeapp.generated.resources.label_property_type
-import smartproperty.composeapp.generated.resources.label_rate
 import smartproperty.composeapp.generated.resources.location_on
 import smartproperty.composeapp.generated.resources.month
-import smartproperty.composeapp.generated.resources.title_rating
 import kotlin.math.absoluteValue
 
 @Serializable
@@ -96,9 +91,7 @@ fun NavGraphBuilder.propertyDetailScreen(
         var showAllRatingDialog by remember { mutableStateOf(false) }
 
         LifecycleResumeEffect(Unit) {
-
             viewModel.refresh()
-
             onPauseOrDispose {}
         }
 
@@ -107,8 +100,12 @@ fun NavGraphBuilder.propertyDetailScreen(
                 onDismissRequest = {
                     showAllRatingDialog = false
                 },
-                onDelete = {  },
-                onEdit = {  },
+                onDelete = {
+                    viewModel.deleteReview()
+                },
+                onEdit = {
+                    showRatingDialog = true
+                },
                 ratings = property.value?.reviews.orEmpty()
             )
         }
@@ -117,6 +114,8 @@ fun NavGraphBuilder.propertyDetailScreen(
             RatingDialog(
                 rating = viewModel.rating,
                 onRatingChanged = viewModel::setRatingValue,
+                review = viewModel.review.orEmpty(),
+                onReviewChanged = { viewModel.review = it },
                 onSubmit = {
                     viewModel.submitRating()
                     showRatingDialog = false
@@ -140,6 +139,12 @@ fun NavGraphBuilder.propertyDetailScreen(
             },
             onShowAllRating = {
                 showAllRatingDialog = true
+            },
+            onDeleteRating = {
+                viewModel.deleteReview()
+            },
+            onEditRating = {
+                showRatingDialog = true
             }
         )
     }
@@ -154,7 +159,8 @@ private fun Screen(
     navigateToAppointmentForm: () -> Unit,
     onRate: () -> Unit,
     onShowAllRating: () -> Unit,
-
+    onDeleteRating: (String) -> Unit,
+    onEditRating: (String) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -297,8 +303,8 @@ private fun Screen(
                         onSeeAll = {
                             onShowAllRating()
                         },
-                        onDelete = {},
-                        onEdit = {},
+                        onDelete = onDeleteRating,
+                        onEdit = onEditRating,
                     )
                     Spacer(modifier = Modifier.height(AppDimens.Spacing.l))
                 }
@@ -369,6 +375,8 @@ private fun Preview() {
             navigateToAppointmentForm = {},
             onRate = {},
             onShowAllRating = {},
+            onDeleteRating = {},
+            onEditRating = {}
         )
     }
 }

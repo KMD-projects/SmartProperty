@@ -9,6 +9,8 @@ import com.myolwinoo.smartproperty.data.AccountManager
 import com.myolwinoo.smartproperty.data.model.AppointmentStatus
 import com.myolwinoo.smartproperty.data.model.Property
 import com.myolwinoo.smartproperty.data.network.SPApi
+import com.myolwinoo.smartproperty.data.network.model.RatingRequest
+import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.StateFlow
@@ -30,6 +32,8 @@ class PropertyDetailViewModel(
     var rating by mutableStateOf(0)
         private set
 
+    var review: String? by mutableStateOf(null)
+
     val userRole = accountManager.userFlow
         .map { it?.role }
         .stateIn(
@@ -47,7 +51,13 @@ class PropertyDetailViewModel(
     fun refresh() {
         viewModelScope.launch {
             spApi.getProperty(propertyId)
-                .onSuccess { _property.value = it }
+                .onSuccess {
+                    _property.value = it
+                    it.ownReview?.let { ownReview ->
+                        rating = ownReview.rating.toInt()
+                        review = ownReview.comment
+                    }
+                }
         }
     }
 
@@ -67,17 +77,25 @@ class PropertyDetailViewModel(
     }
 
     fun submitRating() {
+        val reviewId = property.value?.ownReview?.id
+        val request = RatingRequest(rating, review)
         viewModelScope.launch {
-            spApi.submitRating(propertyId, rating)
-                .onSuccess { refresh() }
+            if (reviewId == null) {
+                spApi.submitRating(propertyId, request)
+            } else {
+                spApi.updateReview(propertyId, reviewId, request)
+            }.onSuccess { refresh() }
+                .onFailure {
+                    Napier.i { it.message.toString() }
+                }
         }
     }
 
-    fun updateStatus(appointmentId: String) {
+    fun deleteReview() {
+        val reviewId = property.value?.ownReview?.id ?: return
         viewModelScope.launch {
-            _property.update {
-                it?.copy(appointmentStatus = null)
-            }
+            spApi.deleteReview(propertyId, reviewId)
+                .onSuccess { refresh() }
         }
     }
 }

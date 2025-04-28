@@ -53,7 +53,7 @@ object PreviewData {
             isFavorite = false,
             isOwnProperty = false,
             viewcount = 100,
-            avgRating = 3.5f,
+            avgRating = "3.5f",
             hasReviewed = false,
             reviews = listOf(
                 Rating(
@@ -114,7 +114,7 @@ object PreviewData {
             isFavorite = true,
             isOwnProperty = false,
             viewcount = 100,
-            avgRating = 3.5f,
+            avgRating = "3.5f",
             hasReviewed = false,
             reviews = listOf(
                 Rating(
@@ -151,7 +151,7 @@ object PreviewData {
             isFavorite = false,
             isOwnProperty = false,
             viewcount = 100,
-            avgRating = 3.5f,
+            avgRating = "3.5f",
             hasReviewed = false,
             reviews = listOf(
                 Rating(
@@ -188,7 +188,7 @@ object PreviewData {
             isFavorite = true,
             isOwnProperty = false,
             viewcount = 100,
-            avgRating = 3.5f,
+            avgRating = "3.5f",
             hasReviewed = false,
             reviews = listOf(
                 Rating(
@@ -229,7 +229,7 @@ object PreviewData {
             isFavorite = false,
             isOwnProperty = false,
             viewcount = 100,
-            avgRating = 3.5f,
+            avgRating = "3.5f",
             hasReviewed = false,
             reviews = listOf(
                 Rating(

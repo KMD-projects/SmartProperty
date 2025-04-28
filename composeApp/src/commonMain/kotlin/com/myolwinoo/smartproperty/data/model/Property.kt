@@ -15,7 +15,7 @@ data class Property(
     val images: List<PropertyImage>,
     val available: Boolean = true,
     val viewcount: Long,
-    val avgRating: Float,
+    val avgRating: String,
     val appointmentStatus: AppointmentStatus?,
     val isOwnProperty: Boolean,
     val hasReviewed: Boolean,
