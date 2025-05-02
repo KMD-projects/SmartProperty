@@ -3,8 +3,10 @@
 package com.myolwinoo.smartproperty.features.profile
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -27,15 +29,21 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -44,7 +52,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import coil3.compose.AsyncImage
+import com.myolwinoo.smartproperty.common.EditProfileDialog
+import com.myolwinoo.smartproperty.data.model.RequisitionStatus
 import com.myolwinoo.smartproperty.data.model.User
+import com.myolwinoo.smartproperty.data.model.UserRole
 import com.myolwinoo.smartproperty.design.theme.AppDimens
 import com.myolwinoo.smartproperty.design.theme.SPTheme
 import kotlinx.serialization.Serializable
@@ -93,6 +104,38 @@ fun ProfileScreen(
 ) {
     val viewModel: ProfileViewModel = koinViewModel<ProfileViewModel>()
     val profileState = viewModel.profile.collectAsStateWithLifecycle()
+    var showEditProfileDialog by remember { mutableStateOf(false) }
+
+    if (showEditProfileDialog) {
+        EditProfileDialog(
+            onDismissRequest = {
+                showEditProfileDialog = false
+                viewModel.cancelEdit()
+            },
+            onSubmit = {
+                showEditProfileDialog = false
+                viewModel.updateProfile()
+            },
+            name = viewModel.name,
+            email = viewModel.email,
+            phone = viewModel.phone,
+            address = viewModel.address,
+            onNameChange = {
+                viewModel.name = it
+            },
+            onEmailChange = {
+                viewModel.email = it
+            },
+            onPhoneChange = {
+                viewModel.phone = it
+            },
+            onAddressChange = {
+                viewModel.address = it
+            },
+            emailError = null,
+
+            )
+    }
 
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
@@ -108,7 +151,8 @@ fun ProfileScreen(
         isLoading = viewModel.isLoading,
         onRefresh = viewModel::refresh,
         becomeLandlord = viewModel::becomeLandlord,
-        onLogout = viewModel::logout
+        onLogout = viewModel::logout,
+        onProfileEdit = { showEditProfileDialog = true }
     )
 }
 
@@ -119,7 +163,8 @@ private fun Screen(
     isLoading: Boolean,
     onRefresh: () -> Unit,
     becomeLandlord: () -> Unit,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    onProfileEdit: () -> Unit,
 ) {
     val statusBarInset = WindowInsets.statusBars.asPaddingValues()
     val pullToRefreshState = rememberPullToRefreshState()
@@ -140,13 +185,15 @@ private fun Screen(
             profile?.let {
                 userInformation(
                     profile = it,
-                    becomeLandlord = becomeLandlord
+                    becomeLandlord = becomeLandlord,
+                    onProfileEdit = {
+                        onProfileEdit()
+                    }
                 )
             }
-            EditItem(
+            ProfileDetailsItem(
                 title = stringResource(Res.string.label_language),
                 data = "English",
-                onClick = {}
             )
             Header(text = stringResource(Res.string.title_support))
             Item(
@@ -210,7 +257,8 @@ private fun Screen(
 @Composable
 fun ColumnScope.userInformation(
     profile: User,
-    becomeLandlord: () -> Unit
+    becomeLandlord: () -> Unit,
+    onProfileEdit: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -240,57 +288,81 @@ fun ColumnScope.userInformation(
             onBecomeLandlord = becomeLandlord
         )
     }
-    Header(text = stringResource(Res.string.title_personal_info))
-    EditItem(
+    Row(
+        modifier = Modifier.fillMaxWidth()
+            .padding(
+                start = 20.dp,
+                end = 20.dp,
+                top = 32.dp,
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Header(
+            modifier = Modifier
+                .weight(1f),
+            padding = PaddingValues(
+                horizontal = 0.dp,
+                vertical = 0.dp
+            ),
+            text = stringResource(Res.string.title_personal_info)
+        )
+        TextButton(
+            onClick = { onProfileEdit() },
+        ) {
+            Text(
+                text = "Edit",
+                textDecoration = TextDecoration.Underline,
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier
+            )
+        }
+
+    }
+    ProfileDetailsItem(
         title = stringResource(Res.string.label_name),
         data = profile.name,
-        onClick = {}
     )
-    EditItem(
+    ProfileDetailsItem(
         title = stringResource(Res.string.label_phone),
         data = profile.phone.ifBlank { "Not specified" },
-        onClick = {}
     )
-    EditItem(
+    ProfileDetailsItem(
         title = stringResource(Res.string.label_email),
         data = profile.email.ifBlank { "Not specified" },
-        onClick = {}
     )
-    EditItem(
+    ProfileDetailsItem(
         title = stringResource(Res.string.label_address),
         data = profile.address.ifBlank { "Not specified" },
-        onClick = {}
     )
 }
 
 @Composable
 fun Header(
     modifier: Modifier = Modifier,
+    padding: PaddingValues = PaddingValues(
+        start = 20.dp,
+        end = 20.dp,
+        top = 32.dp,
+        bottom = 12.dp
+    ),
     text: String
 ) {
     Text(
         text = text,
         style = MaterialTheme.typography.titleMedium,
         modifier = modifier
-            .padding(
-                start = 20.dp,
-                end = 20.dp,
-                top = 32.dp,
-                bottom = 12.dp
-            )
+            .padding(padding)
     )
 }
 
 @Composable
-private fun EditItem(
+private fun ProfileDetailsItem(
     modifier: Modifier = Modifier,
     title: String,
-    data: String,
-    onClick: () -> Unit
+    data: String
 ) {
     Row(
         modifier = modifier
-            .clickable { onClick() }
             .padding(horizontal = 20.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -309,12 +381,6 @@ private fun EditItem(
                 modifier = Modifier
             )
         }
-        Text(
-            text = "Edit",
-            textDecoration = TextDecoration.Underline,
-            style = MaterialTheme.typography.labelLarge,
-            modifier = Modifier
-        )
     }
     HorizontalDivider(
         color = MaterialTheme.colorScheme.onBackground,
@@ -360,11 +426,25 @@ private fun Item(
 private fun Preview() {
     SPTheme {
         Screen(
-            profile = null,
+            profile = User(
+                id = "1",
+                name = "John Doe",
+                phone = "+1234567890",
+                email = " ",
+                address = "",
+                profileImage = "",
+                role = UserRole.LANDLORD,
+                verified = true,
+                createdAt = "",
+                updatedAt = "",
+                requisitionStatus = RequisitionStatus.REJECTED,
+                username = ""
+            ),
             isLoading = false,
             onLogout = {},
             onRefresh = {},
-            becomeLandlord = {}
+            becomeLandlord = {},
+            onProfileEdit = {}
         )
     }
 }

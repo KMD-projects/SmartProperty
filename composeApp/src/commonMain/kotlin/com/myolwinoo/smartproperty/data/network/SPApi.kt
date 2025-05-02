@@ -25,6 +25,7 @@ import com.myolwinoo.smartproperty.data.network.model.RegisterRequest
 import com.myolwinoo.smartproperty.data.network.model.UserData
 import com.myolwinoo.smartproperty.utils.DateUtils
 import com.myolwinoo.smartproperty.utils.DecimalFormatter
+import com.myolwinoo.smartproperty.utils.PreviewData.user
 import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -106,6 +107,31 @@ class SPApi(
                 ?.let { mapUser(it.data) }
                 ?.also { accountManager.saveUser(it) }
                 ?: throw IllegalStateException("User not found")
+        }
+    }
+
+    suspend fun updateProfile(
+        name: String,
+        email: String,
+        phone: String,
+        address: String
+    ): Result<Unit> {
+        return runCatching {
+            val user = accountManager.getUser()
+                ?: throw IllegalStateException("User not found")
+
+            client.post("api/v1/users/${user.id}") {
+                setBody(
+                    mapOf(
+                        "username" to user.username,
+                        "name" to name,
+                        "email" to email,
+                        "phone" to phone,
+                        "address" to address,
+                        "_method" to "PUT"
+                    )
+                )
+            }
         }
     }
 
@@ -312,6 +338,7 @@ class SPApi(
     private fun mapUser(userData: UserData): User {
         return User(
             id = userData.id.orEmpty(),
+            username = userData.username.orEmpty(),
             name = userData.name.orEmpty(),
             email = userData.email.orEmpty(),
             phone = userData.phone.orEmpty(),
@@ -385,14 +412,16 @@ class SPApi(
             appointmentStatus = AppointmentStatus
                 .fromRawValue(propertyData.appointmentStatus),
             isOwnProperty = landlordId == accountManager.getUser()?.id,
-            avgRating = DecimalFormatter.formatToOneDecimal(propertyData.avgRating?.toDouble() ?: 0.0),
+            avgRating = DecimalFormatter.formatToOneDecimal(
+                propertyData.avgRating?.toDouble() ?: 0.0
+            ),
             viewcount = propertyData.viewCount ?: 0,
             hasReviewed = propertyData.hasReviewed ?: false,
             reviews = propertyData.reviews?.map { mapRatings(it) }.orEmpty()
         )
     }
 
-    private suspend fun mapRatings(ratingData: RatingData): Rating{
+    private suspend fun mapRatings(ratingData: RatingData): Rating {
         return Rating(
             id = ratingData.id.orEmpty(),
             rating = ratingData.rating?.toFloat() ?: 0f,
@@ -401,6 +430,6 @@ class SPApi(
             profilePic = ratingData.reviewedBy?.get("profile_pic").orEmpty(),
             isUserComment = ratingData.reviewedBy?.get("id") == accountManager.getUser()?.id,
 
-        )
+            )
     }
 }

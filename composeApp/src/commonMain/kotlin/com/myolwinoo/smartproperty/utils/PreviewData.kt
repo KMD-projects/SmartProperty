@@ -26,6 +26,7 @@ object PreviewData {
         verified = true,
         createdAt = "",
         updatedAt = "",
+        username = ""
     )
 
     val properties = listOf(
