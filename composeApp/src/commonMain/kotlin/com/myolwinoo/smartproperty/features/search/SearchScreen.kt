@@ -48,6 +48,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import coil3.compose.AsyncImage
+import com.myolwinoo.smartproperty.common.EmptyView
 import com.myolwinoo.smartproperty.common.propertyList
 import com.myolwinoo.smartproperty.data.model.Property
 import com.myolwinoo.smartproperty.design.theme.AppDimens
@@ -186,21 +187,27 @@ private fun SearchScreen(
                 )
             }
 
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(AppDimens.Spacing.m),
-                contentPadding = PaddingValues(
-                    vertical = AppDimens.Spacing.l
+            if (searchResult.isEmpty()) {
+                EmptyView(
+                    text = "No result found with keyword \"${query.text}\" and selected filters."
                 )
-            ) {
-                items(
-                    items = searchResult,
-                    key = { it.id }
-                ) {
-                    SearchResultItem(
-                        property = it,
-                        onClick = navigateToPropertyDetail
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(AppDimens.Spacing.m),
+                    contentPadding = PaddingValues(
+                        vertical = AppDimens.Spacing.l
                     )
+                ) {
+                    items(
+                        items = searchResult,
+                        key = { it.id }
+                    ) {
+                        SearchResultItem(
+                            property = it,
+                            onClick = navigateToPropertyDetail
+                        )
+                    }
                 }
             }
         }

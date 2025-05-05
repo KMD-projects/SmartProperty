@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.myolwinoo.smartproperty.common.EmptyView
 import com.myolwinoo.smartproperty.common.LoadingOverlay
 import com.myolwinoo.smartproperty.common.propertyList
 import com.myolwinoo.smartproperty.data.model.Property
@@ -85,6 +86,12 @@ private fun Screen(
                 onFavoriteClick = onFavoriteClick
             )
         }
+    }
+
+    if (properties.isEmpty()) {
+        EmptyView(
+            text = "No data in wishlist."
+        )
     }
 }
 

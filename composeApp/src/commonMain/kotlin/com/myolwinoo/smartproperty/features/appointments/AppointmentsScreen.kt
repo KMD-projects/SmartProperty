@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.myolwinoo.smartproperty.common.EmptyView
 import com.myolwinoo.smartproperty.common.appointmentList
 import com.myolwinoo.smartproperty.data.model.Appointment
 import com.myolwinoo.smartproperty.design.theme.AppDimens
@@ -92,6 +93,12 @@ private fun Screen(
                 onCancel = onCancel
             )
         }
+    }
+
+    if (appointments.isEmpty()) {
+        EmptyView(
+            text = "No appointments yet."
+        )
     }
 }
 
