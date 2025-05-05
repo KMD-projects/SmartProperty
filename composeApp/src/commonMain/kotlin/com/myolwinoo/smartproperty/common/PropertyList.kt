@@ -16,7 +16,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -29,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -47,6 +51,24 @@ import smartproperty.composeapp.generated.resources.favorite_filled
 import smartproperty.composeapp.generated.resources.ic_star
 import smartproperty.composeapp.generated.resources.location_on
 import smartproperty.composeapp.generated.resources.month
+import smartproperty.composeapp.generated.resources.placeholder
+
+fun LazyGridScope.propertyList(
+    properties: List<Property>,
+    onClick: (String) -> Unit,
+    onFavoriteClick: (String) -> Unit
+) {
+    items(
+        items = properties,
+        key = { it.id }
+    ) {
+        PropertyItem(
+            property = it,
+            onClick = onClick,
+            onFavoriteClick = onFavoriteClick
+        )
+    }
+}
 
 fun LazyListScope.propertyList(
     properties: List<Property>,
@@ -84,6 +106,8 @@ fun PropertyItem(
                 // Property Image
                 AsyncImage(
                     model = property.firstImage,
+                    placeholder = painterResource(Res.drawable.placeholder),
+                    error = painterResource(Res.drawable.placeholder),
                     contentDescription = "Property Image",
                     modifier = Modifier
                         .fillMaxWidth()
@@ -93,34 +117,35 @@ fun PropertyItem(
 
                 Box(
                     modifier = Modifier
-                        .matchParentSize()
-                        .background(Brush.horizontalGradient(
-                            colors = listOf(
-                                MaterialTheme.colorScheme.background.copy(alpha = 0.1f),
-                                MaterialTheme.colorScheme.background.copy(alpha = 0.5f)
-                            )
-                        ))
-                )
-
-                IconButton(
-                    onClick = { onFavoriteClick(property.id) },
-                    modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(AppDimens.Spacing.m)
                 ) {
-                    Icon(
-                        painter = painterResource(
-                            if (property.isFavorite) Res.drawable.favorite_filled else Res.drawable.favorite
-                        ),
-                        contentDescription = "Favorite",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
+                    IconButton(
+                        onClick = { onFavoriteClick(property.id) },
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.background, CircleShape)
+                            .size(36.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(
+                                if (property.isFavorite) {
+                                    Res.drawable.favorite_filled
+                                } else {
+                                    Res.drawable.favorite
+                                }
+                            ),
+                            contentDescription = "Favorite",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
 
                 Row(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(AppDimens.Spacing.l),
+                        .padding(AppDimens.Spacing.m)
+                        .background(MaterialTheme.colorScheme.background, RoundedCornerShape(50))
+                        .padding(start = 8.dp, end = 12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(

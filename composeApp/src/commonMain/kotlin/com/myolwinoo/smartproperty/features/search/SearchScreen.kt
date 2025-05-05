@@ -65,6 +65,7 @@ import smartproperty.composeapp.generated.resources.ic_filter
 import smartproperty.composeapp.generated.resources.ic_filter_filled
 import smartproperty.composeapp.generated.resources.label_search
 import smartproperty.composeapp.generated.resources.month
+import smartproperty.composeapp.generated.resources.placeholder
 
 @Serializable
 object SearchRoute
@@ -224,6 +225,8 @@ fun SearchResultItem(
             // Property Image
             AsyncImage(
                 model = property.images.firstOrNull(),
+                placeholder = painterResource(Res.drawable.placeholder),
+                error = painterResource(Res.drawable.placeholder),
                 contentDescription = "Property Image",
                 modifier = Modifier
                     .size(80.dp)

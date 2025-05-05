@@ -25,6 +25,7 @@ import com.myolwinoo.smartproperty.data.network.model.RegisterRequest
 import com.myolwinoo.smartproperty.data.network.model.UserData
 import com.myolwinoo.smartproperty.utils.DateUtils
 import com.myolwinoo.smartproperty.utils.DecimalFormatter
+import com.myolwinoo.smartproperty.utils.ImageUtils
 import com.myolwinoo.smartproperty.utils.PreviewData.user
 import io.github.aakira.napier.Napier
 import io.ktor.client.HttpClient
@@ -391,15 +392,10 @@ class SPApi(
             location = propertyData.address.orEmpty(),
             amenities = propertyData.amenities?.map { it["name"].orEmpty() }.orEmpty(),
             images = propertyData.images?.map {
-                val base = AppConfiguration.BASE_URL
-                val baseDropped = base.dropLast(1)
-                val url = it["url"].orEmpty()
-                    .replace("http://smart-property.test/", base)
+                val url = ImageUtils.getFullUrl(it["url"].orEmpty())
                 PropertyImage.Remote(
                     id = it["id"].orEmpty(),
-                    url = "${url}".also {
-                        Napier.i("Image URL: $it")
-                    }
+                    url = url
                 )
             }.orEmpty(),
             available = propertyData.isAvailable ?: false,
@@ -428,8 +424,7 @@ class SPApi(
             comment = ratingData.comment.orEmpty(),
             username = ratingData.reviewedBy?.get("username").orEmpty(),
             profilePic = ratingData.reviewedBy?.get("profile_pic").orEmpty(),
-            isUserComment = ratingData.reviewedBy?.get("id") == accountManager.getUser()?.id,
-
-            )
+            isUserComment = ratingData.reviewedBy?.get("id") == accountManager.getUser()?.id
+        )
     }
 }
