@@ -98,10 +98,8 @@ kotlin {
 
             implementation(libs.napier)
 
-            // peekaboo-ui
-            implementation(libs.peekaboo.ui)
-            // peekaboo-image-picker
-            implementation(libs.peekaboo.image.picker)
+            implementation(project(":peekaboo-ui"))
+            implementation(project(":peekaboo-image-picker"))
         }
         androidMain.dependencies {
             implementation(compose.preview)

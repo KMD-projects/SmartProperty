@@ -29,3 +29,5 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+include(":peekaboo-ui")
+include(":peekaboo-image-picker")
