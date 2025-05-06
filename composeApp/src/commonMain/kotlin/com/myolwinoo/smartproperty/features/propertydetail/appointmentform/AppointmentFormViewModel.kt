@@ -3,6 +3,7 @@ package com.myolwinoo.smartproperty.features.propertydetail.appointmentform
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,6 +13,10 @@ import com.myolwinoo.smartproperty.utils.DateUtils
 import io.github.aakira.napier.Napier
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class AppointmentFormViewModel(
@@ -32,6 +37,24 @@ class AppointmentFormViewModel(
 
     private val _events = MutableSharedFlow<String>()
     val events: SharedFlow<String> = _events
+
+    val isButtonEnabled: StateFlow<Boolean> = combine(
+        snapshotFlow { fromDate.text },
+        snapshotFlow { fromTime.text },
+        snapshotFlow { toDate.text },
+        snapshotFlow { toTime.text },
+        snapshotFlow { description.text },
+    ) { fromDate, fromTime, toDate, toTime, desc ->
+        fromDate.isNotBlank()
+                && fromTime.isNotBlank()
+                && toDate.isNotBlank()
+                && toTime.isNotBlank()
+                && desc.isNotBlank()
+    }.stateIn(
+        viewModelScope,
+        started = WhileSubscribed(5000),
+        initialValue = false
+    )
 
     fun onFromDateChange(value: TextFieldValue) {
         fromDate = value

@@ -91,6 +91,11 @@ class PropertyDetailViewModel(
         }
     }
 
+    fun resetRating() {
+        rating = property.value?.ownReview?.rating?.toInt() ?: 0
+        review = property.value?.ownReview?.comment.orEmpty()
+    }
+
     fun deleteReview() {
         val reviewId = property.value?.ownReview?.id ?: return
         viewModelScope.launch {

@@ -1,5 +1,6 @@
 package com.myolwinoo.smartproperty.features.register
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.LinkInteractionListener
@@ -154,177 +156,185 @@ private fun Screen(
         )
     }
     Scaffold { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(innerPadding),
+                .padding(innerPadding)
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            Spacer(
-                Modifier.size(64.dp)
-            )
-            Text(
+            Column(
                 modifier = Modifier
-                    .padding(horizontal = AppDimens.Spacing.xl)
-                    .fillMaxWidth(),
-                text = stringResource(Res.string.title_welcome),
-                style = MaterialTheme.typography.headlineMedium
-            )
-            Spacer(
-                Modifier.size(AppDimens.Spacing.m)
-            )
-            Text(
-                modifier = Modifier
-                    .padding(horizontal = AppDimens.Spacing.xl)
-                    .fillMaxWidth(),
-                text = buildAnnotatedString {
-                    append(stringResource(Res.string.message_register_part1))
-                    withStyle(
-                        style = SpanStyle(
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.Bold
-                        )
-                    ) {
-                        withLink(LinkAnnotation.Clickable(
-                            tag = "login",
-                            linkInteractionListener = object : LinkInteractionListener {
-                                override fun onClick(link: LinkAnnotation) {
-                                    onLogin()
-                                }
-                            }
-                        )) {
-                            append(stringResource(Res.string.message_register_part2))
-                        }
-                    }
-                },
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Spacer(
-                Modifier.size(AppDimens.Spacing.xl)
-            )
-            OutlinedTextField(
-                modifier = Modifier
-                    .padding(horizontal = AppDimens.Spacing.xl)
-                    .fillMaxWidth(),
-                value = username,
-                onValueChange = onUsernameChange,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text
-                ),
-                maxLines = 1,
-                label = { Text(stringResource(Res.string.label_username)) }
-            )
-            Spacer(
-                Modifier.size(AppDimens.Spacing.m)
-            )
-            OutlinedTextField(
-                modifier = Modifier
-                    .padding(horizontal = AppDimens.Spacing.xl)
-                    .fillMaxWidth(),
-                value = name,
-                onValueChange = onNameChange,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text
-                ),
-                maxLines = 1,
-                label = { Text(stringResource(Res.string.label_name)) }
-            )
-            Spacer(
-                Modifier.size(AppDimens.Spacing.m)
-            )
-            OutlinedTextField(
-                modifier = Modifier
-                    .padding(horizontal = AppDimens.Spacing.xl)
-                    .fillMaxWidth(),
-                value = email,
-                onValueChange = onEmailChange,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email
-                ),
-                maxLines = 1,
-                isError = emailError != null,
-                supportingText = { emailError?.let { Text(it) } },
-                label = { Text(stringResource(Res.string.label_email)) }
-            )
-            Spacer(
-                Modifier.size(AppDimens.Spacing.m)
-            )
-            SPPasswordTextField(
-                modifier = Modifier
-                    .padding(horizontal = AppDimens.Spacing.xl)
-                    .fillMaxWidth(),
-                value = password,
-                onValueChange = onPasswordChange,
-                showSupportingText = passwordError != null,
-                errorText = passwordError,
-                label = { Text(stringResource(Res.string.label_password)) }
-            )
-            Spacer(
-                Modifier.size(AppDimens.Spacing.m)
-            )
-            SPPasswordTextField(
-                modifier = Modifier
-                    .padding(horizontal = AppDimens.Spacing.xl)
-                    .fillMaxWidth(),
-                value = confirmPassword,
-                onValueChange = onConfirmPasswordChange,
-                showSupportingText = false,
-                errorText = confirmPasswordError,
-                label = { Text(stringResource(Res.string.label_confirm_password)) }
-            )
-            Spacer(
-                Modifier.size(AppDimens.Spacing.m)
-            )
-            OutlinedTextField(
-                modifier = Modifier
-                    .padding(horizontal = AppDimens.Spacing.xl)
-                    .fillMaxWidth(),
-                value = phone,
-                onValueChange = onPhoneChange,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Phone
-                ),
-                maxLines = 1,
-                label = { Text(stringResource(Res.string.label_phone)) }
-            )
-            Spacer(
-                Modifier.size(AppDimens.Spacing.m)
-            )
-            OutlinedTextField(
-                modifier = Modifier
-                    .padding(horizontal = AppDimens.Spacing.xl)
-                    .fillMaxWidth(),
-                value = address,
-                onValueChange = onAddressChange,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text
-                ),
-                minLines = 4,
-                label = { Text(stringResource(Res.string.label_address)) }
-            )
-            Spacer(
-                Modifier.size(AppDimens.Spacing.xl)
-            )
-            Button(
-                modifier = Modifier
-                    .padding(
-                        start = AppDimens.Spacing.xl,
-                        end = AppDimens.Spacing.xl,
-                        bottom = AppDimens.Spacing.xxl
-                    )
-                    .fillMaxWidth()
-                    .widthIn(max = AppDimens.maxWidth),
-                enabled = isRegisterEnabled,
-                onClick = { onRegister() }
+                    .widthIn(max = AppDimens.maxWidth)
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
             ) {
-                Text(
-                    text = stringResource(Res.string.label_register)
+                Spacer(
+                    Modifier.size(64.dp)
                 )
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = AppDimens.Spacing.xl)
+                        .fillMaxWidth(),
+                    text = stringResource(Res.string.title_welcome),
+                    style = MaterialTheme.typography.headlineMedium
+                )
+                Spacer(
+                    Modifier.size(AppDimens.Spacing.m)
+                )
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = AppDimens.Spacing.xl)
+                        .fillMaxWidth(),
+                    text = buildAnnotatedString {
+                        append(stringResource(Res.string.message_register_part1))
+                        withStyle(
+                            style = SpanStyle(
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.Bold
+                            )
+                        ) {
+                            withLink(
+                                LinkAnnotation.Clickable(
+                                tag = "login",
+                                linkInteractionListener = object : LinkInteractionListener {
+                                    override fun onClick(link: LinkAnnotation) {
+                                        onLogin()
+                                    }
+                                }
+                            )) {
+                                append(stringResource(Res.string.message_register_part2))
+                            }
+                        }
+                    },
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Spacer(
+                    Modifier.size(AppDimens.Spacing.xl)
+                )
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(horizontal = AppDimens.Spacing.xl)
+                        .fillMaxWidth(),
+                    value = username,
+                    onValueChange = onUsernameChange,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text
+                    ),
+                    maxLines = 1,
+                    label = { Text(stringResource(Res.string.label_username)) }
+                )
+                Spacer(
+                    Modifier.size(AppDimens.Spacing.m)
+                )
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(horizontal = AppDimens.Spacing.xl)
+                        .fillMaxWidth(),
+                    value = name,
+                    onValueChange = onNameChange,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text
+                    ),
+                    maxLines = 1,
+                    label = { Text(stringResource(Res.string.label_name)) }
+                )
+                Spacer(
+                    Modifier.size(AppDimens.Spacing.m)
+                )
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(horizontal = AppDimens.Spacing.xl)
+                        .fillMaxWidth(),
+                    value = email,
+                    onValueChange = onEmailChange,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email
+                    ),
+                    maxLines = 1,
+                    isError = emailError != null,
+                    supportingText = { emailError?.let { Text(it) } },
+                    label = { Text(stringResource(Res.string.label_email)) }
+                )
+                Spacer(
+                    Modifier.size(AppDimens.Spacing.m)
+                )
+                SPPasswordTextField(
+                    modifier = Modifier
+                        .padding(horizontal = AppDimens.Spacing.xl)
+                        .fillMaxWidth(),
+                    value = password,
+                    onValueChange = onPasswordChange,
+                    showSupportingText = passwordError != null,
+                    errorText = passwordError,
+                    label = { Text(stringResource(Res.string.label_password)) }
+                )
+                Spacer(
+                    Modifier.size(AppDimens.Spacing.m)
+                )
+                SPPasswordTextField(
+                    modifier = Modifier
+                        .padding(horizontal = AppDimens.Spacing.xl)
+                        .fillMaxWidth(),
+                    value = confirmPassword,
+                    onValueChange = onConfirmPasswordChange,
+                    showSupportingText = false,
+                    errorText = confirmPasswordError,
+                    label = { Text(stringResource(Res.string.label_confirm_password)) }
+                )
+                Spacer(
+                    Modifier.size(AppDimens.Spacing.m)
+                )
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(horizontal = AppDimens.Spacing.xl)
+                        .fillMaxWidth(),
+                    value = phone,
+                    onValueChange = onPhoneChange,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Phone
+                    ),
+                    maxLines = 1,
+                    label = { Text(stringResource(Res.string.label_phone)) }
+                )
+                Spacer(
+                    Modifier.size(AppDimens.Spacing.m)
+                )
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(horizontal = AppDimens.Spacing.xl)
+                        .fillMaxWidth(),
+                    value = address,
+                    onValueChange = onAddressChange,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text
+                    ),
+                    minLines = 4,
+                    label = { Text(stringResource(Res.string.label_address)) }
+                )
+                Spacer(
+                    Modifier.size(AppDimens.Spacing.xl)
+                )
+                Button(
+                    modifier = Modifier
+                        .padding(
+                            start = AppDimens.Spacing.xl,
+                            end = AppDimens.Spacing.xl,
+                            bottom = AppDimens.Spacing.xxl
+                        )
+                        .fillMaxWidth()
+                        .widthIn(max = AppDimens.maxWidth),
+                    enabled = isRegisterEnabled,
+                    onClick = { onRegister() }
+                ) {
+                    Text(
+                        text = stringResource(Res.string.label_register)
+                    )
+                }
             }
-        }
 
-        if (isLoading) {
-            LoadingOverlay()
+            if (isLoading) {
+                LoadingOverlay()
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.myolwinoo.smartproperty.features.login
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.LinkInteractionListener
@@ -124,107 +126,111 @@ private fun Screen(
     }
 
     Scaffold { innerPadding ->
-        Column(
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+                .padding(innerPadding)
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            Spacer(
-                Modifier.size(64.dp)
-            )
-            Text(
+            Column(
                 modifier = Modifier
-                    .padding(horizontal = AppDimens.Spacing.xl)
-                    .fillMaxWidth(),
-                text = stringResource(Res.string.title_welcome),
-                style = MaterialTheme.typography.headlineMedium
-            )
-            Spacer(
-                Modifier.size(AppDimens.Spacing.m)
-            )
-            Text(
-                modifier = Modifier
-                    .padding(horizontal = AppDimens.Spacing.xl)
-                    .fillMaxWidth(),
-                text = buildAnnotatedString {
-                    append(stringResource(Res.string.message_login_part1))
-                    withStyle(
-                        style = SpanStyle(
-                            color = MaterialTheme.colorScheme.primary,
-                            fontWeight = FontWeight.Bold
-                        )
-                    ) {
-                        withLink(
-                            LinkAnnotation.Clickable(
-                            tag = "register",
-                            linkInteractionListener = object : LinkInteractionListener {
-                                override fun onClick(link: LinkAnnotation) {
-                                    onRegisterClick()
-                                }
-                            }
-                        )) {
-                            append(stringResource(Res.string.message_login_part2))
-                        }
-                    }
-                },
-                style = MaterialTheme.typography.bodyMedium
-            )
-            Spacer(
-                Modifier.size(AppDimens.Spacing.xl)
-            )
-            OutlinedTextField(
-                modifier = Modifier
-                    .padding(horizontal = AppDimens.Spacing.xl)
                     .widthIn(max = AppDimens.maxWidth)
-                    .fillMaxWidth(),
-                value = email,
-                onValueChange = onEmailChange,
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email
-                ),
-                isError = emailError != null,
-                maxLines = 1,
-                label = { Text(stringResource(Res.string.label_email)) },
-                supportingText = { emailError?.let { Text(it) } }
-            )
-            Spacer(
-                Modifier.size(AppDimens.Spacing.m)
-            )
-            Spacer(
-                Modifier.size(AppDimens.Spacing.m)
-            )
-            SPPasswordTextField(
-                modifier = Modifier
-                    .padding(horizontal = AppDimens.Spacing.xl)
-                    .widthIn(max = AppDimens.maxWidth)
-                    .fillMaxWidth(),
-                value = password,
-                onValueChange = onPasswordChange,
-                label = { Text(stringResource(Res.string.label_password)) }
-            )
-            Spacer(
-                modifier = Modifier.weight(1f)
-            )
-            Button(
-                modifier = Modifier
-                    .padding(
-                        start = AppDimens.Spacing.xl,
-                        end = AppDimens.Spacing.xl,
-                        bottom = AppDimens.Spacing.xxl
-                    )
-                    .widthIn(max = AppDimens.maxWidth)
-                    .fillMaxWidth(),
-                enabled = isLoginEnabled,
-                onClick = { onLogin() }
+                    .fillMaxSize()
             ) {
-                Text(
-                    text = stringResource(Res.string.label_login)
+                Spacer(
+                    Modifier.size(64.dp)
                 )
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = AppDimens.Spacing.xl)
+                        .fillMaxWidth(),
+                    text = stringResource(Res.string.title_welcome),
+                    style = MaterialTheme.typography.headlineMedium
+                )
+                Spacer(
+                    Modifier.size(AppDimens.Spacing.m)
+                )
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = AppDimens.Spacing.xl)
+                        .fillMaxWidth(),
+                    text = buildAnnotatedString {
+                        append(stringResource(Res.string.message_login_part1))
+                        withStyle(
+                            style = SpanStyle(
+                                color = MaterialTheme.colorScheme.primary,
+                                fontWeight = FontWeight.Bold
+                            )
+                        ) {
+                            withLink(
+                                LinkAnnotation.Clickable(
+                                    tag = "register",
+                                    linkInteractionListener = object : LinkInteractionListener {
+                                        override fun onClick(link: LinkAnnotation) {
+                                            onRegisterClick()
+                                        }
+                                    }
+                                )) {
+                                append(stringResource(Res.string.message_login_part2))
+                            }
+                        }
+                    },
+                    style = MaterialTheme.typography.bodyMedium
+                )
+                Spacer(
+                    Modifier.size(AppDimens.Spacing.xl)
+                )
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(horizontal = AppDimens.Spacing.xl)
+                        .fillMaxWidth(),
+                    value = email,
+                    onValueChange = onEmailChange,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email
+                    ),
+                    isError = emailError != null,
+                    maxLines = 1,
+                    label = { Text(stringResource(Res.string.label_email)) },
+                    supportingText = { emailError?.let { Text(it) } }
+                )
+                Spacer(
+                    Modifier.size(AppDimens.Spacing.m)
+                )
+                Spacer(
+                    Modifier.size(AppDimens.Spacing.m)
+                )
+                SPPasswordTextField(
+                    modifier = Modifier
+                        .padding(horizontal = AppDimens.Spacing.xl)
+                        .fillMaxWidth(),
+                    value = password,
+                    onValueChange = onPasswordChange,
+                    label = { Text(stringResource(Res.string.label_password)) }
+                )
+                Spacer(
+                    modifier = Modifier.weight(1f)
+                )
+                Button(
+                    modifier = Modifier
+                        .padding(
+                            start = AppDimens.Spacing.xl,
+                            end = AppDimens.Spacing.xl,
+                            bottom = AppDimens.Spacing.xxl
+                        )
+                        .fillMaxWidth(),
+                    enabled = isLoginEnabled,
+                    onClick = { onLogin() }
+                ) {
+                    Text(
+                        text = stringResource(Res.string.label_login)
+                    )
+                }
             }
-        }
 
-        if (isLoading) {
-            LoadingOverlay()
+            if (isLoading) {
+                LoadingOverlay()
+            }
         }
     }
 }

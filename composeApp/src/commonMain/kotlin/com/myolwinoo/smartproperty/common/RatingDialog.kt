@@ -98,7 +98,10 @@ fun RatingDialog(
                     TextButton(onClick = { onDismissRequest() }) {
                         Text("Cancel")
                     }
-                    TextButton(onClick = { onSubmit() }) {
+                    TextButton(
+                        enabled = rating > 0,
+                        onClick = { onSubmit() }
+                    ) {
                         Text("Submit")
                     }
                 }

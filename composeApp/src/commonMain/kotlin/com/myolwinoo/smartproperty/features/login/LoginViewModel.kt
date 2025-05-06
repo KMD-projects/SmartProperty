@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myolwinoo.smartproperty.data.network.SPApi
 import com.myolwinoo.smartproperty.utils.InputValidator
-import com.myolwinoo.smartproperty.utils.PreviewData
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
@@ -22,11 +21,9 @@ class LoginViewModel(
     private val spApi: SPApi
 ): ViewModel() {
 
-    // TODO: remove preview data
-    var email by mutableStateOf(TextFieldValue(PreviewData.testEmail))
+    var email by mutableStateOf(TextFieldValue())
         private set
-    // TODO: remove preview data
-    var password by mutableStateOf(TextFieldValue(PreviewData.testPassword))
+    var password by mutableStateOf(TextFieldValue())
         private set
     var isLoading by mutableStateOf(false)
         private set

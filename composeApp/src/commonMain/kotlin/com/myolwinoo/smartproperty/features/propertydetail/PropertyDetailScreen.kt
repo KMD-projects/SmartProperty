@@ -17,6 +17,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +48,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import coil3.compose.AsyncImage
 import com.myolwinoo.smartproperty.common.RatingDialog
+import com.myolwinoo.smartproperty.common.Slider
 import com.myolwinoo.smartproperty.data.model.Property
 import com.myolwinoo.smartproperty.data.model.PropertyImage
 import com.myolwinoo.smartproperty.data.model.UserRole
@@ -63,9 +66,16 @@ import smartproperty.composeapp.generated.resources.Res
 import smartproperty.composeapp.generated.resources.currency
 import smartproperty.composeapp.generated.resources.ic_back
 import smartproperty.composeapp.generated.resources.label_amenities
+import smartproperty.composeapp.generated.resources.label_cancel
+import smartproperty.composeapp.generated.resources.label_confirm
+import smartproperty.composeapp.generated.resources.label_ok
 import smartproperty.composeapp.generated.resources.label_property_type
 import smartproperty.composeapp.generated.resources.location_on
+import smartproperty.composeapp.generated.resources.message_delete_review
+import smartproperty.composeapp.generated.resources.message_login_error
 import smartproperty.composeapp.generated.resources.month
+import smartproperty.composeapp.generated.resources.title_delete_review
+import smartproperty.composeapp.generated.resources.title_login_error
 import kotlin.math.absoluteValue
 
 @Serializable
@@ -89,10 +99,44 @@ fun NavGraphBuilder.propertyDetailScreen(
 
         var showRatingDialog by remember { mutableStateOf(false) }
         var showAllRatingDialog by remember { mutableStateOf(false) }
+        var showDeleteRatingDialog by remember { mutableStateOf(false) }
 
         LifecycleResumeEffect(Unit) {
             viewModel.refresh()
             onPauseOrDispose {}
+        }
+
+        if (showDeleteRatingDialog) {
+            AlertDialog(
+                title = {
+                    Text(stringResource(Res.string.title_delete_review))
+                },
+                text = {
+                    Text(stringResource(Res.string.message_delete_review))
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            viewModel.deleteReview()
+                            showDeleteRatingDialog = false
+                        }
+                    ) {
+                        Text(stringResource(Res.string.label_confirm))
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            showDeleteRatingDialog = false
+                        }
+                    ) {
+                        Text(stringResource(Res.string.label_cancel))
+                    }
+                },
+                onDismissRequest = {
+                    showDeleteRatingDialog = false
+                }
+            )
         }
 
         if (showAllRatingDialog){
@@ -121,6 +165,7 @@ fun NavGraphBuilder.propertyDetailScreen(
                     showRatingDialog = false
                 },
                 onDismissRequest = {
+                    viewModel.resetRating()
                     showRatingDialog = false
                 }
             )
@@ -141,7 +186,7 @@ fun NavGraphBuilder.propertyDetailScreen(
                 showAllRatingDialog = true
             },
             onDeleteRating = {
-                viewModel.deleteReview()
+                showDeleteRatingDialog = true
             },
             onEditRating = {
                 showRatingDialog = true
@@ -187,7 +232,7 @@ private fun Screen(
                     .verticalScroll(rememberScrollState())
                     .weight(1f)
             ) {
-                Pager(images = property.images)
+                Slider(images = property.images)
 
                 Column(
                     modifier = Modifier
@@ -321,43 +366,6 @@ private fun Screen(
                 userRole = userRole,
                 cancelAppointment = {},
                 viewAppointments = {}
-            )
-        }
-    }
-}
-
-@Composable
-private fun Pager(images: List<PropertyImage>) {
-    val pagerState = rememberPagerState(pageCount = {
-        images.size
-    })
-    HorizontalPager(
-        state = pagerState,
-        contentPadding = PaddingValues(horizontal = AppDimens.Spacing.xl),
-        pageSpacing = AppDimens.Spacing.m
-    ) { page ->
-        Card(
-            Modifier
-                .fillMaxWidth()
-                .graphicsLayer {
-                    val pageOffset = (
-                            (pagerState.currentPage - page) + pagerState
-                                .currentPageOffsetFraction
-                            ).absoluteValue
-                    alpha = lerp(
-                        start = 0.5f,
-                        stop = 1f,
-                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                    )
-                }
-        ) {
-            AsyncImage(
-                model = (images[page] as PropertyImage.Remote).url,
-                contentDescription = "Property Image $page",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(180.dp),
-                contentScale = ContentScale.Crop
             )
         }
     }

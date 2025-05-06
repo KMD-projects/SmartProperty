@@ -38,6 +38,8 @@ class PropertyFormViewModel(
     private val _events = MutableSharedFlow<String>()
     val events: SharedFlow<String> = _events
 
+    var showError by mutableStateOf(false)
+
     init {
         loadAmenities()
         loadPropertyTypes()
@@ -70,6 +72,11 @@ class PropertyFormViewModel(
 
     fun create() {
         viewModelScope.launch {
+            val isValid = validate()
+            if (!isValid) {
+                showError = true
+                return@launch
+            }
             val images = images.filterIsInstance<PropertyImage.Local>()
             spApi.createProperty(
                 request = CreatePropertyRequest(
@@ -89,6 +96,24 @@ class PropertyFormViewModel(
                 _events.emit("success")
             }
         }
+    }
+
+    fun dismissLoginError() {
+        showError = false
+    }
+
+    private fun validate(): Boolean {
+        if (title.text.isBlank()) return false
+        if (description.text.isBlank()) return false
+        if (price.text.isBlank()) return false
+        if (latitude.text.isBlank()) return false
+        if (longitude.text.isBlank()) return false
+        if (address.text.isBlank()) return false
+        if (selectedPropertyType == null) return false
+        if (selectedAmenities.isEmpty()) return false
+        val images = images.filterIsInstance<PropertyImage.Local>()
+        if (images.isEmpty()) return false
+        return true
     }
 
     private fun loadAmenities() {

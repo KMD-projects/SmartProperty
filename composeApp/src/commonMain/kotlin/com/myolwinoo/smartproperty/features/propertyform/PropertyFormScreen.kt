@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,6 +22,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -48,9 +50,14 @@ import smartproperty.composeapp.generated.resources.label_create
 import smartproperty.composeapp.generated.resources.label_description
 import smartproperty.composeapp.generated.resources.label_latitude
 import smartproperty.composeapp.generated.resources.label_longitude
+import smartproperty.composeapp.generated.resources.label_ok
 import smartproperty.composeapp.generated.resources.label_price
 import smartproperty.composeapp.generated.resources.label_title
+import smartproperty.composeapp.generated.resources.message_incomplete_info
+import smartproperty.composeapp.generated.resources.message_login_error
 import smartproperty.composeapp.generated.resources.title_create_property
+import smartproperty.composeapp.generated.resources.title_incomplete_info
+import smartproperty.composeapp.generated.resources.title_login_error
 
 @Serializable
 private data class PropertyFormRoute(val propertyId: String)
@@ -76,6 +83,25 @@ fun NavGraphBuilder.propertyForm(
                     "success" -> onBack()
                 }
             }
+        }
+
+        if (viewModel.showError) {
+            AlertDialog(
+                title = {
+                    Text(stringResource(Res.string.title_incomplete_info))
+                },
+                text = {
+                    Text(stringResource(Res.string.message_incomplete_info))
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = viewModel::dismissLoginError
+                    ) {
+                        Text(stringResource(Res.string.label_ok))
+                    }
+                },
+                onDismissRequest = viewModel::dismissLoginError
+            )
         }
 
         Screen(

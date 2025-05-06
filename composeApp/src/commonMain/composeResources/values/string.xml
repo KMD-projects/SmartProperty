@@ -51,6 +51,7 @@
     <string name="label_hide">Hide</string>
     <string name="label_capture">Capture</string>
     <string name="label_cancel">Cancel</string>
+    <string name="label_confirm">Confirm</string>
 
     <string name="title_rating">Rating</string>
     <string name="title_login_error">Login Failed</string>
@@ -76,4 +77,10 @@
 
     <string name="currency">MMK</string>
     <string name="month">month</string>
+
+    <string name="title_delete_review">Delete Review</string>
+    <string name="message_delete_review">Are you sure you want to delete your review?</string>
+
+    <string name="title_incomplete_info">Incomplete property info</string>
+    <string name="message_incomplete_info">Please fill all the information</string>
 </resources>

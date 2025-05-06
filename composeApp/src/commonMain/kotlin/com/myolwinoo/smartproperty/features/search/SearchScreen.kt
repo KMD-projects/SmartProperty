@@ -3,7 +3,6 @@
 package com.myolwinoo.smartproperty.features.search
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,10 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,12 +46,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.window.core.layout.WindowWidthSizeClass
 import coil3.compose.AsyncImage
 import com.myolwinoo.smartproperty.common.EmptyView
-import com.myolwinoo.smartproperty.common.propertyList
 import com.myolwinoo.smartproperty.data.model.Property
 import com.myolwinoo.smartproperty.design.theme.AppDimens
 import com.myolwinoo.smartproperty.design.theme.SPTheme
+import com.myolwinoo.smartproperty.utils.ColumnHelper
 import com.myolwinoo.smartproperty.utils.PreviewData
 import kotlinx.serialization.Serializable
 import org.jetbrains.compose.resources.painterResource
@@ -104,6 +104,7 @@ fun NavGraphBuilder.searchScreen(
         }
 
         SearchScreen(
+            windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass.windowWidthSizeClass,
             onBack = onBack,
             searchResult = searchResult.value,
             query = viewModel.query,
@@ -119,6 +120,7 @@ fun NavGraphBuilder.searchScreen(
 
 @Composable
 private fun SearchScreen(
+    windowSizeClass: WindowWidthSizeClass,
     onBack: () -> Unit,
     searchResult: List<Property>,
     query: TextFieldValue,
@@ -127,6 +129,7 @@ private fun SearchScreen(
     onFilterClick: () -> Unit,
     navigateToPropertyDetail: (String) -> Unit
 ) {
+    val column = ColumnHelper.calculate(windowSizeClass)
     Scaffold { innerPadding ->
         Column(
             modifier = Modifier
@@ -139,7 +142,9 @@ private fun SearchScreen(
                 modifier = Modifier
                     .padding(
                         start = AppDimens.Spacing.m,
-                        end = AppDimens.Spacing.xl
+                        end = AppDimens.Spacing.xl,
+                        top = AppDimens.Spacing.m,
+                        bottom = AppDimens.Spacing.m
                     )
             ) {
                 IconButton(
@@ -192,11 +197,15 @@ private fun SearchScreen(
                     text = "No result found with keyword \"${query.text}\" and selected filters."
                 )
             } else {
-                LazyColumn(
+                LazyVerticalStaggeredGrid(
                     modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.spacedBy(AppDimens.Spacing.m),
+                    verticalItemSpacing = AppDimens.Spacing.m,
                     contentPadding = PaddingValues(
+                        horizontal = AppDimens.Spacing.xl,
                         vertical = AppDimens.Spacing.l
+                    ),
+                    columns = StaggeredGridCells.Fixed(
+                        count = column
                     )
                 ) {
                     items(
@@ -222,7 +231,6 @@ fun SearchResultItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp)
             .clickable { onClick(property.id) },
     ) {
         Row(
@@ -275,6 +283,7 @@ fun SearchResultItem(
 private fun Preview() {
     SPTheme {
         SearchScreen(
+            windowSizeClass = WindowWidthSizeClass.COMPACT,
             onBack = {},
             searchResult = PreviewData.properties,
             query = TextFieldValue(),

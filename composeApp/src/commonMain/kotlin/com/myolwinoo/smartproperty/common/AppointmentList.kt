@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,7 +22,7 @@ import com.myolwinoo.smartproperty.design.theme.SPTheme
 import com.myolwinoo.smartproperty.utils.PreviewData
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-fun LazyListScope.appointmentList(
+fun LazyStaggeredGridScope.appointmentList(
     appointments: List<Appointment>,
     onAccept: (String) -> Unit,
     onDecline: (String) -> Unit,
@@ -49,7 +51,6 @@ fun AppointmentItem(
 ) {
     Card(
         modifier = modifier
-            .padding(horizontal = AppDimens.Spacing.xl)
     ) {
         Column(
             modifier = Modifier

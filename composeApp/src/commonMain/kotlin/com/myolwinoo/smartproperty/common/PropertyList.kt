@@ -9,20 +9,23 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.grid.LazyGridScope
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,16 +34,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.myolwinoo.smartproperty.utils.PreviewData
 import com.myolwinoo.smartproperty.data.model.Property
 import com.myolwinoo.smartproperty.design.theme.AppDimens
 import com.myolwinoo.smartproperty.design.theme.SPTheme
+import com.myolwinoo.smartproperty.utils.PreviewData
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -53,7 +54,61 @@ import smartproperty.composeapp.generated.resources.location_on
 import smartproperty.composeapp.generated.resources.month
 import smartproperty.composeapp.generated.resources.placeholder
 
-fun LazyGridScope.propertyList(
+@Preview
+@Composable
+private fun PropertyListOneColPreview() {
+    SPTheme {
+        PropertyList(
+            column = 1,
+            properties = PreviewData.properties,
+            onClick = {},
+            onFavoriteClick = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PropertyListTwoColPreview() {
+    SPTheme {
+        PropertyList(
+            column = 2,
+            properties = PreviewData.properties,
+            onClick = {},
+            onFavoriteClick = {}
+        )
+    }
+}
+
+@Composable
+fun PropertyList(
+    modifier: Modifier = Modifier,
+    column: Int,
+    properties: List<Property>,
+    onClick: (String) -> Unit,
+    onFavoriteClick: (String) -> Unit,
+) {
+    LazyVerticalStaggeredGrid(
+        modifier = modifier
+            .fillMaxSize(),
+        contentPadding = PaddingValues(
+            start = AppDimens.Spacing.xl,
+            end = AppDimens.Spacing.xl,
+            bottom = 20.dp,
+        ),
+        verticalItemSpacing = 12.dp,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        columns = StaggeredGridCells.Fixed(column),
+    ) {
+        propertyList(
+            properties = properties,
+            onClick = onClick,
+            onFavoriteClick = onFavoriteClick
+        )
+    }
+}
+
+fun LazyStaggeredGridScope.propertyList(
     properties: List<Property>,
     onClick: (String) -> Unit,
     onFavoriteClick: (String) -> Unit
@@ -96,7 +151,6 @@ fun PropertyItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp)
             .clickable { onClick(property.id) },
         shape = RoundedCornerShape(12.dp),
     ) {

@@ -22,6 +22,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -64,6 +65,8 @@ fun NavGraphBuilder.appointmentForm(
             parametersOf(propertyId)
         }
 
+        val isButtonEnabled = viewModel.isButtonEnabled.collectAsStateWithLifecycle()
+
         LaunchedEffect(Unit) {
             viewModel.events.collect { event ->
                 when (event) {
@@ -84,6 +87,7 @@ fun NavGraphBuilder.appointmentForm(
             onFromTimeChange = viewModel::onFromTimeChange,
             toTime = viewModel.toTime,
             onToTimeChange = viewModel::onToTimeChange,
+            isButtonEnabled = isButtonEnabled.value,
             onSubmit = viewModel::makeAppointment
         )
     }
@@ -102,6 +106,7 @@ private fun Screen(
     onToTimeChange: (TextFieldValue) -> Unit,
     description: TextFieldValue,
     onDescriptionChange: (TextFieldValue) -> Unit,
+    isButtonEnabled: Boolean,
     onSubmit: () -> Unit
 ) {
     Scaffold(
@@ -182,8 +187,8 @@ private fun Screen(
                         end = AppDimens.Spacing.xl,
                         bottom = AppDimens.Spacing.xxl
                     )
-                    .widthIn(max = AppDimens.maxWidth)
                     .fillMaxWidth(),
+                enabled = isButtonEnabled,
                 onClick = { onSubmit() }
             ) {
                 Text(
@@ -210,6 +215,7 @@ private fun Preview() {
             onFromTimeChange = {},
             toTime = TextFieldValue(),
             onToTimeChange = {},
+            isButtonEnabled = true,
             onSubmit = {}
         )
     }
